@@ -1,0 +1,39 @@
+.header-top-wrapper {
+  background-color: #76c7c1;
+}
+.header-top-container {
+  padding-top: 22px;
+  padding-left: 172px;
+  padding-right: 172px;
+  padding-bottom: 20px;
+}
+
+.clearfix {
+  overflow: auto;
+}
+
+.header-pattern {
+  background: url(../images/ruler-pattern.png) repeat-x;
+  height: 12px;
+}
+
+.logo {
+  float: left;
+}
+
+.header-nav-wrapper {
+  float: right;
+  width: auto;
+}
+
+ul.header-nav li {
+  display: inline;
+  margin-left: 22px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 10px;
+  padding-bottom: 7px;
+  border: 1px solid;
+  border-bottom: 3px solid;
+  border-color: #76c7c1;
+}
