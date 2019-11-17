@@ -12,32 +12,37 @@
   margin-left: 5px;
 }
 
-.header-menu {
+.header-menu-wrapper {
   float: right;
 }
+
 ul.header-menu li {
   display: inline-block;
-  text-transform: uppercase;
-  width: 120px;
-  height: 33px;
-  text-align: center;
-}
-ul.header-menu li a {
-  text-decoration: none;
-  display: block;
-  padding-top: 11px;
 }
 
-ul.header-menu li:hover {
-  background: url("../images/upper-button-active.png");
+ul.header-menu li.header-menu-items {
+  height: 33px;
+  width: 104px;
+  text-align: center;
 }
-.menu-arrow {
-  background: #76c7c1;
-  height: 8px;
-  width: 8px;
+ul.header-menu li.search {
+  background: url("../images/search.png");
+  width: 33px;
+  height: 33px;
 }
-ul.header-menu li:hover .menu-arrow {
-  background: url("../images/upper-button-active-arrow.png");
+ul.header-menu li.search a {
+  display: inline-block;
+  height: 33px;
+}
+
+ul.header-menu li.header-menu-items:hover {
+  background-image: url("../images/upper-button-active1.png");
+}
+li.header-menu-items a {
+  display: block;
+  padding-top: 8px;
+  color: #f0ffff;
+  font-size: 14px;
 }
 .upper-header-end {
   height: 30px;
@@ -182,8 +187,6 @@ ul.c2-diag li div {
   width: 120px;
   height: 58px;
   background-image: url("../images/dial4.png");
-}
-.dials {
 }
 .dial-text {
   color: #737373;
