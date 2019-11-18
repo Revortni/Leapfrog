@@ -9,7 +9,11 @@
   background: #000;
 }
 .upper-header {
-  background-color: #76c7c1;
+  background: #76c7c1;
+  background-image: url("../images/upper-header-end.png");
+  background-repeat: repeat-x;
+  background-position: bottom;
+  padding-bottom: 22px;
   padding-top: 22px;
 }
 
