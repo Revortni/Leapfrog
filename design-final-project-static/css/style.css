@@ -255,6 +255,7 @@ h2 {
 .career-wrapper {
   clear: both;
   overflow: auto;
+  height: 925px;
   background: url(../images/career-bg.png) center no-repeat;
 }
 
@@ -307,4 +308,113 @@ div.f3 {
 }
 div.f4 {
   color: rgb(244, 67, 54);
+}
+
+.contact-us-wrapper {
+  clear: both;
+  background: url(../images/contact-bg.png) center no-repeat;
+}
+.contact-us-upper {
+  text-align: center;
+}
+.contact-us-upper h2 {
+  padding-bottom: 35px;
+}
+.contact-us-upper p {
+  font-size: 14px;
+  font-family: "Roboto Light";
+  color: rgb(129, 145, 166);
+  line-height: 1.714;
+  text-align: center;
+  width: 555px;
+  margin: 0 auto;
+}
+
+.contact-form-bg {
+  overflow: auto;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-family: "OpenSans Semibold";
+  color: #000;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+}
+.contact-form-wrapper {
+  padding-top: 100px;
+  padding-bottom: 145px;
+}
+.contact-form-wrapper form {
+  background-color: #fff;
+  padding-left: 65px;
+  padding-right: 65px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px#888;
+}
+.contact-form-wrapper form div {
+  padding-bottom: 32px;
+}
+input {
+  width: 100%;
+  height: 69px;
+  border-radius: 10px;
+  border: none;
+  background-color: #f5f5f5;
+}
+
+input.message {
+  height: 178px;
+}
+
+.contact-form-wrapper {
+  width: 720px;
+  margin: 0 auto;
+}
+
+.contact-form-wrapper form button {
+  padding: 17px 34px 17px 34px;
+  text-transform: uppercase;
+  border-radius: 25px;
+  border: none;
+  box-shadow: 0 0 10px#888;
+  background-color: #fff;
+  font-size: 14px;
+  color: rgb(76, 175, 80);
+  text-transform: uppercase;
+  text-align: center;
+}
+.contact-form-wrapper form button:hover {
+  box-shadow: 0 0 10px#555;
+}
+
+footer {
+  background: url(../images/contact-bg.png) center no-repeat;
+  border-top: 1px solid #f0f0f0;
+}
+
+.footer-c1 {
+  float: left;
+  padding-left: 5px;
+  padding-top: 43px;
+}
+
+.footer-logo {
+  padding-top: 15px;
+  padding-bottom: 34px;
+}
+
+.footer-logo a {
+  display: block;
+  height: 40px;
+  width: 114px;
+}
+
+.c1-text {
+  font-size: 14px;
+  color: rgb(129, 145, 166);
+  line-height: 1.714;
+  width: 335px;
+  padding-bottom: 34px;
 }
