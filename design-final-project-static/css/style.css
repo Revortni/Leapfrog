@@ -44,20 +44,20 @@ nav.social-links a i:hover {
 .contact-info {
   float: right;
   padding-right: 15px;
-  padding-top: 16px;
-  padding-bottom: 15px;
+  line-height: 40px;
 }
 .contact-info-title {
   font-weight: normal;
   color: rgb(48, 56, 66);
   font-size: 12px;
-  line-height: 1.2;
+  line-height: 14.4px;
 }
 .contact-info-phone {
   color: rgb(107, 124, 147);
   font-weight: lighter;
   font-size: 12px;
   line-height: 1;
+  line-height: 12px;
 }
 
 .lower-header-wrapper {
@@ -165,9 +165,9 @@ img.bars {
 
 .our-customers {
   float: left;
-  padding-left: 15px;
   padding-right: 30px;
   width: 360px;
+  padding-top: 41px;
 }
 .our-customers-title {
   font-size: 24px;
@@ -182,13 +182,144 @@ img.bars {
   line-height: 1.714;
 }
 .partners {
-  background: url("../images/header-line.png") repeat-x;
-  background-position: top bottom;
+  border-image: url("../images/header-line.png");
+  border-top: 1px;
+  border-bottom: 1px;
 }
 
 .customer {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.customer-logo {
+.customer-logos {
   float: right;
+}
+
+.customer-logos img {
+  padding-left: 25px;
+}
+
+.service-wrapper {
+  background: url("../images/sevices-bg.png") center no-repeat;
+}
+
+.service {
+  float: right;
+  padding-left: 15px;
+  width: 750px;
+  padding-top: 163px;
+  padding-bottom: 156px;
+}
+.service-top {
+  width: 612px;
+  padding-bottom: 116px;
+  padding-left: 6px;
+}
+
+h2 {
+  font-size: 34px;
+  font-family: "Roboto Light";
+  color: rgb(48, 56, 66);
+  line-height: 0.706;
+}
+
+.service-top h2 {
+  padding-bottom: 23px;
+}
+.service-top p {
+  font-size: 14px;
+  font-family: "Roboto";
+  color: rgb(129, 145, 166);
+  width: 613px;
+  padding-right: 35px;
+}
+
+.field {
+  float: left;
+  width: 360px;
+  padding-bottom: 70px;
+}
+
+.field figure {
+  float: left;
+}
+
+.field-content {
+  float: right;
+  background: url("../images/header-line.png") repeat-y;
+  background-position: left;
+  padding-left: 28px;
+  width: 292px;
+}
+
+.field-content h3 {
+  font-size: 13px;
+  font-family: "OpenSans";
+  color: rgb(37, 43, 51);
+  text-transform: uppercase;
+  line-height: 2.308;
+  text-align: left;
+}
+
+.field-content p {
+  color: #8191a6;
+  font-size: 14px;
+}
+
+.career-wrapper {
+  background: url(../images/career-bg.png) center no-repeat;
+}
+
+.career {
+  padding-top: 267px;
+  padding-left: 210px;
+  padding-right: 256px;
+}
+.career-top {
+}
+
+.career-top h2 {
+  padding-bottom: 30px;
+}
+.career-top p {
+  font-size: 14px;
+  color: rgb(129, 145, 166);
+  line-height: 24px;
+}
+
+.career-bottom {
+  padding-top: 111px;
+}
+.career-field {
+  float: left;
+  padding-bottom: 83px;
+  padding-right: 98px;
+}
+.career-field div {
+  font-size: 44px;
+  font-family: "Roboto Thin";
+  color: rgb(50, 213, 186);
+  line-height: 0.545;
+  padding-bottom: 20px;
+}
+.career-field span {
+  font-size: 15px;
+  font-family: "Open Sans Light";
+  color: rgb(48, 56, 66);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+div.f1 {
+  color: rgb(48, 56, 66);
+}
+div.f2 {
+  color: rgb(48, 56, 66);
+}
+div.f1 {
+  color: rgb(48, 56, 66);
+}
+div.f2 {
+  color: rgb(48, 56, 66);
 }
