@@ -1,8 +1,3 @@
-.clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
-}
 .main-container {
   width: 100%;
   min-width: 1170px;
@@ -14,21 +9,17 @@
 .header-wrapper {
   background-color: rgba(255, 255, 255, 0.941);
   background-repeat: repeat;
+  box-shadow: 0 1px 10px #888;
 }
 
 .container {
   width: 1170px;
   margin: 0 auto;
 }
-.upper-header {
-  height: 40px;
-}
 
 nav.social-links {
   float: left;
   padding-left: 15px;
-  padding-top: 13px;
-  padding-bottom: 13px;
 }
 nav.social-links a i {
   font-size: 14px;
@@ -50,17 +41,16 @@ nav.social-links a i:hover {
   font-weight: normal;
   color: rgb(48, 56, 66);
   font-size: 12px;
-  line-height: 14.4px;
 }
 .contact-info-phone {
   color: rgb(107, 124, 147);
   font-weight: lighter;
   font-size: 12px;
-  line-height: 1;
-  line-height: 12px;
 }
 
 .lower-header-wrapper {
+  clear: both;
+  overflow: auto;
   background-position: top;
   background-image: url("../images/header-line.png");
   background-repeat: repeat-x;
@@ -105,12 +95,7 @@ div.logo {
   background-position: top;
   background-repeat: repeat-x;
 }
-/* .nav-bar {
-  float: right;
-  background: url("../images/nav-bar.png");
-  height: 10px;
-  width: 15px;
-} */
+
 img.bars {
   background: url("../images/nav-bar.png");
   height: 10px;
@@ -163,28 +148,10 @@ img.bars {
   font-weight: bolder;
 }
 
-.our-customers {
-  float: left;
-  padding-right: 30px;
-  width: 360px;
-  padding-top: 41px;
-}
-.our-customers-title {
-  font-size: 24px;
-  color: rgb(48, 56, 66);
-  line-height: 1;
-}
-
-.our-customers-text {
-  font-size: 14px;
-  font-family: "Open Sans";
-  color: rgb(129, 145, 166);
-  line-height: 1.714;
-}
-.partners {
-  border-image: url("../images/header-line.png");
-  border-top: 1px;
-  border-bottom: 1px;
+.partner {
+  overflow: auto;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .customer {
@@ -192,15 +159,33 @@ img.bars {
   padding-right: 15px;
 }
 
-.customer-logos {
-  float: right;
+.customer-l {
+  float: left;
+  padding-right: 30px;
+  width: 360px;
+  padding-top: 41px;
+}
+.customer-l-title {
+  font-size: 24px;
+  color: rgb(48, 56, 66);
 }
 
-.customer-logos img {
-  padding-left: 25px;
+.customer-l-text {
+  font-size: 14px;
+  font-family: "Open Sans";
+  color: rgb(129, 145, 166);
+}
+
+.customer-r {
+  float: right;
+}
+.customer-r img {
+  margin-left: 20px;
 }
 
 .service-wrapper {
+  overflow: auto;
+  clear: both;
   background: url("../images/sevices-bg.png") center no-repeat;
 }
 
@@ -212,7 +197,7 @@ img.bars {
   padding-bottom: 156px;
 }
 .service-top {
-  width: 612px;
+  width: 613px;
   padding-bottom: 116px;
   padding-left: 6px;
 }
@@ -268,6 +253,8 @@ h2 {
 }
 
 .career-wrapper {
+  clear: both;
+  overflow: auto;
   background: url(../images/career-bg.png) center no-repeat;
 }
 
@@ -275,8 +262,6 @@ h2 {
   padding-top: 267px;
   padding-left: 210px;
   padding-right: 256px;
-}
-.career-top {
 }
 
 .career-top h2 {
@@ -312,14 +297,14 @@ h2 {
 }
 
 div.f1 {
-  color: rgb(48, 56, 66);
+  color: rgb(50, 213, 186);
 }
 div.f2 {
-  color: rgb(48, 56, 66);
+  color: rgb(109, 196, 242);
 }
-div.f1 {
-  color: rgb(48, 56, 66);
+div.f3 {
+  color: rgb(255, 209, 60);
 }
-div.f2 {
-  color: rgb(48, 56, 66);
+div.f4 {
+  color: rgb(244, 67, 54);
 }
