@@ -319,7 +319,7 @@ h2 {
   text-transform: uppercase;
 }
 .career-bottom {
-  padding-bottom: 232px;
+  padding-bottom: 198px;
 }
 
 div.f1 {
@@ -361,12 +361,13 @@ label {
   color: #000;
   text-transform: uppercase;
   padding-top: 20px;
-  line-height: 28px;
+  line-height: 32px;
   font-weight: bold;
 }
 .contact-form-wrapper {
-  height: 708px;
   padding-top: 92px;
+  width: 720px;
+  margin: 0 auto;
 }
 .contact-form-wrapper form {
   display: block;
@@ -404,13 +405,8 @@ textarea.message {
   padding-right: 19px;
 }
 
-.contact-form-wrapper {
-  width: 720px;
-  margin: 0 auto;
-}
-
 .contact-form-wrapper form button {
-  padding: 17px 34px 17px 34px;
+  padding: 16px 34px 16px 34px;
   text-transform: uppercase;
   border-radius: 25px;
   border: none;
@@ -420,14 +416,14 @@ textarea.message {
   color: rgb(76, 175, 80);
   text-transform: uppercase;
   text-align: center;
-  margin-top: 45px;
+  margin-top: 55px;
 }
 .contact-form-wrapper form button:hover {
   background-color: #4caf50;
   color: #fff;
 }
 .lower-contact-content {
-  padding-bottom: 45px;
+  padding-bottom: 49px;
 }
 .ready-content {
   float: left;
@@ -443,6 +439,7 @@ textarea.message {
   padding-right: 30px;
   background-color: #fff;
   margin-left: 26px;
+  margin-top: 25px;
 }
 
 .footer-wrapper {
