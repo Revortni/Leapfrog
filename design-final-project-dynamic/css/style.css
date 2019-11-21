@@ -1,6 +1,5 @@
 .main-container {
   width: 100%;
-  min-width: 1170px;
 }
 
 .clearfix::before,
@@ -22,7 +21,7 @@
 }
 
 .container {
-  width: 1170px;
+  width: 73.125em;
   margin: 0 auto;
 }
 
@@ -74,7 +73,7 @@ div.logo {
 .logo a {
   display: block;
   height: 40px;
-  width: 114px;
+  width: 10.2631%;
 }
 
 .header-menu {
@@ -114,7 +113,6 @@ img.bars {
   padding-top: 302px;
   margin: 0 auto;
   padding-bottom: 180px;
-  height: 300px;
 }
 
 .first-content {
