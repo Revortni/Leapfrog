@@ -2,6 +2,15 @@
   width: 100%;
   min-width: 1170px;
 }
+
+.clearfix::before,
+::after {
+  content: "";
+  display: table;
+}
+.clearfix::after {
+  clear: both;
+}
 .upper-background {
   background: url("../images/upper-header-content1-bg.png") center no-repeat;
 }
@@ -21,36 +30,35 @@ nav.social-links {
   float: left;
   padding-left: 15px;
 }
-nav.social-links a i {
+.social-links a i {
   font-size: 14px;
   color: #b5bcc3;
+  line-height: 40px;
 }
-nav.social-links a {
+.social-links a {
   margin-right: 25px;
+  display: inline-block;
 }
-nav.social-links a i:hover {
+.social-links a i:hover {
   color: #6b7c93;
 }
 
 .contact-info {
-  float: right;
-  padding-right: 15px;
-  line-height: 40px;
-}
-.contact-info-title {
   font-weight: normal;
   color: rgb(48, 56, 66);
   font-size: 12px;
+  float: right;
+  padding-right: 15px;
+  line-height: 40px;
 }
 .contact-info-phone {
   color: rgb(107, 124, 147);
   font-weight: lighter;
   font-size: 12px;
+  padding-left: 17px;
 }
 
 .lower-header-wrapper {
-  clear: both;
-  overflow: auto;
   background-position: top;
   background-image: url("../images/header-line.png");
   background-repeat: repeat-x;
@@ -113,7 +121,7 @@ img.bars {
   padding-bottom: 54px;
 }
 
-.first-content-title {
+h1.first-content-title {
   font-size: 56px;
   font-family: "Roboto";
   color: rgb(48, 56, 66);
@@ -144,12 +152,11 @@ img.bars {
   font-size: 14px;
 }
 .explore-now:hover {
-  box-shadow: 5px 10px 18px #999999;
+  box-shadow: 0 1px 50px #b6b6b6;
   font-weight: bolder;
 }
 
 .partner {
-  overflow: auto;
   border-top: 1px solid #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -163,42 +170,44 @@ img.bars {
   float: left;
   padding-right: 30px;
   width: 360px;
-  padding-top: 41px;
+  padding-top: 17px;
+  padding-bottom: 28px;
 }
 .customer-l-title {
   font-size: 24px;
   color: rgb(48, 56, 66);
+  line-height: 50px;
 }
 
 .customer-l-text {
   font-size: 14px;
   font-family: "Open Sans";
   color: rgb(129, 145, 166);
+  line-height: 24px;
 }
 
 .customer-r {
   float: right;
+  padding-top: 50px;
+  padding-bottom: 28px;
 }
-.customer-r img {
-  margin-left: 20px;
+.customer-logo-wrapper {
+  display: inline-block;
+  padding-left: 62px;
 }
 
 .service-wrapper {
-  overflow: auto;
-  clear: both;
   background: url("../images/sevices-bg.png") center no-repeat;
 }
 
 .service {
   float: right;
-  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 140px;
   width: 750px;
-  padding-top: 163px;
-  padding-bottom: 156px;
 }
 .service-top {
-  width: 613px;
-  padding-bottom: 116px;
+  padding-bottom: 106px;
   padding-left: 6px;
 }
 
@@ -208,34 +217,49 @@ h2 {
   color: rgb(48, 56, 66);
   line-height: 0.706;
 }
-
+.service-top {
+  width: 647px;
+  padding-bottom: 106px;
+}
 .service-top h2 {
-  padding-bottom: 23px;
+  padding-bottom: 12px;
+  font-size: 34px;
+  font-family: "Roboto Light";
+  color: rgb(48, 56, 66);
+  line-height: 55px;
 }
 .service-top p {
   font-size: 14px;
   font-family: "Roboto";
   color: rgb(129, 145, 166);
-  width: 613px;
-  padding-right: 35px;
+  line-height: 25px;
 }
-
+.service-field {
+  width: 750px;
+}
 .field {
   float: left;
-  width: 360px;
   padding-bottom: 70px;
 }
 
-.field figure {
-  float: left;
+.field-img {
+  width: 61px;
+  padding-left: 5px;
+  display: inline-block;
+  height: 35px;
+  background: url(../images/service1.png) no-repeat;
+}
+
+.field:hover .field-img {
+  background: url(../images/service1a.png) no-repeat;
 }
 
 .field-content {
-  float: right;
   background: url("../images/header-line.png") repeat-y;
   background-position: left;
-  padding-left: 28px;
-  width: 292px;
+  padding-left: 26px;
+  display: inline-block;
+  width: 279px;
 }
 
 .field-content h3 {
@@ -253,9 +277,6 @@ h2 {
 }
 
 .career-wrapper {
-  clear: both;
-  overflow: auto;
-  height: 925px;
   background: url(../images/career-bg.png) center no-repeat;
 }
 
@@ -264,37 +285,37 @@ h2 {
   padding-left: 210px;
   padding-right: 256px;
 }
+.career-top {
+  padding-bottom: 95px;
+}
 
 .career-top h2 {
-  padding-bottom: 30px;
+  line-height: 64px;
 }
 .career-top p {
   font-size: 14px;
   color: rgb(129, 145, 166);
   line-height: 24px;
 }
-
-.career-bottom {
-  padding-top: 111px;
-}
 .career-field {
   float: left;
-  padding-bottom: 83px;
-  padding-right: 98px;
+  padding-bottom: 63px;
+  width: 274px;
 }
 .career-field div {
   font-size: 44px;
   font-family: "Roboto Thin";
   color: rgb(50, 213, 186);
-  line-height: 0.545;
-  padding-bottom: 20px;
+  line-height: 52px;
 }
 .career-field span {
   font-size: 15px;
   font-family: "Open Sans Light";
   color: rgb(48, 56, 66);
   text-transform: uppercase;
-  line-height: 1.2;
+}
+.career-bottom {
+  padding-bottom: 232px;
 }
 
 div.f1 {
@@ -311,14 +332,13 @@ div.f4 {
 }
 
 .contact-us-wrapper {
-  clear: both;
   background: url(../images/contact-bg.png) center no-repeat;
 }
 .contact-us-upper {
   text-align: center;
 }
 .contact-us-upper h2 {
-  padding-bottom: 35px;
+  padding-bottom: 25px;
 }
 .contact-us-upper p {
   font-size: 14px;
@@ -330,20 +350,18 @@ div.f4 {
   margin: 0 auto;
 }
 
-.contact-form-bg {
-  overflow: auto;
-}
-
 label {
   display: block;
   font-size: 13px;
   font-family: "OpenSans Semibold";
   color: #000;
   text-transform: uppercase;
-  padding-bottom: 10px;
+  padding-top: 20px;
+  line-height: 28px;
+  font-weight: bold;
 }
 .contact-form-wrapper {
-  padding-top: 100px;
+  padding-top: 90px;
   padding-bottom: 145px;
 }
 .contact-form-wrapper form {
@@ -351,21 +369,34 @@ label {
   padding-left: 65px;
   padding-right: 65px;
   border-radius: 10px;
-  box-shadow: 0 0 10px#888;
+  box-shadow: 0 0 10px#999;
+  padding-top: 50px;
+  padding-bottom: 87px;
 }
-.contact-form-wrapper form div {
-  padding-bottom: 32px;
-}
-input {
+
+.contact-ip {
   width: 100%;
   height: 69px;
   border-radius: 10px;
   border: none;
   background-color: #f5f5f5;
+  padding-left: 6px;
+  font-size: 30px;
 }
 
-input.message {
-  height: 178px;
+textarea.message {
+  min-height: 178px;
+  max-height: 178px;
+  min-width: 100%;
+  max-width: 100%;
+  resize: none;
+}
+.name {
+  display: inline-block;
+  width: 283px;
+}
+.name.sp {
+  padding-right: 19px;
 }
 
 .contact-form-wrapper {
@@ -378,26 +409,28 @@ input.message {
   text-transform: uppercase;
   border-radius: 25px;
   border: none;
-  box-shadow: 0 0 10px#888;
   background-color: #fff;
+  box-shadow: 0 0 10px#CCC;
   font-size: 14px;
   color: rgb(76, 175, 80);
   text-transform: uppercase;
   text-align: center;
+  margin-top: 45px;
 }
 .contact-form-wrapper form button:hover {
-  box-shadow: 0 0 10px#555;
+  box-shadow: 0 0 10px#777;
 }
 
-footer {
-  background: url(../images/contact-bg.png) center no-repeat;
+.footer-wrapper {
+  background: url(../images/footer-bg.png) center no-repeat;
   border-top: 1px solid #f0f0f0;
 }
 
-.footer-c1 {
+.footer-l {
   float: left;
   padding-left: 5px;
   padding-top: 43px;
+  padding-bottom: 87px;
 }
 
 .footer-logo {
@@ -415,6 +448,74 @@ footer {
   font-size: 14px;
   color: rgb(129, 145, 166);
   line-height: 1.714;
-  width: 335px;
-  padding-bottom: 34px;
+  width: 360px;
+  padding-bottom: 27px;
+}
+.c1-policy-term a {
+  display: inline-block;
+  padding-right: 38px;
+  font-size: 12px;
+  font-family: "Roboto";
+  color: rgb(48, 56, 66);
+}
+.c1-policy-term {
+  padding-top: 25px;
+  line-height: 2;
+  text-transform: uppercase;
+}
+
+.cpright {
+  font-size: 14px;
+  font-family: "Roboto";
+  color: rgba(129, 145, 166, 0.502);
+}
+
+.footer-r {
+  padding-right: 15px;
+  float: right;
+  padding-top: 54px;
+  padding-left: 55px;
+}
+
+.footer-r div h3 {
+  text-transform: uppercase;
+  font-size: 14px;
+  color: rgb(48, 56, 66);
+  text-transform: uppercase;
+  line-height: 45px;
+}
+.footer-r div ul li a {
+  font-size: 12px;
+  color: #8191a6;
+  text-transform: capitalize;
+}
+.footer-r div ul {
+  padding-left: 2px;
+  list-style: none;
+}
+.footer-r div ul li {
+  line-height: 34px;
+}
+.footer-r div ul li a:hover {
+  color: #303842;
+}
+
+.footer-r-c1 {
+  float: left;
+  width: 111px;
+  padding-right: 121px;
+}
+.footer-r-c2 {
+  float: left;
+  width: 105px;
+  padding-right: 115px;
+}
+
+.footer-r-c3 {
+  float: left;
+}
+
+.footer-r-c3 ul li {
+  display: inline-block;
+  padding-right: 24px;
 }
