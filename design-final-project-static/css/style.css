@@ -144,16 +144,20 @@ h1.first-content-title {
 }
 .explore-now {
   width: 139px;
+}
+.button {
   margin: 0 auto;
-  color: #4caf50;
+  color: #303842;
   border-radius: 50px;
-  padding: 15px 30px 15px 30px;
+  padding: 15px;
   text-align: center;
   font-size: 14px;
+  text-transform: capitalize;
+  box-shadow: 0 1px 20px #b6b6b6;
 }
-.explore-now:hover {
-  box-shadow: 0 1px 50px #b6b6b6;
-  font-weight: bolder;
+.button:hover {
+  color: #4caf50;
+  cursor: pointer;
 }
 
 .partner {
@@ -332,7 +336,7 @@ div.f4 {
 }
 
 .contact-us-wrapper {
-  background: url(../images/contact-bg.png) center no-repeat;
+  background: url(../images/contact-bg-a.png) center no-repeat;
 }
 .contact-us-upper {
   text-align: center;
@@ -361,10 +365,11 @@ label {
   font-weight: bold;
 }
 .contact-form-wrapper {
-  padding-top: 90px;
-  padding-bottom: 145px;
+  height: 708px;
+  padding-top: 92px;
 }
 .contact-form-wrapper form {
+  display: block;
   background-color: #fff;
   padding-left: 65px;
   padding-right: 65px;
@@ -418,7 +423,26 @@ textarea.message {
   margin-top: 45px;
 }
 .contact-form-wrapper form button:hover {
-  box-shadow: 0 0 10px#777;
+  background-color: #4caf50;
+  color: #fff;
+}
+.lower-contact-content {
+  padding-bottom: 45px;
+}
+.ready-content {
+  float: left;
+  padding-left: 15px;
+  font-size: 34px;
+  font-family: "Roboto";
+  color: rgb(48, 56, 66);
+  line-height: 1.294;
+}
+.contactb {
+  float: right;
+  padding-left: 30px;
+  padding-right: 30px;
+  background-color: #fff;
+  margin-left: 26px;
 }
 
 .footer-wrapper {
