@@ -1,14 +1,221 @@
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 600px) and (max-width: 1170px) {
   .main-container {
     width: 100%;
+    min-width: 48em;
+  }
+  .container {
+    width: 48em;
+    margin: 0 auto;
+  }
+  .upper-header {
+    display: block;
+  }
+  .social-links {
+    float: left;
+    padding-left: 15px;
+  }
+  .social-links a i {
+    font-size: 14px;
+    color: #b5bcc3;
+    line-height: 40px;
+  }
+  .social-links a {
+    margin-right: 25px;
+    display: inline-block;
+  }
+  .social-links a i:hover {
+    color: #6b7c93;
+  }
+
+  .contact-info {
+    font-weight: normal;
+    color: rgb(48, 56, 66);
+    font-size: 12px;
+    float: right;
+    padding-right: 15px;
+    line-height: 40px;
+  }
+  .contact-info-phone {
+    color: rgb(107, 124, 147);
+    font-weight: lighter;
+    font-size: 12px;
+    padding-left: 17px;
+  }
+  .lower-header-wrapper {
+    background-position: top;
+    background-image: url("../images/header-line.png");
+    background-repeat: repeat-x;
+  }
+
+  .header-menu {
+    float: right;
+    padding-right: 15px;
+  }
+  .header-menu ul li:not(:first-child) {
+    display: none;
+  }
+  .header-menu ul:hover li {
+    display: block;
+  }
+  .first-container {
+    padding-top: 302px;
+    margin: 0 auto;
+    padding-bottom: 63px;
+  }
+  .first-content {
+    padding-bottom: 54px;
+    margin: 0 auto;
+  }
+  h1.first-content-title {
+    font-size: 56px;
+    line-height: 82px;
+    text-align: center;
+    margin: 0 auto;
+    width: 80.7692%;
+  }
+  .customer-l {
+    float: none;
+  }
+  .customer-r {
+    float: none;
+    padding-top: 28px;
+  }
+  .customer-logo-wrapper {
+    display: inline-block;
+    padding-left: 25px;
+    padding-right: 25px;
+    margin: 0;
+    padding-bottom: 0;
+  }
+  .customer-logo-wrapper img {
+    margin: 0;
+    padding-bottom: 0;
+    display: inline;
+  }
+  .service {
+    margin: 0 auto;
+    padding-top: 140px;
+    padding-left: 0;
+  }
+  .service-top {
+    padding-bottom: 53px;
+    padding-left: 6px;
+  }
+  .service {
+    padding-top: 140px;
+    padding-left: 0;
+  }
+  .service-top {
+    padding-bottom: 53px;
+    padding-left: 6px;
+    width: 100%;
+    text-align: center;
+  }
+  .field {
+    width: 46%;
+  }
+  .field-img {
+    padding-right: 31px;
+  }
+  .field-content {
+    float: left;
+    width: 76.9444%;
+  }
+  .career {
+    padding-top: 267px;
+    margin: 0 auto;
+  }
+  .career-top {
+    padding-bottom: 95px;
+  }
+  .career-bottom {
+    width: 74%;
+    margin: 0 auto;
+  }
+  .career-field {
+    float: left;
+    padding-bottom: 63px;
+    padding-right: 68px;
+    width: 37%;
+  }
+  .career-bottom {
+    padding-bottom: 198px;
+  }
+
+  .contact-us-upper p {
+    width: 47.4358%;
+  }
+  .contact-form-wrapper {
+    padding-top: 92px;
+    width: 90%;
+    margin: 0 auto;
+  }
+  .contact-form-wrapper form {
+    padding-left: 65px;
+    padding-right: 65px;
+    padding-top: 50px;
+    padding-bottom: 87px;
+  }
+  .name {
+    float: left;
+    width: 48.3887%;
+  }
+  .sp {
+    float: right;
+  }
+  .contact-form-wrapper form button {
+    margin-top: 55px;
+  }
+  .contact-ip {
+    height: 69px;
+    font-size: 30px;
+  }
+  .ready-content {
+    float: left;
+  }
+  .contactb {
+    float: right;
+    margin-right: 15px;
+    margin-left: 26px;
+  }
+  .footer-wrapper {
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+  }
+  .footer-l {
+    float: none;
+    padding-top: 53px;
+    padding-bottom: 40px;
+  }
+  .footer-r-l {
+    float: left;
+    padding-left: 15px;
+  }
+  .footer-r-c1 {
+    float: left;
+    padding-right: 100px;
+    width: auto;
+  }
+  .footer-r-c2 {
+    float: right;
+    padding-right: 100px;
+    padding-left: 12px;
+    width: auto;
+  }
+
+  .footer-r-c3 {
+    padding-left: 12px;
+    float: right;
+  }
+}
+
+@media screen and (min-width: 1170px) {
+  .main-container {
     min-width: 73.125em;
   }
   .container {
     width: 73.125em;
   }
-}
-
-@media screen and (min-width: 900px) {
   .upper-header {
     display: block;
   }
@@ -61,7 +268,9 @@
     display: none;
   }
   .header-menu ul li a {
-    padding-left: 0;
+    padding: 0;
+    padding-top: 32px;
+    padding-bottom: 32px;
   }
 
   .header-menu ul li:hover {

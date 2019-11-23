@@ -2,6 +2,10 @@
   width: 100%;
   min-width: 22.5em;
 }
+.container {
+  width: 22.5em;
+  margin: 0 auto;
+}
 
 .clearfix::before,
 ::after {
@@ -21,10 +25,6 @@
   box-shadow: 0 1px 10px #888;
 }
 
-.container {
-  width: 22.5em;
-  margin: 0 auto;
-}
 .upper-header {
   display: none;
 }
@@ -55,11 +55,14 @@ div.logo {
   text-align: right;
   line-height: 0;
   display: block;
-  padding-bottom: 32px;
-  padding-top: 32px;
+  padding: 32px;
+  padding-right: 0;
 }
 .header-menu ul li:not(:first-child) {
-  /* display: none; */
+  display: none;
+}
+.header-menu ul:hover li {
+  display: block;
 }
 
 .first-container {
@@ -286,6 +289,7 @@ div.f4 {
 
 .contact-us-wrapper {
   background: url(../images/contact-bg-a.png) center no-repeat;
+  background-color: #fff;
 }
 .contact-us-upper {
   text-align: center;
