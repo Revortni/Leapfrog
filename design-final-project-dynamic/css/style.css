@@ -1,4 +1,14 @@
 @media screen and (min-width: 900px) {
+  .main-container {
+    width: 100%;
+    min-width: 73.125em;
+  }
+  .container {
+    width: 73.125em;
+  }
+}
+
+@media screen and (min-width: 900px) {
   .upper-header {
     display: block;
   }
@@ -38,16 +48,20 @@
     background-image: url("../images/header-line.png");
     background-repeat: repeat-x;
   }
+
   .header-menu {
     float: right;
     padding-right: 15px;
   }
-  .header-menu ul li.menu-button {
-    display: none;
-  }
   .header-menu ul li {
     display: inline-block;
     margin-left: 52px;
+  }
+  .header-menu ul li.menu-button {
+    display: none;
+  }
+  .header-menu ul li a {
+    padding-left: 0;
   }
 
   .header-menu ul li:hover {
@@ -55,10 +69,13 @@
     background-position: top;
     background-repeat: repeat-x;
   }
+  .header-menu ul li:not(:first-child) {
+    display: inline-block;
+  }
   .first-container {
     padding-top: 302px;
     margin: 0 auto;
-    padding-bottom: 180px;
+    padding-bottom: 126px;
   }
   .first-content {
     padding-bottom: 54px;
@@ -97,32 +114,107 @@
     padding-left: 6px;
   }
   .field {
-    float: left;
-    padding-bottom: 70px;
     width: 48%;
-    padding-left: 15px;
   }
   .field-img {
-    float: left;
-    width: 9.7222%;
     padding-right: 31px;
-    height: 50px;
-    background: url(../images/service1.png) no-repeat;
   }
   .field-content {
     float: left;
-    border-left: 1px solid #f1f1f1;
-    padding-left: 15px;
     width: 76.9444%;
   }
-}
-
-@media screen and (min-width: 900px) {
-  .main-container {
-    width: 100%;
-    min-width: 73.125em;
+  .career {
+    padding-top: 267px;
+    width: 64.1025%;
+    margin: 0 auto;
   }
-  .container {
-    width: 73.125em;
+  .career-top {
+    padding-bottom: 95px;
+  }
+  .career-bottom {
+    width: 74%;
+  }
+  .career-field {
+    float: left;
+    padding-bottom: 63px;
+    padding-right: 68px;
+    width: 35.1351%;
+  }
+  .career-bottom {
+    padding-bottom: 198px;
+  }
+
+  .contact-us-upper p {
+    width: 47.4358%;
+  }
+  .contact-form-wrapper {
+    padding-top: 92px;
+    width: 64.1025%;
+    margin: 0 auto;
+  }
+  .contact-form-wrapper form {
+    padding-left: 65px;
+    padding-right: 65px;
+    padding-top: 50px;
+    padding-bottom: 87px;
+  }
+  .name {
+    float: left;
+    width: 48.3887%;
+  }
+  .sp {
+    float: right;
+  }
+  .contact-form-wrapper form button {
+    margin-top: 55px;
+  }
+  .contact-ip {
+    height: 69px;
+    font-size: 30px;
+  }
+  .ready-content {
+    float: left;
+  }
+  .contactb {
+    float: right;
+    margin-right: 0;
+    margin-left: 26px;
+  }
+  .footer-wrapper {
+    background: url(../images/footer-bg.png) center no-repeat;
+    border-top: 1px solid #f0f0f0;
+  }
+  .footer-l {
+    float: left;
+    padding-top: 53px;
+    padding-bottom: 40px;
+    width: 30.7692%;
+  }
+
+  .footer-r {
+    float: right;
+    padding-top: 68px;
+    width: 64.1025%;
+  }
+  .footer-r-l {
+    float: left;
+    padding-left: 140px;
+  }
+  .footer-r-c1 {
+    float: left;
+    padding-left: 12px;
+    padding-right: 100px;
+    width: auto;
+  }
+  .footer-r-c2 {
+    float: right;
+    padding-right: 100px;
+    padding-left: 12px;
+    width: auto;
+  }
+
+  .footer-r-c3 {
+    padding-left: 12px;
+    float: right;
   }
 }
