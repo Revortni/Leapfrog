@@ -91,9 +91,6 @@ h1.first-content-title {
   line-height: 1.444;
   padding-bottom: 44px;
 }
-.explore-now {
-  /* width: 11.8803%; */
-}
 .button {
   margin: 0 auto;
   color: #303842;
@@ -250,8 +247,7 @@ h2 {
   color: rgb(129, 145, 166);
   line-height: 24px;
 }
-.career-bottom {
-}
+
 .career-field {
   float: left;
   padding-bottom: 63px;
