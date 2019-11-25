@@ -183,9 +183,13 @@
     border-top: 1px solid #f0f0f0;
   }
   .footer-l {
+    display: block;
     float: none;
     padding-top: 53px;
     padding-bottom: 40px;
+  }
+  .footer-r div h3 {
+    display: block;
   }
   .footer-r-l {
     float: left;
@@ -204,6 +208,7 @@
   }
 
   .footer-r-c3 {
+    display: block;
     padding-left: 12px;
     float: right;
   }
@@ -396,6 +401,7 @@
     border-top: 1px solid #f0f0f0;
   }
   .footer-l {
+    display: block;
     float: left;
     padding-top: 53px;
     padding-bottom: 40px;
@@ -425,6 +431,7 @@
   }
 
   .footer-r-c3 {
+    display: block;
     padding-left: 12px;
     float: right;
   }
