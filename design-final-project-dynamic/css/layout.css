@@ -66,7 +66,7 @@ div.logo {
 }
 
 .first-container {
-  padding-top: 151px;
+  padding-top: 121px;
   margin: 0 auto;
   padding-bottom: 58px;
 }
@@ -76,20 +76,21 @@ h1.first-content-title {
   font-family: "Roboto";
   color: rgb(48, 56, 66);
   text-align: center;
-  padding-bottom: 38px;
+  padding-bottom: 22px;
   width: 80.7692%;
   margin: 0 auto;
+  padding-top: 30px;
 }
 
 .first-content-text {
-  width: 64.1025%;
+  width: 57.2649%;
   margin: 0 auto;
   text-align: center;
   font-size: 18px;
   font-family: "Roboto";
   color: rgb(107, 124, 147);
   line-height: 1.444;
-  padding-bottom: 44px;
+  padding-bottom: 34px;
 }
 .button {
   margin: 0 auto;
@@ -321,8 +322,8 @@ label {
 .contact-form-wrapper form {
   display: block;
   background-color: #fff;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 20px;
+  padding-right: 19px;
   border-radius: 10px;
   box-shadow: 0 0 10px#999;
   padding-top: 25px;

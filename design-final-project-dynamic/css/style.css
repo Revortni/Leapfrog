@@ -58,7 +58,7 @@
     display: block;
   }
   .first-container {
-    padding-top: 302px;
+    padding-top: 242px;
     margin: 0 auto;
     padding-bottom: 63px;
   }
@@ -68,10 +68,10 @@
   }
   h1.first-content-title {
     font-size: 56px;
-    line-height: 82px;
     text-align: center;
     margin: 0 auto;
     width: 80.7692%;
+    padding-top: 60px;
   }
   .customer-l {
     float: none;
@@ -282,7 +282,7 @@
     display: inline-block;
   }
   .first-container {
-    padding-top: 302px;
+    padding-top: 242px;
     margin: 0 auto;
     padding-bottom: 126px;
   }
@@ -291,7 +291,9 @@
   }
   h1.first-content-title {
     font-size: 56px;
-    line-height: 82px;
+    color: rgb(48, 56, 66);
+    line-height: 1.286;
+    padding-top: 60px;
   }
 
   .customer-l {
@@ -363,7 +365,7 @@
   }
   .contact-form-wrapper form {
     padding-left: 65px;
-    padding-right: 65px;
+    padding-right: 64px;
     padding-top: 50px;
     padding-bottom: 87px;
   }
