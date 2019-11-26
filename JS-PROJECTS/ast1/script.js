@@ -78,7 +78,7 @@ leftButton.onclick = function() {
 
 rightButton.onclick = function() {
   currentImageIndex = getAbsoluteIndex(currentImageIndex + 1);
-  setSlideImage(currentImageIndex);
+  animateSlide(currentImageIndex);
   pauseAutoSlideAfterButtonPress();
 };
 
