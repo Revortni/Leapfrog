@@ -2,6 +2,14 @@
   margin: 0;
   padding: 0;
 }
+.clearfix::before,
+::after {
+  content: '';
+  display: table;
+}
+.clearfix::after {
+  clear: both;
+}
 .root {
   margin-top: 100px;
 }
@@ -14,39 +22,49 @@
 }
 .carousel-image-wrapper {
   background-color: #000;
-}
-.carousel-image-wrapper img {
   position: absolute;
   z-index: 5;
 }
+.carousel-image-wrapper img {
+  float: left;
+}
 .carousel-container div i {
   font-size: 30px;
-  opacity: 0.7;
+  opacity: 0.8;
   color: #c3c3c3;
   padding: 10px;
+}
+.carousel-container div:hover i {
+  color: #f3f3f3;
+  opacity: 1;
 }
 
 .control-l {
   position: absolute;
   z-index: 10;
-  top: 80px;
+  top: 50%;
+  margin-top: -20px;
   left: 5px;
 }
 .control-r {
   position: absolute;
   z-index: 10;
-  top: 80px;
+  top: 50%;
+  margin-top: -20px;
   right: 5px;
 }
 
-.bulletNavigation {
+.indicator-nav {
   position: absolute;
   z-index: 10;
   bottom: 5px;
-  left: 40%;
+  left: 50%;
+  margin-left: -150px;
+  width: 300px;
+  text-align: center;
 }
 
-.bulletNavigation span {
+.indicator-nav span {
   display: inline-block;
   background-color: #c3c3c3;
   opacity: 0.8;
@@ -56,9 +74,10 @@
   margin-left: 5px;
   margin-right: 5px;
 }
-.bulletNavigation span:hover {
-  background-color: #888888;
+.indicator-nav span:hover {
+  background-color: #fff;
 }
-.bulletNavigation span .active {
-  background-color: #87cefa;
+.indicator-nav span.active {
+  background-color: #fff;
+  opacity: 1;
 }
