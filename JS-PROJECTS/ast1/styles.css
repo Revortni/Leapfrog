@@ -11,17 +11,22 @@
   clear: both;
 }
 .root {
-  margin-top: 100px;
+  width: 22.5em;
+  margin: 50px auto;
 }
 .carousel-container {
-  width: 90%;
-  margin: 0 auto;
   overflow: hidden;
   position: relative;
-  height: auto;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 .carousel-image-wrapper {
   background-color: #000;
+  margin: 0 auto;
+}
+.carousel-container div i {
+  font-size: 20px;
 }
 .carousel-image-wrapper img {
   float: left;
@@ -29,7 +34,7 @@
   width: 100%;
 }
 .carousel-container div i {
-  font-size: 60px;
+  font-size: 30px;
   opacity: 0.8;
   color: #c3c3c3;
   padding: 10px;
@@ -39,41 +44,38 @@
   opacity: 1;
 }
 
-.control-l {
+.control-button {
   position: absolute;
-  z-index: 10;
+  z-index: 100;
   top: 50%;
   margin-top: -30px;
+}
+.control-left {
   left: 5px;
 }
-.control-r {
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  margin-top: -30px;
+
+.control-right {
   right: 5px;
 }
 
 .indicator-nav {
   position: absolute;
-  z-index: 10;
+  z-index: 100;
   bottom: 5px;
-  left: 50%;
-  margin-left: -150px;
-  width: 300px;
+  width: 100%;
   text-align: center;
 }
-
 .indicator-nav span {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   display: inline-block;
   background-color: #c3c3c3;
   opacity: 0.8;
-  border-radius: 10px;
-  margin-left: 7px;
-  margin-right: 7px;
+  border-radius: 20px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
+
 .indicator-nav span:hover {
   background-color: #fff;
 }
@@ -82,16 +84,27 @@
   opacity: 1;
 }
 
-@media screen and (max-width: 400px) {
-  .carousel-container div i {
-    font-size: 20px;
+@media screen and (min-width: 1170px) {
+  .root {
+    width: 87.5em;
   }
-  .indicator-nav {
-    display: none;
+  .carousel-container div i {
+    font-size: 60px;
+  }
+  .indicator-nav span {
+    width: 30px;
+    height: 30px;
   }
 }
-@media screen and (min-width: 400px) and (max-width: 900px) {
+@media screen and (min-width: 600px) and (max-width: 1170px) {
+  .root {
+    width: 48em;
+  }
   .carousel-container div i {
     font-size: 30px;
+  }
+  .indicator-nav span {
+    width: 20px;
+    height: 20px;
   }
 }

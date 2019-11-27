@@ -1,8 +1,9 @@
 var imageChangeInterval;
 var slideInterval;
 var waitAfterSlideButtonPress;
-var leftButton = document.getElementById('control-l');
-var rightButton = document.getElementById('control-r');
+var carouselContainer = document.getElementById('carousel1');
+var leftButton = addNavButton('left');
+var rightButton = addNavButton('right');
 var IMAGE_WIDTH;
 var imageContainer = document.getElementsByClassName(
   'carousel-image-wrapper'
@@ -12,7 +13,10 @@ var totalImageCount = images.length;
 var currentImageIndex = 0;
 
 function addIndicatorNav() {
-  var indicatorNav = document.getElementById('indicator-nav');
+  var indicatorNav = document.createElement('div');
+  indicatorNav.classList.add('indicator-nav');
+  indicatorNav.id = 'indicator-nav';
+  imageContainer.parentElement.appendChild(indicatorNav);
   images.forEach(function(val, index) {
     val.style.width = 100 / totalImageCount + '%';
     var dot = document.createElement('span');
@@ -23,6 +27,17 @@ function addIndicatorNav() {
     });
     indicatorNav.appendChild(dot);
   });
+}
+function addNavButton(param) {
+  var button = document.createElement('div');
+  var icon = document.createElement('i');
+  icon.classList.add('fa', 'fa-chevron-' + param);
+  button.classList.add('control-button');
+  button.style[param] = 5 + 'px';
+  button.id = 'control-' + param;
+  button.appendChild(icon);
+  carouselContainer.appendChild(button);
+  return button;
 }
 
 function setIndicatorDot(position) {
@@ -48,7 +63,7 @@ function animateSlide(destinationIndex) {
   var currentPosition = -currentImageIndex * IMAGE_WIDTH;
   var displacement = (destinationIndex - currentImageIndex) * IMAGE_WIDTH;
   slideInterval = setInterval(function() {
-    imageContainer.style.marginLeft =
+    imageContainer.style.left =
       currentPosition - displacement * slideFactor + '%';
     slideFactor += 0.1;
     if (slideFactor > 1) {
@@ -86,7 +101,19 @@ rightButton.onclick = function() {
   animateSlide(currentImageIndex + 1);
 };
 
+function setContainerHeight() {
+  var maxHeight = 0;
+  images.forEach(function(val) {
+    var temp = val.height;
+    if (temp > maxHeight) {
+      maxHeight = temp;
+    }
+  });
+  carouselContainer.style.height = maxHeight + 'px';
+}
+
 /* Execution Start */
+setContainerHeight();
 imageContainer.style.width = 100 * totalImageCount + '%';
 IMAGE_WIDTH = 100;
 addIndicatorNav();
