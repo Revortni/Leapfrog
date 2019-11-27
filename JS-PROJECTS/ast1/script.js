@@ -3,7 +3,7 @@ var slideInterval;
 var waitAfterSlideButtonPress;
 var leftButton = document.getElementById('control-l');
 var rightButton = document.getElementById('control-r');
-var IMAGE_WIDTH = 300;
+var IMAGE_WIDTH = 1200;
 var imageContainer = document.getElementsByClassName(
   'carousel-image-wrapper'
 )[0];
@@ -12,15 +12,15 @@ var totalImageCount = images.length;
 var currentImageIndex = 0;
 
 function addIndicatorNav() {
-  var parent = document.getElementById('indicator-nav');
+  var indicatorNav = document.getElementById('indicator-nav');
   images.forEach(function(val, index) {
-    var bullet = document.createElement('span');
-    bullet.position = index;
-    bullet.addEventListener('click', function() {
+    var dot = document.createElement('span');
+    dot.position = index;
+    dot.addEventListener('click', function() {
       pauseAutoSlideAfterButtonPress();
       animateSlide(this.position);
     });
-    parent.appendChild(bullet);
+    indicatorNav.appendChild(dot);
   });
 }
 
@@ -36,7 +36,7 @@ function setIndicatorDot(position) {
   });
 }
 
-/* change image with animated sliding */
+/* change image with sliding animation */
 function animateSlide(destinationIndex) {
   var slideFactor = 0;
   if (destinationIndex < 0) {
@@ -49,12 +49,12 @@ function animateSlide(destinationIndex) {
   slideInterval = setInterval(function() {
     imageContainer.style.left =
       currentPosition - displacement * slideFactor + 'px';
-    slideFactor += 0.2;
+    slideFactor += 0.1;
     if (slideFactor > 1) {
       currentImageIndex = destinationIndex;
       clearInterval(slideInterval);
     }
-  }, 100);
+  }, 30);
 }
 
 /* Slide image after 2s */
@@ -64,7 +64,7 @@ function automaticSlideAfterDelay() {
   }, 2000);
 }
 
-/* Stop all async tasks and resume automatic slide*/
+/* removes all async tasks and resumes automatic slide*/
 function pauseAutoSlideAfterButtonPress() {
   clearInterval(slideInterval);
   clearInterval(imageChangeInterval);

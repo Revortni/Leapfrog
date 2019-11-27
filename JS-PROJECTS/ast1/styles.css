@@ -14,8 +14,8 @@
   margin-top: 100px;
 }
 .carousel-container {
-  width: 300px;
-  height: 200px;
+  width: 1200px;
+  height: 800px;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
@@ -29,7 +29,7 @@
   float: left;
 }
 .carousel-container div i {
-  font-size: 30px;
+  font-size: 60px;
   opacity: 0.8;
   color: #c3c3c3;
   padding: 10px;
@@ -43,14 +43,14 @@
   position: absolute;
   z-index: 10;
   top: 50%;
-  margin-top: -20px;
+  margin-top: -30px;
   left: 5px;
 }
 .control-r {
   position: absolute;
   z-index: 10;
   top: 50%;
-  margin-top: -20px;
+  margin-top: -30px;
   right: 5px;
 }
 
@@ -68,11 +68,11 @@
   display: inline-block;
   background-color: #c3c3c3;
   opacity: 0.8;
-  width: 7px;
-  height: 7px;
+  width: 15px;
+  height: 15px;
   border-radius: 10px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 7px;
+  margin-right: 7px;
 }
 .indicator-nav span:hover {
   background-color: #fff;
