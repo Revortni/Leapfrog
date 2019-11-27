@@ -42,6 +42,7 @@
 .carousel-container div:hover i {
   color: #f3f3f3;
   opacity: 1;
+  cursor: pointer;
 }
 
 .control-button {
@@ -66,8 +67,8 @@
   text-align: center;
 }
 .indicator-nav span {
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
   display: inline-block;
   background-color: #c3c3c3;
   opacity: 0.8;
@@ -78,10 +79,21 @@
 
 .indicator-nav span:hover {
   background-color: #fff;
+  cursor: pointer;
 }
 .indicator-nav span.active {
   background-color: #fff;
   opacity: 1;
+}
+
+.mini-slider {
+  width: 40%;
+}
+.mini-slider div {
+  display: inline-block;
+}
+.mid-slider {
+  width: 60%;
 }
 
 @media screen and (min-width: 1170px) {
@@ -94,6 +106,9 @@
   .indicator-nav span {
     width: 30px;
     height: 30px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 60px;
   }
 }
 @media screen and (min-width: 600px) and (max-width: 1170px) {
