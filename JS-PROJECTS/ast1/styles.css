@@ -14,19 +14,19 @@
   margin-top: 100px;
 }
 .carousel-container {
-  width: 1200px;
-  height: 800px;
+  width: 90%;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
+  height: auto;
 }
 .carousel-image-wrapper {
   background-color: #000;
-  position: absolute;
-  z-index: 5;
 }
 .carousel-image-wrapper img {
   float: left;
+  height: auto;
+  width: 100%;
 }
 .carousel-container div i {
   font-size: 60px;
@@ -65,11 +65,11 @@
 }
 
 .indicator-nav span {
+  width: 15px;
+  height: 15px;
   display: inline-block;
   background-color: #c3c3c3;
   opacity: 0.8;
-  width: 15px;
-  height: 15px;
   border-radius: 10px;
   margin-left: 7px;
   margin-right: 7px;
@@ -80,4 +80,18 @@
 .indicator-nav span.active {
   background-color: #fff;
   opacity: 1;
+}
+
+@media screen and (max-width: 400px) {
+  .carousel-container div i {
+    font-size: 20px;
+  }
+  .indicator-nav {
+    display: none;
+  }
+}
+@media screen and (min-width: 400px) and (max-width: 900px) {
+  .carousel-container div i {
+    font-size: 30px;
+  }
 }

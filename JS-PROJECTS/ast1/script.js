@@ -3,7 +3,7 @@ var slideInterval;
 var waitAfterSlideButtonPress;
 var leftButton = document.getElementById('control-l');
 var rightButton = document.getElementById('control-r');
-var IMAGE_WIDTH = 1200;
+var IMAGE_WIDTH;
 var imageContainer = document.getElementsByClassName(
   'carousel-image-wrapper'
 )[0];
@@ -14,6 +14,7 @@ var currentImageIndex = 0;
 function addIndicatorNav() {
   var indicatorNav = document.getElementById('indicator-nav');
   images.forEach(function(val, index) {
+    val.style.width = 100 / totalImageCount + '%';
     var dot = document.createElement('span');
     dot.position = index;
     dot.addEventListener('click', function() {
@@ -47,8 +48,8 @@ function animateSlide(destinationIndex) {
   var currentPosition = -currentImageIndex * IMAGE_WIDTH;
   var displacement = (destinationIndex - currentImageIndex) * IMAGE_WIDTH;
   slideInterval = setInterval(function() {
-    imageContainer.style.left =
-      currentPosition - displacement * slideFactor + 'px';
+    imageContainer.style.marginLeft =
+      currentPosition - displacement * slideFactor + '%';
     slideFactor += 0.1;
     if (slideFactor > 1) {
       currentImageIndex = destinationIndex;
@@ -86,6 +87,7 @@ rightButton.onclick = function() {
 };
 
 /* Execution Start */
-imageContainer.style.width = IMAGE_WIDTH * totalImageCount + 'px';
+imageContainer.style.width = 100 * totalImageCount + '%';
+IMAGE_WIDTH = 100;
 addIndicatorNav();
 automaticSlideAfterDelay();
