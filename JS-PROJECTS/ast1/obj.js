@@ -1,3 +1,5 @@
+/*FUNCTIONAL APPROACH*/
+
 var imageChangeInterval;
 var slideInterval;
 var waitAfterSlideButtonPress;

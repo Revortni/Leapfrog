@@ -144,5 +144,5 @@ var imageCarousel1 = new ImageCarousel('carousel1', 1000, 10);
 imageCarousel1.init();
 var imageCarousel2 = new ImageCarousel('carousel2', 2000, 20);
 imageCarousel2.init();
-var imageCarousel3 = new ImageCarousel('carousel3', 3000, 30);
+var imageCarousel3 = new ImageCarousel('carousel3', 3000, 50);
 imageCarousel3.init();
