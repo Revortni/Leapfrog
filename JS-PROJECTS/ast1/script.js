@@ -1,12 +1,11 @@
-function ImageCarousel(id, holdTime, transitionTime) {
+function ImageCarousel(id, params) {
   var IMAGE_WIDTH = 100;
   this.id = id;
   var that = this;
-  this.holdTime = holdTime;
-  this.transitionTime = transitionTime;
-  this.imageChangeInterval = null;
+  this.holdTime = params.holdTime || 1000;
+  this.transitionTime = params.transitionTime || 500;
+  this.holdTimeout = null;
   this.slideInterval = null;
-  this.waitAfterSlideButtonPress = null;
   this.carouselContainer = null;
   this.carouselImageWrapper = null;
   this.leftButton = null;
@@ -64,6 +63,7 @@ function ImageCarousel(id, holdTime, transitionTime) {
       indicatorNav.appendChild(dot);
     });
     that.carouselContainer.appendChild(indicatorNav);
+
     return indicatorNav;
   }
 
@@ -75,6 +75,7 @@ function ImageCarousel(id, holdTime, transitionTime) {
     button.id = 'control-' + param;
     button.appendChild(icon);
     that.carouselContainer.appendChild(button);
+
     return button;
   }
 
@@ -89,21 +90,28 @@ function ImageCarousel(id, holdTime, transitionTime) {
     indicator.forEach(function(val, index) {
       if (position == index) {
         val.classList.add('active');
+
         return;
       }
       val.classList.remove('active');
     });
   };
 
-  /* Slide image after 2s */
+  /* Slide image after hold time */
   this.automaticSlideAfterDelay = function() {
-    this.imageChangeInterval = setInterval(function() {
-      that.animateSlide(currentImageIndex + 1);
-    }, holdTime);
+    that.animateSlide(currentImageIndex + 1);
+  };
+
+  /* hold for 'holdTime' and slide */
+  this.holdSlide = function() {
+    this.holdTimeout = setTimeout(function() {
+      that.automaticSlideAfterDelay();
+    }, this.holdTime);
   };
 
   this.animateSlide = function(destinationIndex) {
-    var slideFactor = 0;
+    var slidePortion = 0;
+    var slideImageByFactorEachInterval = 1 / 100;
     if (destinationIndex < 0) {
       destinationIndex = this.totalImageCount - 1;
     }
@@ -112,25 +120,21 @@ function ImageCarousel(id, holdTime, transitionTime) {
     var currentPosition = -currentImageIndex * IMAGE_WIDTH;
     var displacement = (destinationIndex - currentImageIndex) * IMAGE_WIDTH;
     this.slideInterval = setInterval(function() {
-      if (slideFactor >= 1) {
+      if (slidePortion > 1) {
         clearInterval(that.slideInterval);
+        that.holdSlide();
       }
       that.carouselImageWrapper.style.marginLeft =
-        currentPosition - displacement * slideFactor + '%';
-      slideFactor += 0.05;
-
+        currentPosition - displacement * slidePortion + '%';
+      slidePortion += slideImageByFactorEachInterval;
       currentImageIndex = destinationIndex;
-    }, transitionTime);
+    }, this.transitionTime * slideImageByFactorEachInterval);
   };
 
   /* removes all async tasks and resumes automatic slide*/
   this.pauseAutoSlideAfterButtonPress = function() {
     clearInterval(this.slideInterval);
-    clearInterval(this.imageChangeInterval);
-    clearTimeout(this.waitAfterSlideButtonPress);
-    this.waitAfterSlideButtonPress = setTimeout(function() {
-      that.automaticSlideAfterDelay();
-    }, 0);
+    clearTimeout(this.holdTimeout);
   };
 
   /* Slide Button Controls */
@@ -140,9 +144,18 @@ function ImageCarousel(id, holdTime, transitionTime) {
   };
 }
 
-var imageCarousel1 = new ImageCarousel('carousel1', 1000, 10);
+var imageCarousel1 = new ImageCarousel('carousel1', {
+  holdTime: 500,
+  transitionTime: 1000
+});
 imageCarousel1.init();
-var imageCarousel2 = new ImageCarousel('carousel2', 2000, 20);
+var imageCarousel2 = new ImageCarousel('carousel2', {
+  holdTime: 3000,
+  transitionTime: 500
+});
 imageCarousel2.init();
-var imageCarousel3 = new ImageCarousel('carousel3', 3000, 50);
+var imageCarousel3 = new ImageCarousel('carousel3', {
+  holdTime: 3000,
+  transitionTime: 3000
+});
 imageCarousel3.init();
