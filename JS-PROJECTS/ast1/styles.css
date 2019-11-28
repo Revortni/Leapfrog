@@ -62,6 +62,7 @@
   bottom: 5px;
   width: 100%;
   text-align: center;
+  display: none;
 }
 .indicator-nav span {
   width: 5px;
@@ -86,9 +87,7 @@
 .mini-slider {
   width: 40%;
 }
-.mini-slider div {
-  display: inline-block;
-}
+
 .mid-slider {
   width: 60%;
 }
@@ -99,6 +98,9 @@
   }
   .carousel-container div i {
     font-size: 60px;
+  }
+  .indicator-nav {
+    display: block;
   }
   .indicator-nav span {
     width: 30px;
@@ -114,6 +116,9 @@
   }
   .carousel-container div i {
     font-size: 30px;
+  }
+  .indicator-nav {
+    display: block;
   }
   .indicator-nav span {
     width: 20px;
