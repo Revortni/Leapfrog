@@ -3,8 +3,15 @@
   position: relative;
   margin: 10px 10px 10px 10px;
   border: 1px solid '#000';
+  display: inline-block;
 }
 
 .box {
   position: absolute;
+  /* border-radius: 50%; */
+}
+
+.ant {
+  position: absolute;
+  background: url('./assets/antwalk.gif');
 }

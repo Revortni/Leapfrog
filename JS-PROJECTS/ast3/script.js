@@ -47,7 +47,8 @@
     };
 
     this.antClicked = function() {
-      this.element.background = 'url("./deadAnt.gif")';
+      this.element.style.background = 'url("./assets/deadAnt2.png") ';
+      this.element.style.backgroundSize = size + 'px ' + size + 'px';
       this.alive = false;
       setTimeout(function() {
         that.parent.removeChild(that.element);
@@ -157,7 +158,7 @@
   function Game(parent, boxCount, ant) {
     var boxes = [];
     var MAX_WIDTH = 2000;
-    var MAX_HEIGHT = 500;
+    var MAX_HEIGHT = 4000;
     this.parent = parent;
     this.boxCount = boxCount || 20;
     parent.style.width = MAX_WIDTH + 'px';
@@ -187,7 +188,7 @@
         boxes.push(box);
       }
 
-      setInterval(this.moveBoxes.bind(this), 5);
+      setInterval(this.moveBoxes.bind(this), 1);
     };
 
     this.moveBoxes = function() {
@@ -204,8 +205,8 @@
     };
   }
 
-  // var parent = document.getElementById('app');
-  // new Game(parent, 50, false).startGame();
+  var parent = document.getElementById('app');
+  new Game(parent, 1000, true).startGame();
   var parent1 = document.getElementById('app1');
-  new Game(parent1, 100, true).startGame();
+  new Game(parent1, 50, false).startGame();
 })();
