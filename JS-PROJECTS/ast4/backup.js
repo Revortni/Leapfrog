@@ -79,11 +79,24 @@
       return boxes[i];
     };
 
-    this.handleCollision = function(box) {
-      box.speedX = -box.speedX;
-      this.speedX = -this.speedX;
-      box.speedY = -box.speedY;
-      this.speedY = -this.speedY;
+    this.isPositionUnique = function(boxes) {
+      var left = this.x;
+      var right = this.x + this.width;
+      var top = this.y;
+      var bottom = this.y + this.height;
+      for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i] !== this) {
+          if (
+            left < boxes[i].x + boxes[i].width &&
+            right > boxes[i].x &&
+            top < boxes[i].y + boxes[i].height &&
+            bottom > boxes[i].y
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
     };
   }
 

@@ -66,6 +66,26 @@
       }
     };
 
+    this.isPositionUnique = function(boxes) {
+      var left = this.x;
+      var right = this.x + this.width;
+      var top = this.y;
+      var bottom = this.y + this.height;
+      for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i] !== this) {
+          if (
+            left < boxes[i].x + boxes[i].width &&
+            right > boxes[i].x &&
+            top < boxes[i].y + boxes[i].height &&
+            bottom > boxes[i].y
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
+    };
+
     this.checkCollision = function(boxes) {
       var left = this.x;
       var right = this.x + this.width;
@@ -127,10 +147,18 @@
           w: MAX_WIDTH,
           h: MAX_HEIGHT
         }).init();
-        box.setPostion(
-          getRandomArbitrary(0, MAX_WIDTH - randomSize),
-          getRandomArbitrary(0, MAX_HEIGHT - randomSize)
-        );
+        while (1) {
+          box.setPostion(
+            getRandomArbitrary(0, MAX_WIDTH - randomSize),
+            getRandomArbitrary(0, MAX_HEIGHT - randomSize)
+          );
+          if (!boxes.length) {
+            break;
+          }
+          if (box.isPositionUnique(boxes)) {
+            break;
+          }
+        }
         box.draw();
         boxes.push(box);
       }
