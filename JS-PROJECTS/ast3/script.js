@@ -58,6 +58,25 @@
         this.speedY = -this.speedY;
       }
     };
+    this.isPositionUnique = function(boxes) {
+      var left = this.x;
+      var right = this.x + this.width;
+      var top = this.y;
+      var bottom = this.y + this.height;
+      for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i] !== this) {
+          if (
+            left < boxes[i].x + boxes[i].width &&
+            right > boxes[i].x &&
+            top < boxes[i].y + boxes[i].height &&
+            bottom > boxes[i].y
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
+    };
 
     this.checkCollision = function(boxes) {
       var left = this.x;
@@ -105,10 +124,10 @@
 
   function Game(parent, boxCount) {
     var boxes = [];
-    var MAX_WIDTH = 100;
-    var MAX_HEIGHT = 100;
+    var MAX_WIDTH = 500;
+    var MAX_HEIGHT = 500;
     this.parent = parent;
-    this.boxCount = boxCount || 2;
+    this.boxCount = boxCount || 30;
     parent.style.width = MAX_WIDTH + 'px';
     parent.style.height = MAX_HEIGHT + 'px';
 
@@ -120,15 +139,23 @@
           w: MAX_WIDTH,
           h: MAX_HEIGHT
         }).init();
-        box.setPostion(
-          getRandomArbitrary(0, MAX_WIDTH - randomSize),
-          getRandomArbitrary(0, MAX_HEIGHT - randomSize)
-        );
+        while (1) {
+          box.setPostion(
+            getRandomArbitrary(0, MAX_WIDTH - randomSize),
+            getRandomArbitrary(0, MAX_HEIGHT - randomSize)
+          );
+          if (!boxes.length) {
+            break;
+          }
+          if (box.isPositionUnique(boxes)) {
+            break;
+          }
+        }
         box.draw();
         boxes.push(box);
       }
 
-      setInterval(this.moveBoxes.bind(this), 100);
+      setInterval(this.moveBoxes.bind(this), 10);
     };
 
     this.moveBoxes = function() {
@@ -141,11 +168,5 @@
   }
 
   var parent = document.getElementById('app');
-  // var parent1 = document.getElementById('app1');
-  // var parent2 = document.getElementById('app2');
-  // var parent3 = document.getElementById('app3');
   new Game(parent).startGame();
-  // new Game(parent1).startGame();
-  // new Game(parent2).startGame();
-  // new Game(parent3).startGame();
 })();
