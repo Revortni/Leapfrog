@@ -47,6 +47,7 @@
 
     this.antClicked = function() {
       this.ant.src = './deadAnt.gif';
+      this.move = function() {};
       setTimeout(function() {
         that.parent.removeChild(that.element);
       }, 1000);
