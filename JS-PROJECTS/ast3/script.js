@@ -46,8 +46,10 @@
     };
 
     this.antClicked = function() {
-      this.ant.src = './deadAnt.png';
-      that.parent.removeChild(that.element);
+      this.ant.src = './deadAnt.gif';
+      setTimeout(function() {
+        that.parent.removeChild(that.element);
+      }, 1000);
     };
 
     this.draw = function() {
