@@ -10,6 +10,8 @@
     this.element = null;
     this.parent = parent;
     this.ant = ant;
+    this.alive = true;
+
     var that = this;
 
     this.init = function() {
@@ -24,6 +26,7 @@
         ant.style.maxWidth = '100%';
         ant.style.maxHeight = '100%';
         box.appendChild(ant);
+
         this.ant = ant;
         this.element.onclick = this.antClicked.bind(this);
       } else {
@@ -47,7 +50,7 @@
 
     this.antClicked = function() {
       this.ant.src = './deadAnt.gif';
-      this.move = function() {};
+      this.alive = false;
       setTimeout(function() {
         that.parent.removeChild(that.element);
       }, 1000);
@@ -179,6 +182,11 @@
 
     this.moveBoxes = function() {
       for (var i = 0; i < this.boxCount; i++) {
+        if (ant) {
+          if (!boxes[i].alive) {
+            boxes.splice(i, 1);
+          }
+        }
         boxes[i].move();
         boxes[i].applyBoundary();
         boxes[i].checkCollision(boxes);
