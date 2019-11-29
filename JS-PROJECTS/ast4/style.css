@@ -1,0 +1,15 @@
+.app {
+  background: #e3e3e3;
+  position: relative;
+  margin: 10px 10px 10px 10px;
+  border: 1px solid '#000';
+  display: inline-block;
+}
+
+.box {
+  position: absolute;
+}
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
