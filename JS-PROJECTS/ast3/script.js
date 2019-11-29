@@ -11,6 +11,8 @@
     this.parent = parent;
     this.ant = ant;
     this.alive = true;
+    this.xprev = 0;
+    this.yprev = 0;
 
     var that = this;
 
@@ -18,18 +20,14 @@
       var box = document.createElement('div');
       box.style.height = this.height + 'px';
       box.style.width = this.width + 'px';
-      box.classList.add('box');
+
       this.element = box;
       if (this.ant) {
-        var ant = document.createElement('img');
-        ant.src = './antwalk.gif';
-        ant.style.maxWidth = '100%';
-        ant.style.maxHeight = '100%';
-        box.appendChild(ant);
-
-        this.ant = ant;
+        box.classList.add('ant');
+        box.style.backgroundSize = size + 'px ' + size + 'px';
         this.element.onclick = this.antClicked.bind(this);
       } else {
+        box.classList.add('box');
         box.style.backgroundColor = color;
         this.element.onclick = this.boxClicked.bind(this);
       }
@@ -49,7 +47,7 @@
     };
 
     this.antClicked = function() {
-      this.ant.src = './deadAnt.gif';
+      this.element.background = 'url("./deadAnt.gif")';
       this.alive = false;
       setTimeout(function() {
         that.parent.removeChild(that.element);
@@ -61,9 +59,20 @@
       this.element.style.top = this.y + 'px';
     };
 
+    this.setFace = function(x, y) {
+      var dx = this.x - x;
+      var dy = this.y - y;
+      var a = dx < 0 ? -90 : 90;
+      this.element.style.transform =
+        'rotate(' + (Math.atan(dy / dx) * 57.2958 + a) + 'deg)';
+    };
+
     this.move = function() {
+      var x = this.x;
+      var y = this.y;
       this.x += this.speedX;
       this.y += this.speedY;
+      this.setFace(x, y);
       this.draw();
     };
 
@@ -195,8 +204,8 @@
     };
   }
 
-  var parent = document.getElementById('app');
-  new Game(parent, 50, false).startGame();
+  // var parent = document.getElementById('app');
+  // new Game(parent, 50, false).startGame();
   var parent1 = document.getElementById('app1');
-  new Game(parent1, 50, true).startGame();
+  new Game(parent1, 100, true).startGame();
 })();
