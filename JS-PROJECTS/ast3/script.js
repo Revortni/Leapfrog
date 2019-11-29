@@ -188,8 +188,8 @@
           }
         }
         boxes[i].move();
-        boxes[i].applyBoundary();
         boxes[i].checkCollision(boxes);
+        boxes[i].applyBoundary();
       }
     };
   }
