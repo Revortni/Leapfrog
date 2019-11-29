@@ -68,18 +68,19 @@
     };
 
     this.applyBoundary = function() {
-      var left = this.x;
-      var right = this.x + this.width;
-      var top = this.y;
-      var bottom = this.y + this.height;
+      var left = this.x + this.speedX;
+      var right = this.x + this.width + this.speedX;
+      var top = this.y + this.speedY;
+      var bottom = this.y + this.height + this.speedY;
       if (left < 0 || right > boundary.w) {
-        this.speedX = -this.speedX;
+        this.speedX = -this.speedX * 0.8;
       }
 
       if (top < 0 || bottom > boundary.h) {
-        this.speedY = -this.speedY;
+        this.speedY = -this.speedY * 0.8;
       }
     };
+
     this.isPositionUnique = function(boxes) {
       var left = this.x;
       var right = this.x + this.width;
@@ -146,7 +147,7 @@
 
   function Game(parent, boxCount, ant) {
     var boxes = [];
-    var MAX_WIDTH = 500;
+    var MAX_WIDTH = 2000;
     var MAX_HEIGHT = 500;
     this.parent = parent;
     this.boxCount = boxCount || 20;
@@ -177,7 +178,7 @@
         boxes.push(box);
       }
 
-      setInterval(this.moveBoxes.bind(this), 10);
+      setInterval(this.moveBoxes.bind(this), 5);
     };
 
     this.moveBoxes = function() {
@@ -195,7 +196,7 @@
   }
 
   var parent = document.getElementById('app');
-  new Game(parent, 10, false).startGame();
+  new Game(parent, 50, false).startGame();
   var parent1 = document.getElementById('app1');
-  new Game(parent1, 10, true).startGame();
+  new Game(parent1, 50, true).startGame();
 })();
