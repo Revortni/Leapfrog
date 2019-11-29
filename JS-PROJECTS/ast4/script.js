@@ -9,6 +9,7 @@
     this.height = size;
     this.element = null;
     this.parent = parent;
+    this.antImage = null;
     var that = this;
 
     this.init = function() {
@@ -22,6 +23,7 @@
       this.parent.appendChild(box);
       box.appendChild(ant);
       this.element = box;
+      this.antImage = ant;
       this.element.onclick = this.boxClicked.bind(this);
       this.draw();
 
@@ -34,7 +36,8 @@
     };
 
     this.boxClicked = function() {
-      this.element.remove();
+      this.antImage.src = './deadAnt.png';
+      that.element.remove();
       console.log('Box ' + this.id + ' was clicked');
     };
 
