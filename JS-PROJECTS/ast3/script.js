@@ -1,5 +1,5 @@
 (function() {
-  function Box(parent, id, size, color, boundary) {
+  function Box(ant, parent, id, size, color, boundary) {
     this.x = 10;
     this.y = 10;
     this.id = id;
@@ -9,16 +9,28 @@
     this.height = size;
     this.element = null;
     this.parent = parent;
+    this.ant = ant;
     var that = this;
 
     this.init = function() {
       var box = document.createElement('div');
       box.style.height = this.height + 'px';
       box.style.width = this.width + 'px';
-      box.style.backgroundColor = color;
       box.classList.add('box');
-      this.parent.appendChild(box);
       this.element = box;
+      if (this.ant) {
+        var ant = document.createElement('img');
+        ant.src = './antwalk.gif';
+        ant.style.maxWidth = '100%';
+        ant.style.maxHeight = '100%';
+        box.appendChild(ant);
+        this.ant = ant;
+        this.element.onclick = this.antClicked.bind(this);
+      } else {
+        box.style.backgroundColor = color;
+        this.element.onclick = this.boxClicked.bind(this);
+      }
+      this.parent.appendChild(box);
       this.element.onclick = this.boxClicked.bind(this);
       this.draw();
 
@@ -32,6 +44,11 @@
 
     this.boxClicked = function() {
       console.log('Box ' + this.id + ' was clicked');
+    };
+
+    this.antClicked = function() {
+      this.antImage.src = './deadAnt.png';
+      that.parent.removeChild(that.element);
     };
 
     this.draw = function() {
@@ -122,20 +139,20 @@
     return colors[index];
   }
 
-  function Game(parent, boxCount) {
+  function Game(parent, boxCount, ant) {
     var boxes = [];
     var MAX_WIDTH = 500;
     var MAX_HEIGHT = 500;
     this.parent = parent;
-    this.boxCount = boxCount || 30;
+    this.boxCount = boxCount || 20;
     parent.style.width = MAX_WIDTH + 'px';
     parent.style.height = MAX_HEIGHT + 'px';
 
     this.startGame = function() {
       for (var i = 0; i < this.boxCount; i++) {
-        var randomSize = 20;
+        var randomSize = Math.floor(getRandomArbitrary(20, 50));
         var randomColor = getRandomColor();
-        var box = new Box(parent, i, randomSize, randomColor, {
+        var box = new Box(ant, parent, i, randomSize, randomColor, {
           w: MAX_WIDTH,
           h: MAX_HEIGHT
         }).init();
@@ -168,5 +185,7 @@
   }
 
   var parent = document.getElementById('app');
-  new Game(parent).startGame();
+  new Game(parent, 20, false).startGame();
+  var parent1 = document.getElementById('app1');
+  new Game(parent1, 20, true).startGame();
 })();
