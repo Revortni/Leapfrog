@@ -4,6 +4,7 @@
   margin: 10px 10px 10px 10px;
   border: 1px solid '#000';
   display: inline-block;
+  cursor: pointer;
 }
 
 .box {
