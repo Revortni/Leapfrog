@@ -31,7 +31,6 @@
         this.element.onclick = this.boxClicked.bind(this);
       }
       this.parent.appendChild(box);
-      this.element.onclick = this.boxClicked.bind(this);
       this.draw();
 
       return this;
@@ -47,7 +46,7 @@
     };
 
     this.antClicked = function() {
-      this.antImage.src = './deadAnt.png';
+      this.ant.src = './deadAnt.png';
       that.parent.removeChild(that.element);
     };
 
@@ -185,7 +184,7 @@
   }
 
   var parent = document.getElementById('app');
-  new Game(parent, 20, false).startGame();
+  new Game(parent, 10, false).startGame();
   var parent1 = document.getElementById('app1');
-  new Game(parent1, 20, true).startGame();
+  new Game(parent1, 10, true).startGame();
 })();
