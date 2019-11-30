@@ -198,9 +198,9 @@
             boxes.splice(i, 1);
           }
         }
-        boxes[i].move();
         boxes[i].checkCollision(boxes);
         boxes[i].applyBoundary();
+        boxes[i].move();
       }
     };
   }
