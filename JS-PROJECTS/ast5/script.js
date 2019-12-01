@@ -26,6 +26,13 @@
       return this;
     };
 
+    this.reset = function() {
+      this.gameOver = false;
+      this.x = this.windowWidth / 2 - this.width / 2;
+      this.element.style.display = 'block';
+      this.draw();
+    };
+
     this.handleButtonClick = function(event) {
       if (event.code == 'KeyA') {
         this.moveLeft();
@@ -57,13 +64,15 @@
       var top = this.y + this.length;
       var bottom = this.y;
       for (var i = 0; i < cars.length; i++) {
+        if (bottom > windowHeight - cars[i].y) {
+          continue;
+        }
         if (
           left < cars[i].x + cars[i].width &&
           right > cars[i].x &&
           top > windowHeight - (cars[i].y + cars[i].length) &&
           bottom < windowHeight - cars[i].y
         ) {
-          console.log('collision', i);
           return i + 1;
         }
       }
@@ -116,6 +125,8 @@
     var MAX_WIDTH = 300;
     var MAX_HEIGHT = 1000;
     var LANE_WIDTH = 100;
+    var BASE_SPEED = 5;
+    var spaceBetweenPlayerAndTop = 0;
     var laneCount = MAX_WIDTH / LANE_WIDTH;
     this.sliderPosition = -MAX_HEIGHT;
     this.parentElement = parentElement;
@@ -125,11 +136,12 @@
     this.clock = 0;
     this.roadStrip = null;
     this.interval = 0;
-    this.gameSpeed = 1;
-    this.carSpeed = 5;
-    this.roadSpeed = 10;
     this.score = 0;
     this.splashScreen = null;
+    this.roadSpeed = BASE_SPEED;
+    this.carSpeed = this.roadSpeed + 1;
+    this.obstacleGenRate = null;
+    this.gameOverScreen = null;
 
     var that = this;
 
@@ -147,6 +159,23 @@
       this.createSplashScreen();
     };
 
+    this.resetGame = function() {
+      this.score = 0;
+      this.updateScore();
+      this.gameWindow.removeChild(this.collisionImage);
+      this.parentElement.removeChild(this.gameOverScreen);
+      cars.forEach(
+        function(car) {
+          this.gameWindow.removeChild(car.element);
+        }.bind(this)
+      );
+      cars = [];
+      this.roadSpeed = BASE_SPEED;
+      this.carSpeed = this.roadSpeed + 1;
+      this.player.reset();
+      this.createSplashScreen();
+    };
+
     this.createSplashScreen = function() {
       var screen = document.createElement('div');
       var buttonWrapper = document.createElement('div');
@@ -154,16 +183,13 @@
       screen.style.width = '100%';
       screen.style.height = MAX_HEIGHT + 'px';
       this.splashScreen = screen;
-
       startButton.innerHTML = 'start';
-
       screen.classList.add('splashScreen');
       buttonWrapper.classList.add('buttonWrapper');
       startButton.classList.add('startButton');
       startButton.onclick = function() {
-        this.showGame();
+        this.startScreenSlider();
       }.bind(this);
-
       buttonWrapper.appendChild(startButton);
       screen.appendChild(buttonWrapper);
       this.parentElement.appendChild(this.splashScreen);
@@ -193,12 +219,13 @@
         MAX_HEIGHT,
         LANE_WIDTH
       ).init();
+      spaceBetweenPlayerAndTop = MAX_HEIGHT - this.player.y * 2;
     };
 
     this.createCar = function(lane) {
       var car = new Car(
         this.gameWindow,
-        this.carSpeed * this.gameSpeed,
+        this.carSpeed,
         LANE_WIDTH,
         lane
       ).init();
@@ -224,13 +251,21 @@
       }
     };
 
-    this.gameOverScreen = function() {
+    this.createGameOverScreen = function() {
       var screen = document.createElement('div');
       var text = document.createElement('div');
+      var clickToContinueText = document.createElement('div');
       text.innerHTML = 'gameOver';
+      clickToContinueText.innerHTML = 'click screen to play again';
       screen.classList.add('gameOver');
       text.classList.add('gameOverText');
+      clickToContinueText.classList.add('continueInfo');
+
+      screen.onclick = this.resetGame.bind(this);
       screen.appendChild(text);
+      screen.appendChild(clickToContinueText);
+
+      this.gameOverScreen = screen;
       this.parentElement.appendChild(screen);
     };
 
@@ -249,7 +284,7 @@
     };
 
     this.updateScore = function() {
-      this.scoreBoard.innerHTML = 'Score:' + this.score;
+      this.scoreBoard.innerHTML = 'Score: ' + this.score;
     };
 
     this.moveCars = function() {
@@ -268,9 +303,28 @@
       cars = cars.filter(function(val, i) {
         return !indexes.includes(i);
       });
-      if (flag) {
+      return flag;
+    };
+    this.speedUpGame = function() {
+      this.carSpeed++;
+      this.roadSpeed++;
+    };
+
+    this.updateGame = function() {
+      var carPassedPlayer = this.moveCars();
+      var collision = this.player.checkCollision(cars);
+      if (collision) {
+        this.handleCollision(collision);
+      }
+      if (carPassedPlayer) {
         this.score++;
         this.updateScore();
+        if (!(this.score % 5)) {
+          this.speedUpGame();
+          this.obstacleGenRate = Math.ceil(
+            spaceBetweenPlayerAndTop / this.carSpeed
+          );
+        }
       }
     };
 
@@ -282,13 +336,14 @@
       collisionImage.style.height = LANE_WIDTH + 'px';
       collisionImage.style.bottom = this.player.y + 'px';
       collisionImage.style.left = this.player.x - this.player.width / 2 + 'px';
-      this.gameWindow.appendChild(collisionImage);
+      this.player.element.style.display = 'none';
+      this.collisionImage = collisionImage;
+      this.gameWindow.appendChild(this.collisionImage);
       this.gameWindow.removeChild(collidedCar.element);
-      this.gameWindow.removeChild(this.player.element);
       this.player.gameOver = true;
     };
 
-    this.render = function() {
+    this.renderGame = function() {
       cars.forEach(function(car) {
         car.draw();
       });
@@ -296,7 +351,7 @@
       this.animateRoad();
     };
 
-    this.showGame = function() {
+    this.startScreenSlider = function() {
       var shift = 1;
       var startInterval = setInterval(
         function() {
@@ -313,23 +368,19 @@
     };
 
     this.startGame = function() {
+      this.obstacleGenRate = Math.ceil(
+        spaceBetweenPlayerAndTop / this.carSpeed
+      );
       var interval = setInterval(
         function() {
-          if (!(this.clock % 10)) {
-            if (!(this.clock % (this.player.length * this.gameSpeed))) {
-              this.generateObstacles();
-            }
-            this.moveCars();
-            var collision = this.player.checkCollision(cars);
-            if (collision) {
-              this.handleCollision(collision);
-            }
-            this.render();
-            if (this.player.gameOver) {
-              this.gameOverScreen();
-              this.score = 0;
-              clearInterval(interval);
-            }
+          if (!(this.clock % this.obstacleGenRate)) {
+            this.generateObstacles();
+          }
+          this.updateGame();
+          this.renderGame();
+          if (this.player.gameOver) {
+            this.createGameOverScreen();
+            clearInterval(interval);
           }
           this.clock++;
         }.bind(this),
