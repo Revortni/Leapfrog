@@ -384,7 +384,7 @@
           }
           this.clock++;
         }.bind(this),
-        10
+        20
       );
     };
   }
