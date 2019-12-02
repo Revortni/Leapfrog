@@ -135,10 +135,11 @@
     this.score = 0;
     this.splashScreen = null;
     this.roadSpeed = BASE_SPEED;
-    this.carSpeed = this.roadSpeed;
+    this.carSpeed = this.roadSpeed + 1;
     this.obstacleGap = 0;
     this.gameOverScreen = null;
     minSpaceBetweenPlayerAndCar = 0;
+    this.highScore = 0;
 
     var that = this;
 
@@ -310,21 +311,21 @@
     this.speedUpGame = function() {
       if (this.roadSpeed < 30) {
         this.roadSpeed += 1;
-        this.carSpeed = this.roadSpeed;
+        this.carSpeed = this.roadSpeed + 1;
       }
     };
 
     this.updateGame = function() {
       var carPassedPlayer = this.moveCars();
-      // var collision = this.player.checkCollision(cars);
-      // if (collision) {
-      //   this.handleCollision(collision);
-      // }
+      var collision = this.player.checkCollision(cars);
+      if (collision) {
+        this.handleCollision(collision);
+      }
       if (carPassedPlayer) {
         this.score++;
         this.updateScore();
         if (!(this.score % 10)) {
-          if (minSpaceBetweenPlayerAndCar > this.player.length * 2.5) {
+          if (minSpaceBetweenPlayerAndCar > this.player.length * 2) {
             minSpaceBetweenPlayerAndCar -= this.carSpeed;
           }
           this.speedUpGame();
@@ -393,6 +394,8 @@
   }
 
   var parentElement = document.getElementById('app');
-
   new Game(parentElement).init();
+
+  var parentElement1 = document.getElementById('app1');
+  new Game(parentElement1).init();
 })();

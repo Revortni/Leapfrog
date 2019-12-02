@@ -15,7 +15,8 @@
   background-color: #e3e3e3;
   position: relative;
   background: #c3c3c3;
-  margin: 100px auto;
+  /* margin: 100px auto; */
+  display: inline-block;
   width: 37.5em;
   border: 5px solid #aaaaaa;
 }
