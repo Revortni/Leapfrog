@@ -203,7 +203,7 @@
     this.score = 0;
     this.splashScreen = null;
     this.roadSpeed = BASE_SPEED;
-    this.carSpeed = this.roadSpeed + 1;
+    this.carSpeed = this.roadSpeed - 1;
     this.obstacleGap = 0;
     this.gameOverScreen = null;
     var minSpaceBetweenPlayerAndCar = 0;
@@ -249,7 +249,7 @@
       );
       cars = [];
       this.roadSpeed = BASE_SPEED;
-      this.carSpeed = this.roadSpeed;
+      this.carSpeed = this.roadSpeed - 1;
       this.player.reset();
       this.updateBulletCounter();
       this.createSplashScreen();
@@ -421,8 +421,8 @@
         minSpaceBetweenPlayerAndCar
       ) {
         this.roadSpeed += 1;
-        this.carSpeed = this.roadSpeed + 1;
-        spaceBetweenPlayerAndCar -= this.carSpeed;
+        this.carSpeed = this.roadSpeed - 1;
+        spaceBetweenPlayerAndCar += this.carSpeed;
       }
     };
 
@@ -488,9 +488,11 @@
       }
       this.updateScore();
       if (this.clock && !(this.clock % 1000)) {
-        this.speedUpGame();
         this.player.bulletCount++;
         this.updateBulletCounter();
+      }
+      if (this.clock && !(this.clock % 2000)) {
+        this.speedUpGame();
       }
       this.player.moveBullets();
       var collision = this.player.checkCollision(cars);
@@ -564,7 +566,7 @@
           }
           this.clock++;
         }.bind(this),
-        10
+        0
       );
     };
   }
