@@ -77,7 +77,10 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
-  background-color: #c3c3c380;
+  background-color: #c3c3c3cc;
+}
+.gameOver:hover {
+  background-color: #c3c3c399;
 }
 .gameOverText {
   font-size: 60px;

@@ -116,17 +116,13 @@
   function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
   }
-  function getBinaryRandom() {
-    return Math.round(Math.random());
-  }
 
   function Game(parentElement) {
     var cars = [];
     var MAX_WIDTH = 300;
     var MAX_HEIGHT = 1000;
     var LANE_WIDTH = 100;
-    var BASE_SPEED = 5;
-    var spaceBetweenPlayerAndTop = 0;
+    var BASE_SPEED = 4;
     var laneCount = MAX_WIDTH / LANE_WIDTH;
     this.sliderPosition = -MAX_HEIGHT;
     this.parentElement = parentElement;
@@ -139,9 +135,10 @@
     this.score = 0;
     this.splashScreen = null;
     this.roadSpeed = BASE_SPEED;
-    this.carSpeed = this.roadSpeed + 1;
-    this.obstacleGenRate = null;
+    this.carSpeed = this.roadSpeed;
+    this.obstacleGap = 0;
     this.gameOverScreen = null;
+    minSpaceBetweenPlayerAndCar = 0;
 
     var that = this;
 
@@ -152,6 +149,7 @@
       this.gameWindow.style.width = MAX_WIDTH + 'px';
       this.gameWindow.style.height = MAX_HEIGHT + 'px';
       this.parentElement.classList.add('clearfix');
+      minSpaceBetweenPlayerAndCar = MAX_HEIGHT - 200;
       this.createRoad();
       this.createPlayer();
       this.parentElement.appendChild(this.gameWindow);
@@ -164,6 +162,7 @@
       this.updateScore();
       this.gameWindow.removeChild(this.collisionImage);
       this.parentElement.removeChild(this.gameOverScreen);
+      minSpaceBetweenPlayerAndCar = MAX_HEIGHT - 200;
       cars.forEach(
         function(car) {
           this.gameWindow.removeChild(car.element);
@@ -171,7 +170,7 @@
       );
       cars = [];
       this.roadSpeed = BASE_SPEED;
-      this.carSpeed = this.roadSpeed + 1;
+      this.carSpeed = this.roadSpeed;
       this.player.reset();
       this.createSplashScreen();
     };
@@ -243,6 +242,8 @@
 
     this.animateRoad = function() {
       this.sliderPosition += this.roadSpeed;
+    };
+    this.showRoad = function() {
       this.roadStrip.style.display = 'none';
       this.roadSlider.style.marginTop = this.sliderPosition + 'px';
       if (this.sliderPosition >= 0) {
@@ -290,6 +291,7 @@
     this.moveCars = function() {
       var flag = 0;
       var indexes = [];
+      this.obstacleGap += this.carSpeed;
       cars.forEach(
         function(car, index) {
           car.move();
@@ -306,8 +308,8 @@
       return flag;
     };
     this.speedUpGame = function() {
-      this.carSpeed++;
-      this.roadSpeed++;
+      this.roadSpeed += 2;
+      this.carSpeed = this.roadSpeed;
     };
 
     this.updateGame = function() {
@@ -319,13 +321,11 @@
       if (carPassedPlayer) {
         this.score++;
         this.updateScore();
-        if (!(this.score % 5)) {
+        if (!(this.score % 25)) {
           this.speedUpGame();
-          this.obstacleGenRate = Math.ceil(
-            spaceBetweenPlayerAndTop / this.carSpeed
-          );
         }
       }
+      this.animateRoad();
     };
 
     this.handleCollision = function(index) {
@@ -347,8 +347,8 @@
       cars.forEach(function(car) {
         car.draw();
       });
+      this.showRoad();
       this.player.draw();
-      this.animateRoad();
     };
 
     this.startScreenSlider = function() {
@@ -368,12 +368,13 @@
     };
 
     this.startGame = function() {
-      this.obstacleGenRate = Math.ceil(
-        spaceBetweenPlayerAndTop / this.carSpeed
-      );
       var interval = setInterval(
         function() {
-          if (!(this.clock % this.obstacleGenRate)) {
+          if (this.obstacleGap > minSpaceBetweenPlayerAndCar) {
+            this.obstacleGap = 0;
+            if (minSpaceBetweenPlayerAndCar > this.player.length * 2.5) {
+              minSpaceBetweenPlayerAndCar += 10;
+            }
             this.generateObstacles();
           }
           this.updateGame();
