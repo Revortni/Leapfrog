@@ -17,7 +17,7 @@
   background: #c3c3c3;
   /* margin: 100px auto; */
   display: inline-block;
-  width: 37.5em;
+  width: 75em;
   border: 5px solid #aaaaaa;
 }
 
@@ -41,7 +41,8 @@
 }
 .roadSlider {
   height: 200%;
-  background: url('./assets/lane2.png') repeat-y;
+  background: url('./assets/lane2.png');
+  background-size: 1400px 1400px;
 }
 .roadSlider img {
   width: 100%;
@@ -52,15 +53,16 @@
 .player {
   position: absolute;
   background: url('./assets/player.png');
-  background-size: 70px 120px;
+  /* background-size: cover; */
   background-position: center;
+  background-size: 130px 230px;
   z-index: 10;
 }
 
 .car {
   position: absolute;
   background: url('./assets/car1.png');
-  background-size: 50px 100px;
+  background-size: 100px 200px;
   z-index: 10;
 }
 

@@ -1,14 +1,21 @@
 (function() {
-  function Player(parentElement, windowWidth, windowHeight, speed) {
+  function Player(
+    parentElement,
+    windowWidth,
+    windowHeight,
+    speed,
+    controlKeys
+  ) {
     this.x = 0;
     this.y = 10;
     this.turnSpeed = speed || 50;
-    this.length = 100;
-    this.width = 50;
+    this.length = 200;
+    this.width = 100;
     this.element = null;
     this.parentElement = parentElement;
     this.windowWidth = windowWidth;
     this.gameOver = false;
+    this.controlKeys = controlKeys;
 
     var that = this;
 
@@ -34,10 +41,11 @@
     };
 
     this.handleButtonClick = function(event) {
-      if (event.code == 'KeyA') {
+      console.log(event.code);
+      if (event.code == this.controlKeys.left) {
         this.moveLeft();
       }
-      if (event.code == 'KeyD') {
+      if (event.code == this.controlKeys.right) {
         this.moveRight();
       }
     };
@@ -79,12 +87,36 @@
       return null;
     };
   }
+  function Bullet(parentElement, x, y) {
+    this.x = x;
+    this.y = y;
+    this.length = 20;
+    this.width = 10;
+    this.parentElement = parentElement;
+
+    this.init = function() {
+      var bullet = document.createElement('div');
+      bullet.classList.add('bullet');
+      bullet.style.width = this.width + 'px';
+      bullet.style.height = this.height + 'px';
+      this.element = bullet;
+      this.parentElement.appendChild(this.element);
+      this.draw();
+    };
+
+    this.draw = function() {
+      this.element.style.left = this.x + 'px';
+      this.element.style.bottom = this.y + 'px';
+    };
+
+    this.checkCollisionWithCar = function(cars) {};
+  }
 
   function Car(parentElement, speed, laneWidth, lane) {
     this.x = 0;
     this.y = 0;
-    this.length = 100;
-    this.width = 50;
+    this.length = 200;
+    this.width = 100;
     this.speed = speed;
     this.lane = lane;
     this.parentElement = parentElement;
@@ -117,11 +149,11 @@
     return Math.random() * (max - min) + min;
   }
 
-  function Game(parentElement) {
+  function Game(parentElement, controls) {
     var cars = [];
-    var MAX_WIDTH = 300;
-    var MAX_HEIGHT = 1000;
-    var LANE_WIDTH = 100;
+    var MAX_WIDTH = 600;
+    var MAX_HEIGHT = 1400;
+    var LANE_WIDTH = 200;
     var BASE_SPEED = 4;
     var laneCount = MAX_WIDTH / LANE_WIDTH;
     this.sliderPosition = -MAX_HEIGHT;
@@ -140,6 +172,7 @@
     this.gameOverScreen = null;
     var minSpaceBetweenPlayerAndCar = 0;
     var spaceBetweenPlayerAndCar = 0;
+    this.controls = controls || 0;
 
     var that = this;
 
@@ -201,27 +234,31 @@
 
     this.createRoad = function() {
       var roadSlider = document.createElement('div');
-
-      this.roadStrip = roadSlider.cloneNode();
-      this.roadStrip.classList.add('roadStrip');
-      this.roadStrip.style.width = MAX_WIDTH + 'px';
       this.roadSlider = roadSlider;
-
       roadSlider.classList.add('roadSlider');
       roadSlider.style.marginTop = this.sliderPosition + 'px';
-      roadSlider.style.backgroundSize = MAX_WIDTH + 'px';
+      roadSlider.style.backgroundSize = MAX_WIDTH + 'px ' + MAX_HEIGHT + 'px';
       roadSlider.classList.add('roadSlider');
 
       this.gameWindow.appendChild(roadSlider);
-      this.gameWindow.appendChild(this.roadStrip);
     };
 
     this.createPlayer = function() {
+      var controls = this.controls;
+      var controlKeys = { left: 0, right: 0 };
+      if (controls) {
+        controlKeys.left = 'KeyJ';
+        controlKeys.right = 'KeyL';
+      } else {
+        controlKeys.left = 'KeyA';
+        controlKeys.right = 'KeyD';
+      }
       this.player = new Player(
         this.gameWindow,
         MAX_WIDTH,
         MAX_HEIGHT,
-        LANE_WIDTH
+        LANE_WIDTH,
+        controlKeys
       ).init();
     };
 
@@ -249,11 +286,10 @@
     };
 
     this.showRoad = function() {
-      this.roadStrip.style.display = 'none';
       this.roadSlider.style.marginTop = this.sliderPosition + 'px';
       if (this.sliderPosition + this.roadSpeed >= 0) {
-        this.roadStrip.style.display = 'block';
-        this.sliderPosition = -MAX_HEIGHT;
+        var diff = this.roadSpeed - this.sliderPosition;
+        this.sliderPosition = -MAX_HEIGHT + diff;
       }
     };
 
@@ -326,10 +362,10 @@
 
     this.updateGame = function() {
       var carPassedPlayer = this.moveCars();
-      var collision = this.player.checkCollision(cars);
-      if (collision) {
-        this.handleCollision(collision);
-      }
+      // var collision = this.player.checkCollision(cars);
+      // if (collision) {
+      //   this.handleCollision(collision);
+      // }
       if (carPassedPlayer) {
         this.score++;
         this.updateScore();
@@ -400,8 +436,8 @@
   }
 
   var parentElement = document.getElementById('app');
-  new Game(parentElement).init();
+  new Game(parentElement, 0).init();
 
   var parentElement1 = document.getElementById('app1');
-  new Game(parentElement1).init();
+  new Game(parentElement1, 1).init();
 })();
