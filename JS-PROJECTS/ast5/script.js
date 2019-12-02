@@ -19,8 +19,6 @@
     this.bullets = [];
     this.bulletCount = 5;
 
-    var that = this;
-
     this.init = function() {
       var car = document.createElement('div');
       car.style.height = this.length + 'px';
@@ -39,6 +37,8 @@
       this.gameOver = false;
       this.x = this.windowWidth / 2 - this.width / 2;
       this.element.style.display = 'block';
+      this.bulletCount = 5;
+      this.bullets = [];
       this.draw();
     };
 
@@ -209,6 +209,9 @@
     var minSpaceBetweenPlayerAndCar = 0;
     var spaceBetweenPlayerAndCar = 0;
     this.controls = controls || 0;
+    this.highScore = 0;
+    this.bulletCounter = 0;
+    var HIGHSCOREKEY = '@highscore';
 
     var that = this;
 
@@ -219,16 +222,18 @@
       this.gameWindow.style.width = MAX_WIDTH + 'px';
       this.gameWindow.style.height = MAX_HEIGHT + 'px';
       this.parentElement.classList.add('clearfix');
+      this.fetchHighScore();
       this.createRoad();
       this.createPlayer();
+
       minSpaceBetweenPlayerAndCar = this.player.length * 4;
       spaceBetweenPlayerAndCar = MAX_HEIGHT - this.player.length * 2;
       this.obstacleGap = MAX_HEIGHT - this.player.length * 2;
       this.parentElement.appendChild(this.gameWindow);
-      this.createScoreBoard();
+      this.createInfoBoard();
+      this.updateBulletCounter();
       this.startGame();
       // this.createSplashScreen();
-      // this.createGameOverScreen();
     };
 
     this.resetGame = function() {
@@ -249,6 +254,14 @@
       this.carSpeed = this.roadSpeed;
       this.player.reset();
       this.createSplashScreen();
+    };
+
+    this.fetchHighScore = function() {
+      if (localStorage.getItem(HIGHSCOREKEY) == null) {
+        this.highScore = 0;
+      } else {
+        this.highScore = localStorage.getItem(HIGHSCOREKEY);
+      }
     };
 
     this.createSplashScreen = function() {
@@ -313,12 +326,26 @@
       cars.push(car);
     };
 
-    this.createScoreBoard = function() {
+    this.createInfoBoard = function() {
+      var infoBoard = document.createElement('div');
       var board = document.createElement('span');
-      board.classList.add('scoreBoard');
+      var bulletCounter = document.createElement('span');
+      infoBoard.classList.add('infoBoard');
       this.scoreBoard = board;
       this.updateScore();
-      this.parentElement.appendChild(board);
+      this.bulletCounter = bulletCounter;
+      this.updateBulletCounter();
+      infoBoard.appendChild(this.scoreBoard);
+      infoBoard.appendChild(this.bulletCounter);
+      this.parentElement.appendChild(infoBoard);
+    };
+
+    this.updateScore = function() {
+      this.scoreBoard.innerHTML = 'Score: ' + this.score;
+    };
+
+    this.updateBulletCounter = function() {
+      this.bulletCounter.innerHTML = 'Ammo left: ' + this.player.bulletCount;
     };
 
     this.animateRoad = function() {
@@ -337,14 +364,20 @@
       var screen = document.createElement('div');
       var text = document.createElement('div');
       var restart = document.createElement('div');
+      var highScore = document.createElement('div');
+      highScore.classList.add('scoreText');
+      var yourScore = highScore.cloneNode();
       text.innerHTML = 'gameOver';
+      highScore.innerHTML = 'High Score: ' + this.highScore;
+      yourScore.innerHTML = 'Your Score: ' + this.score;
       screen.classList.add('gameOver');
       text.classList.add('gameOverText');
       restart.classList.add('restart');
-      screen.onclick = this.resetGame.bind(this);
+      restart.onclick = this.resetGame.bind(this);
       screen.appendChild(text);
       screen.appendChild(restart);
-
+      screen.appendChild(highScore);
+      screen.appendChild(yourScore);
       this.gameOverScreen = screen;
       this.parentElement.appendChild(screen);
     };
@@ -363,23 +396,24 @@
       });
     };
 
-    this.updateScore = function() {
-      this.scoreBoard.innerHTML = 'Score: ' + this.score;
-    };
-
     this.moveCars = function() {
       this.obstacleGap += this.carSpeed;
+      var flag = 0;
       cars = cars.filter(
         function(car) {
           car.move();
           if (car.y > MAX_HEIGHT) {
             car.element.remove();
-            this.score++;
+            flag = 1;
             return false;
           }
           return true;
         }.bind(this)
       );
+      if (flag) {
+        this.score++;
+      }
+      return flag;
     };
 
     this.speedUpGame = function() {
@@ -392,6 +426,7 @@
         spaceBetweenPlayerAndCar -= this.carSpeed;
       }
     };
+
     this.createExplosion = function(x, y, height) {
       var explosion = document.createElement('div');
       explosion.classList.add('explosion');
@@ -407,6 +442,7 @@
         800
       );
     };
+
     this.checkBulletHitCar = function(bullets) {
       bullets = bullets.forEach(
         function(bullet, index) {
@@ -448,13 +484,14 @@
     this.updateGame = function() {
       this.moveCars();
       if (this.player.bullets.length) {
+        this.updateBulletCounter();
         this.checkBulletHitCar(this.player.bullets);
       }
       this.updateScore();
-      if (this.score && !(this.score % 10)) {
-        this.speedUpGame();
+      if (this.score && !(this.score % 2)) {
+        this.player.bulletCount++;
+        this.updateBulletCounter();
       }
-
       this.player.moveBullets();
       var collision = this.player.checkCollision(cars);
       if (collision) {
@@ -509,10 +546,22 @@
             this.obstacleGap = 0;
             this.generateObstacles();
           }
+          if (!(this.clock % 10000)) {
+            this.speedUpGame();
+          }
           this.updateGame();
           this.renderGame();
           if (this.player.gameOver) {
-            this.createGameOverScreen();
+            if (this.score > this.highScore) {
+              this.highScore = this.score;
+              localStorage.setItem(HIGHSCOREKEY, this.score);
+            }
+            setTimeout(
+              function() {
+                this.createGameOverScreen();
+              }.bind(this),
+              1000
+            );
             clearInterval(interval);
           }
           this.clock++;

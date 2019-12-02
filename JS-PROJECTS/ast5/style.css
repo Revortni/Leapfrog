@@ -26,10 +26,13 @@
   position: relative;
   float: left;
 }
-.scoreBoard {
+.infoBoard {
   float: left;
-  font-size: 40px;
   padding-left: 10%;
+}
+
+.infoBoard span {
+  font-size: 60px;
 }
 
 .roadStrip {
@@ -88,17 +91,26 @@
   cursor: pointer;
   background-color: #c3c3c3cc;
 }
-.gameOver:hover {
-  background-color: #c3c3c399;
-}
+
 .gameOverText {
   font-size: 80px;
-  padding-top: 30%;
+  padding-top: 15%;
   text-transform: uppercase;
   text-align: center;
 }
+
+.scoreText {
+  font-size: 80px;
+  padding-top: 10%;
+  text-align: center;
+}
 .gameOver:hover .restart {
-  opacity: 0.7;
+  opacity: 0.9;
+}
+.restart:hover {
+  background: url('./assets/restart1_hover.png') no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 .restart {
   background: url('./assets/restart1.png') no-repeat;
