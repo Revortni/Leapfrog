@@ -225,15 +225,13 @@
       this.fetchHighScore();
       this.createRoad();
       this.createPlayer();
-
       minSpaceBetweenPlayerAndCar = this.player.length * 4;
       spaceBetweenPlayerAndCar = MAX_HEIGHT - this.player.length * 2;
       this.obstacleGap = MAX_HEIGHT - this.player.length * 2;
       this.parentElement.appendChild(this.gameWindow);
       this.createInfoBoard();
       this.updateBulletCounter();
-      this.startGame();
-      // this.createSplashScreen();
+      this.createSplashScreen();
     };
 
     this.resetGame = function() {
@@ -253,6 +251,7 @@
       this.roadSpeed = BASE_SPEED;
       this.carSpeed = this.roadSpeed;
       this.player.reset();
+      this.updateBulletCounter();
       this.createSplashScreen();
     };
 
@@ -488,7 +487,8 @@
         this.checkBulletHitCar(this.player.bullets);
       }
       this.updateScore();
-      if (this.score && !(this.score % 2)) {
+      if (this.clock && !(this.clock % 1000)) {
+        this.speedUpGame();
         this.player.bulletCount++;
         this.updateBulletCounter();
       }
@@ -497,6 +497,7 @@
       if (collision) {
         this.handleCollision(collision);
       }
+
       this.animateRoad();
     };
 
@@ -545,9 +546,6 @@
           if (this.obstacleGap > spaceBetweenPlayerAndCar) {
             this.obstacleGap = 0;
             this.generateObstacles();
-          }
-          if (!(this.clock % 10000)) {
-            this.speedUpGame();
           }
           this.updateGame();
           this.renderGame();

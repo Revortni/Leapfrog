@@ -132,16 +132,16 @@
 }
 
 .startButton {
-  width: 50%;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  padding-left: 30px;
-  padding-right: 30px;
+  width: 25%;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
   background-color: red;
   color: #fff;
   text-align: center;
   margin: 0 auto;
-  border-radius: 100px;
+  border-radius: 50%;
   font-size: 40px;
   text-transform: uppercase;
 }
