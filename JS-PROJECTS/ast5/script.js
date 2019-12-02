@@ -17,7 +17,7 @@
     this.gameOver = false;
     this.controlKeys = controlKeys;
     this.bullets = [];
-    this.bulletCount = 20;
+    this.bulletCount = 5;
 
     var that = this;
 
@@ -84,7 +84,7 @@
     };
 
     this.moveBullets = function() {
-      this.bullets.filter(function(bullet) {
+      this.bullets = this.bullets.filter(function(bullet) {
         return bullet.move();
       });
     };
@@ -145,23 +145,6 @@
 
     this.draw = function() {
       this.element.style.bottom = this.y + 'px';
-    };
-
-    this.checkCollisionWithCar = function(cars) {
-      var left = this.x;
-      var right = this.x + this.width;
-      var top = this.y + this.length;
-      for (var i = 0; i < cars.length; i++) {
-        if (
-          right < cars[i].x + cars[i].width &&
-          left > cars[i].x &&
-          top > windowHeight - (cars[i].y + cars[i].length)
-        ) {
-          this.element.remove();
-          return i + 1;
-        }
-      }
-      return null;
     };
   }
 
@@ -385,23 +368,18 @@
     };
 
     this.moveCars = function() {
-      var flag = 0;
-      var indexes = [];
       this.obstacleGap += this.carSpeed;
-      cars.forEach(
-        function(car, index) {
+      cars = cars.filter(
+        function(car) {
           car.move();
           if (car.y > MAX_HEIGHT) {
-            flag = 1;
-            this.gameWindow.removeChild(car.element);
-            indexes.push(index);
+            car.element.remove();
+            this.score++;
+            return false;
           }
+          return true;
         }.bind(this)
       );
-      cars = cars.filter(function(val, i) {
-        return !indexes.includes(i);
-      });
-      return flag;
     };
 
     this.speedUpGame = function() {
@@ -414,34 +392,73 @@
         spaceBetweenPlayerAndCar -= this.carSpeed;
       }
     };
-
-    this.updateGame = function() {
-      var carPassedPlayer = this.moveCars();
-      this.player.moveBullets();
-      this.player.bullets.forEach(
+    this.createExplosion = function(x, y, height) {
+      var explosion = document.createElement('div');
+      explosion.classList.add('explosion');
+      explosion.style.width = LANE_WIDTH + 'px';
+      explosion.style.height = height + 'px';
+      explosion.style.left = x + 'px';
+      explosion.style.top = y + 'px';
+      this.gameWindow.appendChild(explosion);
+      setTimeout(
+        function() {
+          this.gameWindow.removeChild(explosion);
+        }.bind(this),
+        800
+      );
+    };
+    this.checkBulletHitCar = function(bullets) {
+      bullets = bullets.forEach(
         function(bullet, index) {
-          var destroyedCarIndex = bullet.checkCollisionWithCar(cars);
-          if (destroyedCarIndex) {
-            console.log(cars);
-            var car = cars[destroyedCarIndex - 1];
-            cars.splice(1, destroyedCarIndex - 1);
-            car.element.remove();
-            this.player.bullets.splice(1, index);
+          var left = bullet.x;
+          var right = bullet.x + bullet.width;
+          var top = bullet.y + bullet.length;
+          var bottom = bullet.y;
+
+          for (var i = 0; i < cars.length; i++) {
+            var cleft = cars[i].x;
+            var cright = cars[i].x + cars[i].width;
+            var ctop = MAX_HEIGHT - (cars[i].y + cars[i].length);
+            var cbottom = MAX_HEIGHT - cars[i].y;
+            if (
+              right < cright &&
+              left > cleft &&
+              top > ctop &&
+              bottom < cbottom
+            ) {
+              cars[i].element.remove();
+              bullet.element.remove();
+              this.score++;
+              this.updateScore();
+              this.createExplosion(
+                cars[i].x - cars[i].width / 2,
+                cars[i].y,
+                cars[i].length
+              );
+              cars[i].x = -1;
+              cars.splice(1, i);
+              bullet.x = -1;
+              bullets = bullets.splice(1, index);
+            }
           }
         }.bind(this)
       );
+    };
 
-      // this.player.bullets.checkCollisionWithCar(cars);
-      // var collision = this.player.checkCollision(cars);
-      // if (collision) {
-      //   this.handleCollision(collision);
-      // }
-      if (carPassedPlayer) {
-        this.score++;
-        this.updateScore();
-        if (!(this.score % 10)) {
-          this.speedUpGame();
-        }
+    this.updateGame = function() {
+      this.moveCars();
+      if (this.player.bullets.length) {
+        this.checkBulletHitCar(this.player.bullets);
+      }
+      this.updateScore();
+      if (this.score && !(this.score % 10)) {
+        this.speedUpGame();
+      }
+
+      this.player.moveBullets();
+      var collision = this.player.checkCollision(cars);
+      if (collision) {
+        this.handleCollision(collision);
       }
       this.animateRoad();
     };

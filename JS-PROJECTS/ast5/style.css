@@ -138,3 +138,11 @@
   background-color: rgb(224, 30, 30);
   cursor: pointer;
 }
+
+.explosion {
+  position: absolute;
+  background: url('./assets/explosion.png') no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: 15;
+}
