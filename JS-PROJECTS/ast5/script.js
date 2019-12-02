@@ -246,7 +246,7 @@
     this.showRoad = function() {
       this.roadStrip.style.display = 'none';
       this.roadSlider.style.marginTop = this.sliderPosition + 'px';
-      if (this.sliderPosition >= 0) {
+      if (this.sliderPosition + this.roadSpeed >= 0) {
         this.roadStrip.style.display = 'block';
         this.sliderPosition = -MAX_HEIGHT;
       }
@@ -308,20 +308,25 @@
       return flag;
     };
     this.speedUpGame = function() {
-      this.roadSpeed += 2;
-      this.carSpeed = this.roadSpeed;
+      if (this.roadSpeed < 30) {
+        this.roadSpeed += 1;
+        this.carSpeed = this.roadSpeed;
+      }
     };
 
     this.updateGame = function() {
       var carPassedPlayer = this.moveCars();
-      var collision = this.player.checkCollision(cars);
-      if (collision) {
-        this.handleCollision(collision);
-      }
+      // var collision = this.player.checkCollision(cars);
+      // if (collision) {
+      //   this.handleCollision(collision);
+      // }
       if (carPassedPlayer) {
         this.score++;
         this.updateScore();
-        if (!(this.score % 25)) {
+        if (!(this.score % 10)) {
+          if (minSpaceBetweenPlayerAndCar > this.player.length * 2.5) {
+            minSpaceBetweenPlayerAndCar -= this.carSpeed;
+          }
           this.speedUpGame();
         }
       }
@@ -372,9 +377,6 @@
         function() {
           if (this.obstacleGap > minSpaceBetweenPlayerAndCar) {
             this.obstacleGap = 0;
-            if (minSpaceBetweenPlayerAndCar > this.player.length * 2.5) {
-              minSpaceBetweenPlayerAndCar += 10;
-            }
             this.generateObstacles();
           }
           this.updateGame();
