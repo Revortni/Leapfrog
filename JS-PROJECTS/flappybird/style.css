@@ -1,0 +1,105 @@
+.app {
+  display: inline-block;
+}
+.foreground {
+  background: url('./assets/foreground.png') repeat-x;
+  width: 200%;
+  position: absolute;
+  z-index: 20;
+}
+.gameWindow {
+  position: relative;
+  border: 2px solid #000000;
+  overflow: hidden;
+  background: url('./assets/background.png');
+  background-size: cover;
+}
+
+.player {
+  background: url('./assets/mid.png') no-repeat;
+  background-position: center;
+  background-size: contain;
+  position: absolute;
+  z-index: 30;
+}
+
+.pipe {
+  position: absolute;
+  z-index: 20;
+  background-color: #000000;
+}
+
+.gameOver {
+  position: absolute;
+  top: 0;
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  background-color: #c3c3c3dd;
+}
+
+.gameOverText {
+  font-size: 40px;
+  padding-top: 30%;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.scoreText {
+  font-size: 30px;
+  padding-top: 10%;
+  text-align: center;
+}
+.gameOver:hover .restart {
+  opacity: 0.9;
+}
+.restart:hover {
+  background: url('./assets/restart1_hover.png') no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+.restart {
+  background: url('./assets/restart1.png') no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 30%;
+  height: 30%;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.splashScreen {
+  background-color: #98fb98cc;
+  position: absolute;
+  top: 0;
+  z-index: 30;
+}
+.buttonWrapper {
+  padding-top: 30%;
+}
+
+.startButton {
+  width: 50%;
+  background: url('./assets/start.png') 200px 200px no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin: 0 auto;
+  height: 400px;
+}
+
+.startButton:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.score {
+  font-family: 'Flappy Bird';
+  position: absolute;
+  z-index: 25;
+  font-size: 60px;
+  font-weight: bold;
+  color: #eee;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  top: 20%;
+}
