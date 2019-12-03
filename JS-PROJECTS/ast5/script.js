@@ -281,7 +281,6 @@
       screen.style.width = '100%';
       screen.style.height = MAX_HEIGHT + 'px';
       this.splashScreen = screen;
-      startButton.innerHTML = 'start';
       screen.classList.add('splashScreen');
       controlInfo.classList.add('controlInfo');
       buttonWrapper.classList.add('buttonWrapper');
