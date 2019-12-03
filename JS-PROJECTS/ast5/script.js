@@ -459,6 +459,7 @@
     this.checkBulletHitCar = function(bullets) {
       bullets = bullets.forEach(
         function(bullet, index) {
+          var flag = 0;
           var left = bullet.x;
           var right = bullet.x + bullet.width;
           var top = bullet.y + bullet.length;
@@ -488,6 +489,11 @@
               cars.splice(1, i);
               bullet.x = -1;
               bullets = bullets.splice(1, index);
+              break;
+              flag = 1;
+            }
+            if (flag) {
+              break;
             }
           }
         }.bind(this)
@@ -528,7 +534,7 @@
       this.player.element.style.display = 'none';
       this.collisionImage = collisionImage;
       this.gameWindow.appendChild(this.collisionImage);
-      this.gameWindow.removeChild(collidedCar.element);
+      collidedCar.element.remove();
       this.player.gameOver = true;
     };
 
