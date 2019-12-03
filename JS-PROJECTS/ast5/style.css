@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Roboto';
+  list-style: none;
 }
 .clearfix::before,
 ::after {
@@ -128,7 +129,7 @@
   z-index: 30;
 }
 .buttonWrapper {
-  padding-top: 70%;
+  padding-top: 30%;
 }
 
 .startButton {
@@ -157,4 +158,17 @@
   background-position: center;
   background-size: cover;
   z-index: 15;
+}
+ul.controlInfo {
+  padding-top: 100px;
+}
+ul.controlInfo li {
+  font-size: 40px;
+  text-align: center;
+  padding-bottom: 50px;
+  text-transform: capitalize;
+}
+
+ul.controlInfo li:first-child {
+  font-size: 50px;
 }

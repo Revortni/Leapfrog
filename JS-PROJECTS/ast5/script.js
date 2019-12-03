@@ -211,6 +211,7 @@
     this.controls = controls || 0;
     this.highScore = 0;
     this.bulletCounter = 0;
+    this.controlKeys = null;
     var HIGHSCOREKEY = '@highscore';
 
     var that = this;
@@ -231,7 +232,7 @@
       this.parentElement.appendChild(this.gameWindow);
       this.createInfoBoard();
       this.updateBulletCounter();
-      this.createSplashScreen();
+      this.createStartScreen();
     };
 
     this.resetGame = function() {
@@ -252,7 +253,7 @@
       this.carSpeed = this.roadSpeed - 1;
       this.player.reset();
       this.updateBulletCounter();
-      this.createSplashScreen();
+      this.createStartScreen();
     };
 
     this.fetchHighScore = function() {
@@ -263,15 +264,26 @@
       }
     };
 
-    this.createSplashScreen = function() {
+    this.createStartScreen = function() {
+      var keys = this.controlKeys;
       var screen = document.createElement('div');
       var buttonWrapper = document.createElement('div');
       var startButton = document.createElement('div');
+      var controlInfo = document.createElement('ul');
+      var controlInfoTitle = document.createElement('li');
+      controlInfoTitle.innerHTML = 'Controls';
+      controlInfo.appendChild(controlInfoTitle);
+      Object.keys(keys).forEach(function(key) {
+        var item = document.createElement('li');
+        item.innerHTML = key + ' - ' + keys[key][3];
+        controlInfo.appendChild(item);
+      });
       screen.style.width = '100%';
       screen.style.height = MAX_HEIGHT + 'px';
       this.splashScreen = screen;
       startButton.innerHTML = 'start';
       screen.classList.add('splashScreen');
+      controlInfo.classList.add('controlInfo');
       buttonWrapper.classList.add('buttonWrapper');
       startButton.classList.add('startButton');
       startButton.onclick = function() {
@@ -279,6 +291,7 @@
       }.bind(this);
       buttonWrapper.appendChild(startButton);
       screen.appendChild(buttonWrapper);
+      screen.appendChild(controlInfo);
       this.parentElement.appendChild(this.splashScreen);
     };
 
@@ -305,6 +318,7 @@
         controlKeys.right = 'KeyD';
         controlKeys.shoot = 'KeyW';
       }
+      this.controlKeys = controlKeys;
       this.player = new Player(
         this.gameWindow,
         MAX_WIDTH,
@@ -574,6 +588,6 @@
   var parentElement = document.getElementById('app');
   new Game(parentElement, 0).init();
 
-  // var parentElement1 = document.getElementById('app1');
-  // new Game(parentElement1, 1).init();
+  var parentElement1 = document.getElementById('app1');
+  new Game(parentElement1, 1).init();
 })();
