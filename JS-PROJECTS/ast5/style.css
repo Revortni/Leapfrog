@@ -133,23 +133,17 @@
 }
 
 .startButton {
-  width: 25%;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-left: 15px;
-  padding-right: 15px;
-  background-color: red;
-  color: #fff;
-  text-align: center;
+  width: 400px;
+  background: url('./assets/start.png') 200px 200px no-repeat;
+  background-position: center;
+  background-size: contain;
   margin: 0 auto;
-  border-radius: 50%;
-  font-size: 40px;
-  text-transform: uppercase;
+  height: 400px;
 }
 
 .startButton:hover {
-  background-color: rgb(224, 30, 30);
   cursor: pointer;
+  opacity: 0.6;
 }
 
 .explosion {
