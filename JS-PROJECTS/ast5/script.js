@@ -489,7 +489,6 @@
               cars.splice(1, i);
               bullet.x = -1;
               bullets = bullets.splice(1, index);
-              break;
               flag = 1;
             }
             if (flag) {
