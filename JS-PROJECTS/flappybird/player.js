@@ -13,7 +13,7 @@ class Player {
     this.maxWidth = maxWidth;
     this.alive = true;
     this.angleUp = -60; //lowerlimit for angle of player
-    this.angleIncrement = 3; //rate at which angle increases
+    this.angleIncrement = 10; //rate at which angle increases
     this.angle = 0; //base angle
     this.angleDown = 90; //upperlimit for angle of player
     this.useMouse = controlFlag; //set if control for game is mouse
