@@ -94,6 +94,8 @@ class Game {
 
   resetGame = () => {
     this.score = 0;
+    this.clock = 0;
+    this.gameOver = false;
     this.showScoreBoard();
     this.gameWindow.removeChild(this.gameOverScreen);
     this.pipes.forEach(pipe => {
@@ -228,12 +230,9 @@ class Game {
           this.highScore = this.score;
           localStorage.setItem(HIGHSCOREKEY, this.score);
         }
-        setTimeout(
-          function() {
-            this.createGameOverScreen();
-          }.bind(this),
-          1000
-        );
+        setTimeout(() => {
+          this.createGameOverScreen();
+        }, 1000);
         while (this.player.y + this.player.width / 2 < this.player.maxHeight) {
           this.player.move();
           this.player.draw();
@@ -251,7 +250,7 @@ function getRandomArbitrary(min, max) {
 
 (function() {
   const parent = document.getElementById('app');
-  new Game(400, 600, parent, 0).init();
+  new Game(600, 600, parent, 0).init();
   const parent1 = document.getElementById('app1');
-  new Game(400, 600, parent, 1).init();
+  new Game(600, 600, parent1, 1).init();
 })();
