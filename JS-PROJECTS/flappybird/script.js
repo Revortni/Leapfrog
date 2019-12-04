@@ -43,10 +43,15 @@ class Game {
     let screen = document.createElement('div');
     let buttonWrapper = document.createElement('div');
     let startButton = document.createElement('div');
+    let info = document.createElement('div');
+    let infoText = this.controlFlag ? 'Click' : 'SpaceBar';
+    info.innerHTML = 'Control: ' + infoText;
     screen.style.width = '100%';
     screen.style.height = this.screenHeight + 'px';
     this.splashScreen = screen;
+
     screen.classList.add('splashScreen');
+    info.classList.add('info');
     buttonWrapper.classList.add('buttonWrapper');
     startButton.classList.add('startButton');
     startButton.onclick = () => {
@@ -54,6 +59,7 @@ class Game {
     };
     buttonWrapper.appendChild(startButton);
     screen.appendChild(buttonWrapper);
+    screen.appendChild(info);
     this.gameWindow.appendChild(this.splashScreen);
   };
 
@@ -149,7 +155,7 @@ class Game {
     return foreground;
   };
 
-  createPipe = function() {
+  createPipe = () => {
     /*create a pipe on the  top half of screen */
     let topHeight = Math.floor(getRandomArbitrary(1, 5)) * 100;
     let topPipe = new Pipe(this.gameWindow, this.width, 0, topHeight).init();
@@ -206,7 +212,7 @@ class Game {
     let collision = this.player.checkCollision(this.pipes);
     if (this.player.y + this.player.height > this.height || collision) {
       this.gameOver = true;
-      console.log('gameOver');
+      this.player.alive = false;
     }
   };
 
@@ -214,6 +220,17 @@ class Game {
     this.player.draw();
     this.showScoreBoard();
     this.moveForeground();
+  };
+
+  dropBird = () => {
+    let die = setInterval(() => {
+      this.player.move();
+      this.player.draw();
+      if (this.player.y + this.player.width / 2 > this.player.maxHeight) {
+        clearInterval(die);
+        this.createGameOverScreen();
+      }
+    }, 10);
   };
 
   startGame = () => {
@@ -225,19 +242,12 @@ class Game {
       this.update();
       this.render();
       if (this.gameOver) {
-        this.player.alive = false;
         if (this.score > this.highScore) {
           this.highScore = this.score;
           localStorage.setItem(HIGHSCOREKEY, this.score);
         }
-        setTimeout(() => {
-          this.createGameOverScreen();
-        }, 1000);
-        while (this.player.y + this.player.width / 2 < this.player.maxHeight) {
-          this.player.move();
-          this.player.draw();
-        }
         clearInterval(this.interval);
+        this.dropBird();
       }
       this.clock++;
     }, 20);

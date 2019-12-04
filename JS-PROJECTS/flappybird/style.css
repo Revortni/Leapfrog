@@ -2,7 +2,7 @@
   background: url('./assets/foreground.png') repeat-x;
   width: 200%;
   position: absolute;
-  z-index: 20;
+  z-index: 40;
 }
 .gameWindow {
   position: relative;
@@ -29,7 +29,7 @@
 .gameOver {
   position: absolute;
   top: 0;
-  z-index: 30;
+  z-index: 50;
   width: 100%;
   height: 100%;
   background-color: #c3c3c3dd;
@@ -69,10 +69,18 @@
   background-color: #98fb98cc;
   position: absolute;
   top: 0;
-  z-index: 30;
+  z-index: 50;
 }
 .buttonWrapper {
   padding-top: 30%;
+}
+
+.info {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .startButton {
