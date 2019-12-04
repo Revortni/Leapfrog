@@ -17,6 +17,8 @@ class Player {
     this.angle = 0; //base angle
     this.angleDown = 90; //upperlimit for angle of player
     this.useMouse = controlFlag; //set if control for game is mouse
+    this.images = ['./assets/down.png', './assets/mid.png', './assets/up.png'];
+    this.imageIndex = 0;
   }
 
   init = () => {
@@ -32,6 +34,7 @@ class Player {
     }
     this.element = player;
     this.parentElement.appendChild(this.element);
+    this.animateBird();
     return this;
   };
 
@@ -44,17 +47,26 @@ class Player {
       if (this.angle < this.angleDown) {
         this.angle += this.angleIncrement;
       }
-      this.element.style.background = "url('./assets/down.png') no-repeat ";
-      this.element.style.backgroundSize = 'contain';
+    }
+    if (!this.alive) {
+      clearInterval(this.animateInterval);
     }
   }
+
+  animateBird = () => {
+    this.animateInterval = setInterval(() => {
+      this.element.style.background =
+        'url(' + this.images[this.imageIndex] + ') no-repeat ';
+      this.element.style.backgroundSize = 'contain';
+      this.imageIndex += 1;
+      this.imageIndex %= this.images.length;
+    }, 30);
+  };
 
   handleButtonPress = event => {
     if ((event.code == 'Space' || this.useMouse) && this.alive) {
       this.pullDownForce = this.pushUpForce;
       this.angle = this.angleUp;
-      this.element.style.background = "url('./assets/bird.gif') no-repeat ";
-      this.element.style.backgroundSize = 'contain';
     }
   };
 
@@ -99,6 +111,7 @@ class Player {
     this.pullDownForce = 1;
     this.element.style.background = "url('./assets/down.png') no-repeat ";
     this.element.style.backgroundSize = 'contain';
+    this.animateBird();
     this.draw();
   };
 }
