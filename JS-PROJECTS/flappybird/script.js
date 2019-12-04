@@ -6,9 +6,6 @@ class Game {
     this.parentElement = parentElement;
     this.gameWindow = null;
     this.foregroundPosition = -width;
-    this.pullDownForce = 1;
-    this.pushUpForce = -5;
-    this.gravity = 5;
     this.gameOver = false;
     this.clock = 0;
     this.pipes = [];
@@ -97,6 +94,7 @@ class Game {
 
   resetGame = () => {
     this.score = 0;
+    this.showScoreBoard();
     this.gameWindow.removeChild(this.gameOverScreen);
     this.pipes.forEach(pipe => {
       pipe.element.remove();
@@ -126,8 +124,6 @@ class Game {
 
   createPlayer = () => {
     let player = new Player(
-      100,
-      this.height / 2,
       this.gameWindow,
       this.height,
       this.width,

@@ -1,5 +1,5 @@
-.app {
-  display: inline-block;
+body {
+  overflow: hidden;
 }
 .foreground {
   background: url('./assets/foreground.png') repeat-x;
@@ -92,7 +92,6 @@
   opacity: 0.6;
 }
 .score {
-  font-family: 'Flappy Bird';
   position: absolute;
   z-index: 25;
   font-size: 60px;

@@ -1,21 +1,22 @@
 class Player {
-  constructor(x, y, parentElement, maxHeight, maxWidth, controlFlag = 0) {
-    this.x = x;
-    this.y = y;
+  constructor(parentElement, maxHeight, maxWidth, controlFlag = 0) {
     this.element = null;
     this.width = 50;
     this.height = 50;
+    this.x = maxWidth / 2 - this.width;
+    this.y = maxHeight / 2;
     this.parentElement = parentElement;
-    this.pullDownForce = 0.5;
-    this.pushUpForce = -6;
-    this.gravity = 0.5;
+    this.pullDownForce = 1; //downward force
+    this.pushUpForce = -6; //force when button is pressed
+    this.gravity = 0.5; //rate at which downward force increases
     this.maxHeight = maxHeight;
     this.maxWidth = maxWidth;
-    this.keyHold = false;
     this.alive = true;
-    this.imgUp = -0.8;
-    this.angle = 0;
-    this.useMouse = controlFlag;
+    this.angleUp = -60; //lowerlimit for angle of player
+    this.angleIncrement = 3; //rate at which angle increases
+    this.angle = 0; //base angle
+    this.angleDown = 90; //upperlimit for angle of player
+    this.useMouse = controlFlag; //set if control for game is mouse
   }
 
   init = () => {
@@ -40,8 +41,8 @@ class Player {
       this.pullDownForce += this.gravity;
     }
     if (this.pullDownForce > 0) {
-      if (this.angle < 90) {
-        this.angle += 3;
+      if (this.angle < this.angleDown) {
+        this.angle += this.angleIncrement;
       }
       this.element.style.background = "url('./assets/down.png') no-repeat ";
       this.element.style.backgroundSize = 'contain';
@@ -51,7 +52,7 @@ class Player {
   handleButtonPress = event => {
     if ((event.code == 'Space' || this.useMouse) && this.alive) {
       this.pullDownForce = this.pushUpForce;
-      this.angle = -60;
+      this.angle = this.angleUp;
       this.element.style.background = "url('./assets/bird.gif') no-repeat ";
       this.element.style.backgroundSize = 'contain';
     }
@@ -91,6 +92,13 @@ class Player {
     this.alive = true;
     this.y = this.maxHeight / 2;
     this.x = this.maxWidth / 2;
+    this.angleUp = -60;
+    this.angleIncrement = 3;
+    this.angle = 0;
+    this.angleDown = 90;
+    this.pullDownForce = 1;
+    this.element.style.background = "url('./assets/down.png') no-repeat ";
+    this.element.style.backgroundSize = 'contain';
     this.draw();
   };
 }
