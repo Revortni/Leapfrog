@@ -3,7 +3,7 @@ class Player {
     this.element = null;
     this.width = 50;
     this.height = 50;
-    this.x = maxWidth / 2 - this.width;
+    this.x = maxWidth / 2 - this.width / 2;
     this.y = maxHeight / 2;
     this.parentElement = parentElement;
     this.pullDownForce = 1; //downward force
@@ -60,7 +60,7 @@ class Player {
       this.element.style.backgroundSize = 'contain';
       this.imageIndex += 1;
       this.imageIndex %= this.images.length;
-    }, 30);
+    }, 100);
   };
 
   handleButtonPress = event => {

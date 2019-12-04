@@ -24,6 +24,7 @@ class Game {
     this.foreground = this.createForeground();
     this.scoreBoard = this.createScoreBoard();
     this.showScoreBoard();
+    this.fetchHighScore();
     this.createStartScreen();
   };
 
@@ -113,10 +114,10 @@ class Game {
   };
 
   fetchHighScore = () => {
-    if (localStorage.getItem(HIGHSCOREKEY) == null) {
+    if (localStorage.getItem(HIGHSCOREKEY + this.controlFlag) == null) {
       this.highScore = 0;
     } else {
-      this.highScore = localStorage.getItem(HIGHSCOREKEY);
+      this.highScore = localStorage.getItem(HIGHSCOREKEY + this.controlFlag);
     }
   };
 
@@ -244,7 +245,7 @@ class Game {
       if (this.gameOver) {
         if (this.score > this.highScore) {
           this.highScore = this.score;
-          localStorage.setItem(HIGHSCOREKEY, this.score);
+          localStorage.setItem(HIGHSCOREKEY + this.controlFlag, this.score);
         }
         clearInterval(this.interval);
         this.dropBird();
