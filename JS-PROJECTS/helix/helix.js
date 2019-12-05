@@ -13,6 +13,7 @@ class Helix {
     this.d = 40;
     this.row = 8;
     this.column = 16;
+    this.degInterval = 180 / this.column;
   }
 
   init = () => {
@@ -66,7 +67,7 @@ class Helix {
     for (let i = 0; i < this.row; i++) {
       for (let j = 0; j < this.column; j++) {
         let factorCos = Math.cos(
-          (j + i + this.time) * (180 / this.circleArrCos[i].length) * degToRad
+          (j + i + this.time) * this.degInterval * degToRad
         );
         this.circleArrCos[i][j].update(
           this.top * (factorCos + 1) + this.top,
@@ -74,7 +75,7 @@ class Helix {
         );
         this.circleArrCos[i][j].draw();
         let factorSin = Math.sin(
-          (j + i + this.time) * (180 / this.circleArrSin[i].length) * degToRad
+          (j + i + this.time) * this.degInterval * degToRad
         );
         this.circleArrSin[i][j].update(
           this.top * (factorSin + 1) + this.top,
