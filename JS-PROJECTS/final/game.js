@@ -11,13 +11,34 @@ class Game {
   init = () => {
     this.context.canvas.width = this.width;
     this.context.canvas.height = this.height;
+    this.setBackground();
     this.player = this.createPlayer();
     this.startGame();
   };
 
+  setBackground() {
+    var bg = new Image();
+    bg.src = './assets/area1_bg.png';
+    bg.onload = () => {
+      this.context.drawImage(
+        bg,
+        0,
+        468,
+        300,
+        234,
+        0,
+        0,
+        this.width,
+        this.height
+      );
+    };
+  }
+
   createPlayer = () => {
-    let player = new Player(this.context, this.width, this.height);
-    player.draw();
+    let player = new Player(this.context, this.width, this.height - 100, {
+      width: this.width,
+      height: this.height
+    });
     return player;
   };
 
@@ -34,6 +55,7 @@ class Game {
   };
 
   render = () => {
+    // this.setBackground();
     this.player.draw();
   };
 

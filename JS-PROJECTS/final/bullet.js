@@ -12,11 +12,7 @@ class Bullet {
   }
 
   init() {
-    //if on ground and shooting down
-    if (!this.jumping && this.dy == 1 && this.dx) {
-      this.y += 10;
-      this.dy = 0;
-    } else if (this.dy == 1) {
+    if (this.dy == 1 && this.jumping) {
       //if jumping and shooting down
       this.dx = 0;
     }

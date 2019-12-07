@@ -1,3 +1,6 @@
 #app {
+  display: block;
+  margin: 0 auto;
   background-color: #98fb98;
+  margin-top: 100px;
 }
