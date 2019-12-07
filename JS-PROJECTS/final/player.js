@@ -24,6 +24,19 @@ const controller = {
   }
 };
 
+const display = {
+  '0': '#000',
+  '1': '',
+  '2': '#f00',
+  '3': '',
+  '4': '#00f',
+  '5': '',
+  '6': '#0f0',
+  '7': '',
+  '8': '#FFD700',
+  '9': '#006400'
+};
+
 const values = {
   dx: 2,
   dy: 50,
@@ -41,14 +54,15 @@ class Player {
     this.dy = 0; //velocity of player in y axis
     this.c = context;
     this.state = null;
-    this.init();
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
     this.jumping = true;
+    this.init();
   }
 
   init = () => {
     /*initialize event listeners for buttons */
+    this.intro = true;
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     this.reset();
@@ -60,35 +74,48 @@ class Player {
       color: '#000',
       facingLeft: false
     };
-    this.directionFacing = '#000';
+    this.directionFacing = 0;
+    this.shootDirection = { x: 1, y: 0 };
   };
 
   update = () => {
+    this.shootDirection.x = this.state.facingLeft ? -1 : 1;
     if (controller.jump && this.jumping == false) {
       this.dy -= values.dy;
       this.jumping = true;
     }
+
+    if (controller.up) {
+      this.shootDirection.x = 0;
+      this.shootDirection.y = 1;
+      this.state.color = 2;
+    } else if (controller.down) {
+      this.shootDirection.x = 0;
+      this.shootDirection.y = -1;
+      this.state.color = 6;
+    } else if (!this.jumping) {
+      this.state.color = this.directionFacing;
+      this.shootDirection.y = 0;
+    } else {
+      this.shootDirection.y = 0;
+    }
+
     if (controller.left) {
       this.dx -= values.dx;
-      this.directionFacing = '#00f';
+      this.directionFacing = 4;
+      this.shootDirection.x = -1;
       this.state.facingLeft = true;
     }
     if (controller.right) {
       this.dx += values.dx;
-      this.directionFacing = '#000';
+      this.directionFacing = 0;
+      this.shootDirection.x = 1;
       this.state.facingLeft = false;
-    }
-    if (controller.up) {
-      this.state.color = '#f00';
-    } else if (controller.down) {
-      this.state.color = '#0f0';
-    } else if (!this.jumping) {
-      this.state.color = this.directionFacing;
     }
 
     if (this.jumping) {
       this.dy += values.gravity;
-      this.state.color = this.state.facingLeft ? '#006400' : '#FFD700';
+      this.state.color = this.state.facingLeft ? 9 : 8;
     }
     //add velocity for movement in x y
     this.x += this.dx;
@@ -110,13 +137,14 @@ class Player {
     if (this.x + this.width > this.maxWidth) {
       this.x = this.maxWidth - this.width;
     }
+    console.log(this.shootDirection);
   };
 
   draw = () => {
     let c = this.c;
     c.beginPath();
     c.rect(this.x, this.y, this.width, this.height);
-    c.fillStyle = this.state.color;
+    c.fillStyle = display[this.state.color];
     c.fill();
   };
 }

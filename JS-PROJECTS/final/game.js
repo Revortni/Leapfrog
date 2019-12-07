@@ -1,4 +1,3 @@
-const HIGHSCOREKEY = '@highscore';
 class Game {
   constructor(width, height, parentElement) {
     this.width = width;
@@ -9,12 +8,14 @@ class Game {
   }
 
   init = () => {
-    this.player = this.createPlayer(this.width, this.height, this.context);
+    this.context.canvas.width = this.width;
+    this.context.canvas.height = this.height;
+    this.player = this.createPlayer();
     this.startGame();
   };
 
   createPlayer = () => {
-    let player = new Player(this.context, this.height, this.width);
+    let player = new Player(this.context, this.width, this.height);
     player.draw();
     return player;
   };
