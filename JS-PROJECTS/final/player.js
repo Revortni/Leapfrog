@@ -44,7 +44,7 @@ const display = {
 };
 
 const values = {
-  dx: 1,
+  dx: 5,
   dy: 50,
   gravity: 1.5,
   friction: 0.9
@@ -108,13 +108,13 @@ class Player {
     }
 
     if (controller.left) {
-      this.dx -= values.dx;
+      this.dx = -values.dx;
       this.directionFacing = 4;
       this.shootDirection.x = -1;
       this.state.facingLeft = true;
     }
     if (controller.right) {
-      this.dx += values.dx;
+      this.dx = values.dx;
       this.directionFacing = 0;
       this.shootDirection.x = 1;
       this.state.facingLeft = false;
