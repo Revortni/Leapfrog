@@ -5,6 +5,7 @@ class Game {
     this.parentElement = parentElement;
     this.context = this.parentElement.getContext('2d');
     this.player = null;
+    this.clock = 0;
   }
 
   init = () => {
@@ -21,7 +22,15 @@ class Game {
   };
 
   update = () => {
-    this.player.update();
+    //update player position and create bullets if button pressed
+    this.player.update(this.clock);
+    //bullet generates every 2 seconds
+    if (!this.player.shootFlag) {
+      this.clock++;
+    }
+    if (this.clock % 10 == 0) {
+      this.player.shootFlag = true;
+    }
   };
 
   render = () => {
