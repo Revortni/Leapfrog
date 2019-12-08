@@ -31,6 +31,19 @@ const controller = {
 };
 
 const display = {
+  '0': 'pStandingR.png',
+  '1': 'pStandingL.png',
+  '2': '#f00',
+  '3': '#fff',
+  '4': 'pStandingL.png',
+  '5': '#fff',
+  '6': 'pLayingDownR.png',
+  '7': '#fff',
+  '8': 'pStandingR.png',
+  '9': 'pStandingL.png',
+  '10': 'pLayingDownL.png'
+};
+const color = {
   '0': '#000',
   '1': '#fff',
   '2': '#f00',
@@ -43,19 +56,23 @@ const display = {
   '9': '#006400'
 };
 
-const values = {
+const playerValues = {
   dx: 4,
   dy: 50,
   gravity: 2,
   friction: 0.9,
   width: 48,
-  height: 68
+  height: 68,
+  crouchWidth: 68,
+  crouchHeight: 38,
+  jumpSize: 40,
+  reloadTime: 10
 };
 
 class Player {
   constructor(context, maxWidth, maxHeight, game) {
-    this.width = values.width;
-    this.height = values.height;
+    this.width = playerValues.width;
+    this.height = playerValues.height;
     this.x = 100; //x coordinate of player
     this.dx = 0; //velocity of player in x axis
     this.y = 100; //y coordinate of player
@@ -67,9 +84,9 @@ class Player {
     this.jumping = true;
     this.bullets = [];
     this.shootFlag = true;
-    this.imagePos = 1;
+    this.sprite = null;
     this.bulletClock = 1;
-    this.init();
+    this.shootCreationHeight = this.init();
   }
 
   init = () => {
@@ -93,14 +110,14 @@ class Player {
 
   controllerHandler = () => {
     if (controller.jump && this.jumping == false) {
-      this.dy -= values.dy;
+      this.dy -= playerValues.dy;
       this.jumping = true;
-      this.width = values.width;
-      this.height = values.width;
+      this.width = playerValues.width;
+      this.height = playerValues.height;
     }
 
     if (this.jumping) {
-      this.dy += values.gravity;
+      this.dy += playerValues.gravity;
       this.state.sprite = this.state.facingLeft ? 9 : 8;
     } else {
       this.state.sprite = this.directionFacing;
@@ -108,7 +125,7 @@ class Player {
         this.state.sprite = 2;
       }
       if (controller.down) {
-        this.state.sprite = 6;
+        this.state.sprite = this.state.facingLeft ? 10 : 6;
       }
       if (controller.right && controller.up) {
         this.state.sprite = 1;
@@ -131,13 +148,13 @@ class Player {
       this.shootDirection.y = 1;
     }
     if (controller.left) {
-      this.dx = -values.dx;
+      this.dx = -playerValues.dx;
       this.directionFacing = 4;
       this.shootDirection.x = -1;
       this.state.facingLeft = true;
     }
     if (controller.right) {
-      this.dx = values.dx;
+      this.dx = playerValues.dx;
       this.directionFacing = 0;
       this.shootDirection.x = 1;
       this.state.facingLeft = false;
@@ -148,16 +165,17 @@ class Player {
       controller.down &&
       !(controller.right || controller.left)
     ) {
-      let shift = this.height - this.width;
-      this.y = this.crouch ? this.y : this.y + shift;
+      this.y = this.crouch
+        ? this.y
+        : this.maxHeight - playerValues.crouchHeight;
       this.crouch = true;
-      this.width = values.height;
-      this.height = values.width;
+      this.width = playerValues.crouchWidth;
+      this.height = playerValues.crouchHeight;
       this.shootDirection.y = 0;
     } else if (this.crouch) {
       this.crouch = false;
-      this.width = values.width;
-      this.height = values.height;
+      this.width = playerValues.width;
+      this.height = playerValues.height;
       this.y = this.y + this.height - this.width;
     }
   };
@@ -168,15 +186,15 @@ class Player {
     this.y += this.dy;
 
     //friction
-    this.dy *= values.friction;
+    this.dy *= playerValues.friction;
     this.dx *= 0.7;
   };
 
   checkBoundary = () => {
     //check bottom boundary
     if (this.y + this.height > this.maxHeight) {
-      this.width = values.width;
-      this.height = values.height;
+      this.width = playerValues.width;
+      this.height = playerValues.height;
       this.jumping = false;
       this.y = this.maxHeight - this.height;
       this.dy = 0;
@@ -195,11 +213,11 @@ class Player {
   };
 
   shoot = () => {
-    let x = this.x + this.width / 2;
+    let x = this.state.facingLeft ? this.x : this.x + this.width;
     let y =
       this.jumping || this.crouch
         ? this.y + this.height / 2
-        : this.y + this.height / 3;
+        : this.y + this.height / 4;
     let bullet = new Bullet(
       this.context,
       x,
@@ -219,7 +237,7 @@ class Player {
     }
     if (!this.shootFlag) {
       this.bulletClock++;
-      if (this.bulletClock % 15 == 0) {
+      if (this.bulletClock % playerValues.reloadTime == 0) {
         this.shootFlag = true;
         this.bulletClock = 1;
       }
@@ -227,23 +245,12 @@ class Player {
   };
 
   moveBullets = () => {
-    //move bullets and bulletBoundaryCheck function
-    if (this.bullets.length) {
-      let removeBullet = [];
-      this.bullets.forEach((bullet, index) => {
-        bullet.move();
-        if (
-          bullet.x > this.maxWidth ||
-          bullet.x < 0 ||
-          bullet.y < 0 ||
-          bullet.y > this.maxHeight
-        ) {
-          removeBullet.push(index);
-        }
-      });
-      //remove bullets that have crossed boundary
-      this.bullets.filter((val, index) => removeBullet.includes(index));
-    }
+    this.bullets.forEach(bullet => {
+      bullet.move();
+      bullet.checkBoundary();
+    });
+
+    this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
   };
 
   update = () => {
@@ -267,25 +274,15 @@ class Player {
   draw = () => {
     let c = this.context;
     c.beginPath();
-    // var bg = new Image();
-    // bg.src = './assets/p1.png';
-    // bg.onload = () => {
-    //   this.context.drawImage(
-    //     bg,
-    //     this.imagePos,
-    //     12,
-    //     24,
-    //     33,
-    //     this.x,
-    //     this.y,
-    //     this.width,
-    //     this.height
-    //   );
-    //   this.imagePos += 26;
-    // };
-    c.rect(this.x, this.y, this.width, this.height);
-    c.fillStyle = display[this.state.sprite];
-    c.fill();
+    let bg = new Image();
+    bg.src = './assets/' + display[this.state.sprite];
+    bg.onload = () => {
+      c.drawImage(bg, this.x, this.y, this.width, this.height);
+    };
+    // c.rect(this.x, this.y, this.width, this.height);
+    // c.fillStyle = display[this.state.sprite];
+    // c.fill();
+    c.closePath();
   };
 
   render = () => {

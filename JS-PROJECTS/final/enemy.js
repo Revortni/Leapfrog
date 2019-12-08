@@ -1,4 +1,4 @@
-const values = {
+const enemyValues = {
   dx: 5,
   dy: 0,
   gravity: 1.5,
@@ -6,7 +6,7 @@ const values = {
 };
 
 class Enemy {
-  constructor(context, x, y, maxWidth, maxHeight) {
+  constructor(context, maxWidth, maxHeight, position) {
     this.width = 50;
     this.height = 50;
     this.x = 0;
@@ -14,21 +14,29 @@ class Enemy {
     this.dx = 0;
     this.dy = 0;
     this.context = context;
-    this.alive = null;
+    this.alive = true;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
+    this.setPosition(position);
     this.init();
   }
 
   init = () => {
-    /*initialize event listeners for buttons */
-    this.x = this.maxWidth;
-    this.dx = -values.dx;
-    this.dy = values.dy;
-    this.reset();
+    this.dy = enemyValues.dy;
   };
 
-  reset = () => {};
+  setPosition = position => {
+    if (position == 'right') {
+      this.x = this.maxWidth;
+      this.y = this.maxHeight - this.height;
+      this.dx = -enemyValues.dx;
+    }
+    if (position == 'left') {
+      this.x = 0;
+      this.y = this.maxHeight - this.height;
+      this.dx = enemyValues.dx;
+    }
+  };
 
   update = () => {
     //add velocity for movement in x y
@@ -42,6 +50,15 @@ class Enemy {
     c.rect(this.x, this.y, this.width, this.height);
     c.fillStyle = '#f00';
     c.fill();
+    c.closePath();
+  };
+
+  checkBoundary = () => {
+    if (this.x < 0 || this.x > this.maxWidth) {
+      this.alive = false;
+    } else {
+      this.alive = true;
+    }
   };
 }
 

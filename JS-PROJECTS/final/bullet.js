@@ -6,8 +6,9 @@ class Bullet {
     this.dx = dx;
     this.dy = dy;
     this.speed = 10;
-    this.r = 10;
+    this.r = 8;
     this.context = context;
+    this.destroyed = false;
     this.init();
   }
 
@@ -25,9 +26,22 @@ class Bullet {
 
   draw() {
     let c = this.context;
+    let img = document.createElement('img');
+    img.src = './assets/bullet.png';
     c.beginPath();
-    c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
-    c.fillStyle = '#000';
-    c.fill();
+    c.drawImage(img, this.x, this.y, 2 * this.r, 2 * this.r);
+    c.closePath();
   }
+
+  checkBoundary = () => {
+    //move bullets and bulletBoundaryCheck function
+    if (
+      this.x > this.maxWidth ||
+      this.x < 0 ||
+      this.y < 0 ||
+      this.y > this.maxHeight
+    ) {
+      this.destroyed = true;
+    }
+  };
 }
