@@ -5,7 +5,7 @@ class Bullet {
     this.jumping = jumping;
     this.dx = dx;
     this.dy = dy;
-    this.speed = 50;
+    this.speed = 10;
     this.r = 10;
     this.context = context;
     this.init();
@@ -21,7 +21,6 @@ class Bullet {
   move() {
     this.x += this.dx * this.speed;
     this.y += this.dy * this.speed;
-    this.draw();
   }
 
   draw() {

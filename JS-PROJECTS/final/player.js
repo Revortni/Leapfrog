@@ -47,13 +47,15 @@ const values = {
   dx: 4,
   dy: 50,
   gravity: 2,
-  friction: 0.9
+  friction: 0.9,
+  width: 48,
+  height: 68
 };
 
 class Player {
   constructor(context, maxWidth, maxHeight, game) {
-    this.width = 48;
-    this.height = 68;
+    this.width = values.width;
+    this.height = values.height;
     this.x = 100; //x coordinate of player
     this.dx = 0; //velocity of player in x axis
     this.y = 100; //y coordinate of player
@@ -66,6 +68,7 @@ class Player {
     this.bullets = [];
     this.shootFlag = true;
     this.imagePos = 1;
+    this.bulletClock = 1;
     this.init();
   }
 
@@ -88,14 +91,12 @@ class Player {
     this.shootDirection = { x: 1, y: 0 };
   };
 
-  update = () => {
-    this.shootDirection.x = this.state.facingLeft ? -1 : 1;
-    this.shootDirection.y = 0;
+  controllerHandler = () => {
     if (controller.jump && this.jumping == false) {
       this.dy -= values.dy;
       this.jumping = true;
-      this.width = 48;
-      this.height = 48;
+      this.width = values.width;
+      this.height = values.width;
     }
 
     if (this.jumping) {
@@ -150,16 +151,18 @@ class Player {
       let shift = this.height - this.width;
       this.y = this.crouch ? this.y : this.y + shift;
       this.crouch = true;
-      this.width = 68;
-      this.height = 48;
+      this.width = values.height;
+      this.height = values.width;
       this.shootDirection.y = 0;
     } else if (this.crouch) {
       this.crouch = false;
-      this.width = 48;
-      this.height = 68;
+      this.width = values.width;
+      this.height = values.height;
       this.y = this.y + this.height - this.width;
     }
+  };
 
+  move = () => {
     //add velocity for movement in x y
     this.x += this.dx;
     this.y += this.dy;
@@ -167,11 +170,13 @@ class Player {
     //friction
     this.dy *= values.friction;
     this.dx *= 0.7;
+  };
 
+  checkBoundary = () => {
     //check bottom boundary
     if (this.y + this.height > this.maxHeight) {
-      this.width = 48;
-      this.height = 68;
+      this.width = values.width;
+      this.height = values.height;
       this.jumping = false;
       this.y = this.maxHeight - this.height;
       this.dy = 0;
@@ -187,11 +192,42 @@ class Player {
     if (this.x + this.width > this.maxWidth) {
       this.x = this.maxWidth - this.width;
     }
+  };
 
+  shoot = () => {
+    let x = this.x + this.width / 2;
+    let y =
+      this.jumping || this.crouch
+        ? this.y + this.height / 2
+        : this.y + this.height / 3;
+    let bullet = new Bullet(
+      this.context,
+      x,
+      y,
+      this.shootDirection.x,
+      this.shootDirection.y,
+      this.jumping
+    );
+    this.bullets.push(bullet);
+  };
+
+  shootHandler = () => {
     //shooting function
-    this.shoot();
+    if (controller.shoot && this.shootFlag) {
+      this.shoot();
+      this.shootFlag = false;
+    }
+    if (!this.shootFlag) {
+      this.bulletClock++;
+      if (this.bulletClock % 15 == 0) {
+        this.shootFlag = true;
+        this.bulletClock = 1;
+      }
+    }
+  };
 
-    //bulletBoundary function
+  moveBullets = () => {
+    //move bullets and bulletBoundaryCheck function
     if (this.bullets.length) {
       let removeBullet = [];
       this.bullets.forEach((bullet, index) => {
@@ -205,31 +241,27 @@ class Player {
           removeBullet.push(index);
         }
       });
+      //remove bullets that have crossed boundary
       this.bullets.filter((val, index) => removeBullet.includes(index));
     }
   };
 
-  shoot = () => {
-    if (controller.shoot && this.shootFlag) {
-      controller.shoot = false;
-      let x = this.x + this.width / 2;
-      let y =
-        this.jumping || this.crouch
-          ? this.y + this.height / 2
-          : this.y + this.height / 3;
-      let bullet = new Bullet(
-        this.context,
-        x,
-        y,
-        this.shootDirection.x,
-        this.shootDirection.y,
-        this.jumping
-      );
-      this.bullets.push(bullet);
-      this.shootFlag = false;
-    }
+  update = () => {
+    //player updates
+    this.shootDirection.x = this.state.facingLeft ? -1 : 1;
+    this.shootDirection.y = 0;
+    this.controllerHandler();
+    this.move();
+    this.checkBoundary();
+    //bullet updates
+    this.shootHandler();
+    this.moveBullets();
+  };
 
-    return;
+  drawBullets = () => {
+    this.bullets.forEach((bullet, index) => {
+      bullet.draw();
+    });
   };
 
   draw = () => {
@@ -254,6 +286,11 @@ class Player {
     c.rect(this.x, this.y, this.width, this.height);
     c.fillStyle = display[this.state.sprite];
     c.fill();
+  };
+
+  render = () => {
+    this.drawBullets();
+    this.draw();
   };
 }
 
