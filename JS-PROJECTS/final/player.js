@@ -73,6 +73,8 @@ class Player {
   constructor(context, maxWidth, maxHeight, game) {
     this.width = playerValues.width;
     this.height = playerValues.height;
+    this.playerX = 0;
+    this.playerY = 0;
     this.x = 100; //x coordinate of player
     this.dx = 0; //velocity of player in x axis
     this.y = 100; //y coordinate of player
@@ -86,12 +88,14 @@ class Player {
     this.shootFlag = true;
     this.sprite = null;
     this.bulletClock = 1;
+    this.image = null;
     this.shootCreationHeight = this.init();
   }
 
   init = () => {
     /*initialize event listeners for buttons */
     this.intro = true;
+    this.image = new Image();
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     this.reset();
@@ -217,7 +221,7 @@ class Player {
     let y =
       this.jumping || this.crouch
         ? this.y + this.height / 2
-        : this.y + this.height / 4;
+        : this.y + this.height / 5;
     let bullet = new Bullet(
       this.context,
       x,
@@ -263,6 +267,7 @@ class Player {
     //bullet updates
     this.shootHandler();
     this.moveBullets();
+    this.image.src = './assets/' + display[this.state.sprite];
   };
 
   drawBullets = () => {
@@ -274,14 +279,10 @@ class Player {
   draw = () => {
     let c = this.context;
     c.beginPath();
-    let bg = new Image();
-    bg.src = './assets/' + display[this.state.sprite];
-    bg.onload = () => {
-      c.drawImage(bg, this.x, this.y, this.width, this.height);
-    };
-    // c.rect(this.x, this.y, this.width, this.height);
-    // c.fillStyle = display[this.state.sprite];
-    // c.fill();
+    // c.drawImage(this.image, this.x, this.y, this.width, this.height);
+    c.rect(this.x, this.y, this.width, this.height);
+    c.fillStyle = display[this.state.sprite];
+    c.fill();
     c.closePath();
   };
 

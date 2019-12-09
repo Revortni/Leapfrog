@@ -1,8 +1,8 @@
 class Game {
-  constructor(width, height, parentElement) {
+  constructor(width, height) {
     this.parentElement = parentElement;
     this.context = this.parentElement.getContext('2d');
-    this.world = new World(width, height, this.context);
+    this.world = new World(width, height);
   }
 
   init = () => {
@@ -14,15 +14,14 @@ class Game {
   };
 
   render = () => {
-    // this.setBackground();
     this.world.render();
   };
 
   startGame = () => {
-    setInterval(() => {
-      this.update();
-      this.render();
-      this.clock++;
-    }, 50);
+    // setInterval(() => {
+    this.update();
+    this.render();
+    this.clock++;
+    // }, 50);
   };
 }

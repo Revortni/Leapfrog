@@ -26,7 +26,7 @@ class Bullet {
 
   draw() {
     let c = this.context;
-    let img = document.createElement('img');
+    let img = new Image();
     img.src = './assets/bullet.png';
     c.beginPath();
     c.drawImage(img, this.x, this.y, 2 * this.r, 2 * this.r);

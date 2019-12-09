@@ -1,44 +1,38 @@
 class World {
-  constructor(width, height, context) {
+  constructor(width, height) {
+    this.x = 0;
+    this.y = 0;
     this.width = width;
     this.height = height;
-    this.context = context;
     this.player = null;
     this.floorHeight = height - 100;
     this.enemies = [];
-    this.clock = 1;
+    this.clock = 0;
     this.init();
   }
 
   init = () => {
-    this.context.canvas.width = this.width;
-    this.context.canvas.height = this.height;
-    this.player = new Player(this.context, this.width, this.floorHeight, {
+    ctx.canvas.width = this.width;
+    ctx.canvas.height = this.height;
+    this.y = 496 * 4;
+    this.player = new Player(ctx, this.width, this.floorHeight, {
       width: this.width,
       height: this.height
     });
   };
 
-  setBackground() {
+  setBackground = () => {
     var bg = new Image();
     bg.src = './assets/area1_bg.png';
     bg.onload = () => {
-      this.context.drawImage(
-        bg,
-        0,
-        468,
-        300,
-        234,
-        0,
-        0,
-        this.width,
-        this.height
-      );
+      ctx;
+      ctx.translate(this.x, -this.y);
+      ctx.drawImage(bg, 0, 0, IMAGESIZE.x, IMAGESIZE.y);
     };
-  }
+  };
 
   generateEnemy = () => {
-    let enemy = new Enemy(this.context, this.width, this.floorHeight, 'right');
+    let enemy = new Enemy(ctx, this.width, this.floorHeight, 'right');
     this.enemies.push(enemy);
   };
 
@@ -54,23 +48,23 @@ class World {
 
   update = () => {
     //update player position and create bullets if button pressed
-    this.player.update();
-    this.updateEnemy();
-    if (this.clock % 50 == 0) {
-      this.generateEnemy();
-    }
+    // this.player.update();
+    // this.updateEnemy();
+    // if (this.clock % 50 == 0) {
+    //   this.generateEnemy();
+    // }
     this.clock++;
   };
 
   render = () => {
-    this.context.clearRect(0, 0, this.width, this.height);
-    // this.setBackground();
-    this.player.render();
-    if (this.enemies.length > 0) {
-      this.enemies.forEach(enemy => {
-        enemy.draw();
-      });
-    }
+    ctx.clearRect(0, 0, this.width, this.height);
+    this.setBackground();
+    // this.player.render();
+    // if (this.enemies.length > 0) {
+    //   this.enemies.forEach(enemy => {
+    //     enemy.draw();
+    //   });
+    // }
   };
 }
 
