@@ -1,13 +1,12 @@
 class Bullet {
-  constructor(context, x, y, dx, dy, jumping) {
+  constructor(x, y, dx, dy, jumping) {
     this.x = x;
     this.y = y;
     this.jumping = jumping;
     this.dx = dx;
     this.dy = dy;
-    this.speed = 10;
-    this.r = 8;
-    this.context = context;
+    this.speed = 25;
+    this.r = 2 * SCALE;
     this.destroyed = false;
     this.init();
   }
@@ -25,9 +24,9 @@ class Bullet {
   }
 
   draw() {
-    let c = this.context;
+    let c = ctx;
     let img = new Image();
-    img.src = './assets/bullet.png';
+    img.src = './assets/bullet1.png';
     c.beginPath();
     c.drawImage(img, this.x, this.y, 2 * this.r, 2 * this.r);
     c.closePath();

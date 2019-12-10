@@ -6,6 +6,8 @@ const controller = {
   down: false,
   jump: false,
   shoot: false,
+  select: false,
+  start: false,
   keyListener: event => {
     let keyState = event.type == 'keydown' ? true : false;
     switch (event.keyCode) {
@@ -21,10 +23,10 @@ const controller = {
       case 87: //W
         controller.up = keyState;
         break;
-      case 88:
+      case 88: //X
         controller.jump = keyState;
         break;
-      case 90:
+      case 90: //Z
         controller.shoot = keyState;
     }
   }
@@ -44,7 +46,7 @@ const display = {
   '10': 'pLayingDownL.png'
 };
 const color = {
-  '0': '#000',
+  '0': '#fff',
   '1': '#fff',
   '2': '#f00',
   '3': '#fff',
@@ -53,33 +55,19 @@ const color = {
   '6': '#0f0',
   '7': '#fff',
   '8': '#FFD700',
-  '9': '#006400'
-};
-
-const playerValues = {
-  dx: 4,
-  dy: 50,
-  gravity: 2,
-  friction: 0.9,
-  width: 48,
-  height: 68,
-  crouchWidth: 68,
-  crouchHeight: 38,
-  jumpSize: 40,
-  reloadTime: 10
+  '9': '#006400',
+  '10': '#f203f4'
 };
 
 class Player {
-  constructor(context, maxWidth, maxHeight, game) {
+  constructor(maxWidth, maxHeight) {
     this.width = playerValues.width;
     this.height = playerValues.height;
-    this.playerX = 0;
-    this.playerY = 0;
-    this.x = 100; //x coordinate of player
-    this.dx = 0; //velocity of player in x axis
-    this.y = 100; //y coordinate of player
-    this.dy = 0; //velocity of player in y axis
-    this.context = context;
+    this.playerX = maxWidth / 2;
+    this.x = 0;
+    this.dx = 0;
+    this.y = 100;
+    this.dy = 0;
     this.state = null;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
@@ -89,22 +77,19 @@ class Player {
     this.sprite = null;
     this.bulletClock = 1;
     this.image = null;
-    this.shootCreationHeight = this.init();
+    this.init();
   }
 
   init = () => {
     /*initialize event listeners for buttons */
     this.intro = true;
-    this.image = new Image();
-    document.addEventListener('keydown', controller.keyListener);
-    document.addEventListener('keyup', controller.keyListener);
     this.reset();
   };
 
   reset = () => {
     this.state = {
       alive: true,
-      sprite: '#000',
+      sprite: 0,
       facingLeft: false
     };
     this.crouch = false;
@@ -190,8 +175,8 @@ class Player {
     this.y += this.dy;
 
     //friction
-    this.dy *= playerValues.friction;
-    this.dx *= 0.7;
+    this.dx *= playerValues.frictionX;
+    this.dy *= playerValues.frictionY;
   };
 
   checkBoundary = () => {
@@ -211,19 +196,20 @@ class Player {
     }
 
     //check right boundary
-    if (this.x + this.width > this.maxWidth) {
-      this.x = this.maxWidth - this.width;
+    if (this.x + this.width > SCREEN.width) {
+      this.x = SCREEN.width - this.width;
     }
   };
 
   shoot = () => {
-    let x = this.state.facingLeft ? this.x : this.x + this.width;
+    let x = this.state.facingLeft
+      ? this.x - this.width / 2
+      : this.x + this.width / 2;
     let y =
       this.jumping || this.crouch
         ? this.y + this.height / 2
-        : this.y + this.height / 5;
+        : this.y + this.height / 4;
     let bullet = new Bullet(
-      this.context,
       x,
       y,
       this.shootDirection.x,
@@ -267,7 +253,6 @@ class Player {
     //bullet updates
     this.shootHandler();
     this.moveBullets();
-    this.image.src = './assets/' + display[this.state.sprite];
   };
 
   drawBullets = () => {
@@ -277,13 +262,14 @@ class Player {
   };
 
   draw = () => {
-    let c = this.context;
-    c.beginPath();
-    // c.drawImage(this.image, this.x, this.y, this.width, this.height);
-    c.rect(this.x, this.y, this.width, this.height);
-    c.fillStyle = display[this.state.sprite];
-    c.fill();
-    c.closePath();
+    ctx.beginPath();
+    let image = new Image();
+    image.src = './assets/' + display[this.state.sprite];
+    ctx.drawImage(image, this.x, this.y, this.width, this.height);
+    // ctx.rect(this.playerX, this.y, this.width, this.height);
+    // ctx.fillStyle = color[this.state.sprite];
+    // ctx.fill();
+    ctx.closePath();
   };
 
   render = () => {

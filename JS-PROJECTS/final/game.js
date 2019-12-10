@@ -1,12 +1,19 @@
 class Game {
-  constructor(width, height) {
-    this.parentElement = parentElement;
-    this.context = this.parentElement.getContext('2d');
-    this.world = new World(width, height);
+  constructor() {
+    this.level = 1;
+    this.world = null;
   }
 
   init = () => {
-    this.startGame();
+    this.world = new World(this.level);
+    document.addEventListener('keydown', controller.keyListener);
+    document.addEventListener('keyup', controller.keyListener);
+    let mainBackground = new Image();
+    mainBackground.src = './assets/area' + this.level + '_Labeled.png';
+    mainBackground.onload = () => {
+      this.world.init(mainBackground);
+      this.startGame();
+    };
   };
 
   update = () => {
@@ -18,10 +25,10 @@ class Game {
   };
 
   startGame = () => {
-    // setInterval(() => {
-    this.update();
-    this.render();
-    this.clock++;
-    // }, 50);
+    setInterval(() => {
+      this.update();
+      this.render();
+      this.clock++;
+    }, 50);
   };
 }

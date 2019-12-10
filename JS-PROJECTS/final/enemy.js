@@ -3,19 +3,18 @@ const enemyValues = {
   dy: 0,
   gravity: 1.5,
   friction: 0.9,
-  width: 48,
-  height: 68
+  width: 19,
+  height: 33
 };
 
 class Enemy {
-  constructor(context, maxWidth, maxHeight, position) {
-    this.width = enemyValues.width;
-    this.height = enemyValues.height;
+  constructor(maxWidth, maxHeight, position) {
+    this.width = enemyValues.width * SCALE;
+    this.height = enemyValues.height * SCALE;
     this.x = 0;
     this.y = 0;
     this.dx = 0;
     this.dy = 0;
-    this.context = context;
     this.alive = true;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
@@ -50,13 +49,12 @@ class Enemy {
   };
 
   draw = () => {
-    let c = this.context;
     let image = new Image();
     image.src = this.image;
-    c.beginPath();
+    ctx.beginPath();
     image.onload = () => {
-      c.drawImage(image, this.x, this.y, this.width, this.height);
-      c.closePath();
+      ctx.drawImage(image, this.x, this.y, this.width, this.height);
+      ctx.closePath();
     };
   };
 

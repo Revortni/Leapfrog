@@ -1,38 +1,35 @@
 class World {
-  constructor(width, height) {
+  constructor(level) {
     this.x = 0;
-    this.y = 0;
-    this.width = width;
-    this.height = height;
+    this.y = IMAGESIZE.y - SCREEN.height;
+    this.width = SCREEN.width;
+    this.height = SCREEN.height;
+    this.background = null;
     this.player = null;
-    this.floorHeight = height - 100;
+    this.boundary = this.height - worldValues[level].mid * SCALE;
     this.enemies = [];
     this.clock = 0;
-    this.init();
+    this.loaded = false;
   }
 
-  init = () => {
-    ctx.canvas.width = this.width;
-    ctx.canvas.height = this.height;
-    this.y = 496 * 4;
-    this.player = new Player(ctx, this.width, this.floorHeight, {
+  init = background => {
+    this.player = new Player(this.width, this.boundary, {
       width: this.width,
       height: this.height
     });
+    this.background = background;
   };
 
   setBackground = () => {
-    var bg = new Image();
-    bg.src = './assets/area1_bg.png';
-    bg.onload = () => {
-      ctx;
-      ctx.translate(this.x, -this.y);
-      ctx.drawImage(bg, 0, 0, IMAGESIZE.x, IMAGESIZE.y);
-    };
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(-this.x, -this.y);
+    ctx.drawImage(this.background, 0, 0, IMAGESIZE.x, IMAGESIZE.y);
+    ctx.restore();
   };
 
   generateEnemy = () => {
-    let enemy = new Enemy(ctx, this.width, this.floorHeight, 'right');
+    let enemy = new Enemy(this.width, this.boundary, 'right');
     this.enemies.push(enemy);
   };
 
@@ -46,28 +43,34 @@ class World {
     this.enemies = this.enemies.filter(enemy => enemy.alive);
   };
 
+  manageWorldView = () => {
+    if (this.x >= 0 && this.x + SCREEN.width <= IMAGESIZE.x) {
+      if (this.player.x + this.player.width / 2 > SCREEN.width / 2) {
+        this.x += this.player.dx / playerValues.frictionX;
+        this.player.x -= this.player.dx / playerValues.frictionX;
+      }
+    }
+  };
+
   update = () => {
     //update player position and create bullets if button pressed
-    // this.player.update();
-    // this.updateEnemy();
-    // if (this.clock % 50 == 0) {
-    //   this.generateEnemy();
-    // }
+    this.player.update();
+    this.manageWorldView();
+    this.updateEnemy();
+    if (this.clock % 50 == 0) {
+      this.generateEnemy();
+    }
     this.clock++;
   };
 
   render = () => {
     ctx.clearRect(0, 0, this.width, this.height);
     this.setBackground();
-    // this.player.render();
-    // if (this.enemies.length > 0) {
-    //   this.enemies.forEach(enemy => {
-    //     enemy.draw();
-    //   });
-    // }
+    this.player.render();
+    if (this.enemies.length > 0) {
+      this.enemies.forEach(enemy => {
+        enemy.draw();
+      });
+    }
   };
-}
-
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
 }
