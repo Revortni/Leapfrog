@@ -78,16 +78,16 @@ class Player {
     this.maxHeight = maxHeight;
     this.jumping = true;
     this.bullets = [];
-    this.shootFlag = true;
     this.sprite = null;
-    this.bulletClock = 1;
     this.image = null;
+    this.gun = null;
     this.init();
   }
 
   init = () => {
     /*initialize event listeners for buttons */
     this.intro = true;
+    this.gun = new Gun();
     this.reset();
   };
 
@@ -206,7 +206,7 @@ class Player {
     }
   };
 
-  shoot = () => {
+  gunHandler = () => {
     let x = this.state.facingLeft
       ? this.x - this.width / 2
       : this.x + this.width / 2;
@@ -214,29 +214,17 @@ class Player {
       this.jumping || this.crouch
         ? this.y + this.height / 2
         : this.y + this.height / 4;
-    let bullet = new Bullet(
+    let bullet = this.gun.shoot(
       x,
       y,
       this.shootDirection.x,
       this.shootDirection.y,
       this.jumping
     );
-    this.bullets.push(bullet);
-  };
-
-  shootHandler = () => {
-    //shooting function
-    if (controller.shoot && this.shootFlag) {
-      this.shoot();
-      this.shootFlag = false;
+    if (bullet) {
+      this.bullets.push(bullet);
     }
-    if (!this.shootFlag) {
-      this.bulletClock++;
-      if (this.bulletClock % playerValues.reloadTime == 0) {
-        this.shootFlag = true;
-        this.bulletClock = 1;
-      }
-    }
+    this.gun.reload();
   };
 
   moveBullets = () => {
@@ -256,8 +244,10 @@ class Player {
     this.move();
     this.checkBoundary();
     //bullet updates
-    this.shootHandler();
-    this.moveBullets();
+    this.gunHandler();
+    if (this.bullets.length) {
+      this.moveBullets();
+    }
   };
 
   drawBullets = () => {

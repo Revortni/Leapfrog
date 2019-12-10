@@ -1,22 +1,30 @@
 class Gun {
-  constructor(x, y, dx, dy, jumping) {
-    this.x = x;
-    this.y = y;
-    this.jumping = jumping;
-    this.dx = dx;
-    this.dy = dy;
-    this.speed = 25;
-    this.r = 2 * SCALE;
-    this.destroyed = false;
-    this.init();
+  constructor() {
+    this.type = 0;
+    this.time = 1;
+    this.reloading = false;
   }
 
-  init() {
-    if (this.dy == 1 && this.jumping) {
-      //if jumping and shooting down
-      this.dx = 0;
+  upgrade = () => {};
+
+  reset = () => {};
+
+  shoot = (x, y, dx, dy, jumping) => {
+    if (controller.shoot && !this.reloading) {
+      this.reloading = true;
+      return new Bullet(x, y, dx, dy, jumping);
     }
-  }
+    return null;
+  };
 
-  shoot() {}
+  reload = () => {
+    //reload is true after reloadtime has passed
+    if (this.reloading) {
+      this.time++;
+      if (this.time % playerValues.reloadTime == 0) {
+        this.reloading = false;
+        this.time = 1;
+      }
+    }
+  };
 }
