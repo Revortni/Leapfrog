@@ -6,7 +6,7 @@ class World {
     this.height = SCREEN.height;
     this.background = null;
     this.player = null;
-    this.boundary = this.height - worldValues[level].mid * SCALE;
+    this.boundary = this.height - worldValues[level].mid;
     this.enemies = [];
     this.clock = 0;
     this.loaded = false;
@@ -23,8 +23,14 @@ class World {
   setBackground = () => {
     ctx.save();
     ctx.beginPath();
-    ctx.translate(-this.x, -this.y);
-    ctx.drawImage(this.background, 0, 0, IMAGESIZE.x, IMAGESIZE.y);
+    ctx.translate(-this.x * SCALE, -this.y * SCALE);
+    ctx.drawImage(
+      this.background,
+      0,
+      0,
+      IMAGESIZE.x * SCALE,
+      IMAGESIZE.y * SCALE
+    );
     ctx.restore();
   };
 
@@ -38,9 +44,13 @@ class World {
       this.enemies.forEach(enemy => {
         enemy.update();
         enemy.checkBoundary();
+        if (this.player.bullets.length > 0) {
+          enemy.checkCollision(this.player.bullets);
+        }
       });
     }
     this.enemies = this.enemies.filter(enemy => enemy.alive);
+    this.enemies = this.enemies.filter(enemy => enemy.inVision);
   };
 
   manageWorldView = () => {

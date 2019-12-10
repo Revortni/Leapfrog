@@ -5,8 +5,8 @@ class Bullet {
     this.jumping = jumping;
     this.dx = dx;
     this.dy = dy;
-    this.speed = 25;
-    this.r = 2 * SCALE;
+    this.speed = 5;
+    this.r = 2;
     this.destroyed = false;
     this.init();
   }
@@ -28,7 +28,13 @@ class Bullet {
     let img = new Image();
     img.src = './assets/bullet1.png';
     c.beginPath();
-    c.drawImage(img, this.x, this.y, 2 * this.r, 2 * this.r);
+    c.drawImage(
+      img,
+      this.x * SCALE,
+      this.y * SCALE,
+      2 * this.r * SCALE,
+      2 * this.r * SCALE
+    );
     c.closePath();
   }
 

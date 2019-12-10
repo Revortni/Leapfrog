@@ -18,9 +18,5 @@ class Gun {
     }
   }
 
-  move() {
-    this.x += this.dx * this.speed;
-    this.y += this.dy * this.speed;
-  }
   shoot() {}
 }

@@ -1,5 +1,5 @@
 const enemyValues = {
-  dx: 5,
+  dx: 2,
   dy: 0,
   gravity: 1.5,
   friction: 0.9,
@@ -9,16 +9,16 @@ const enemyValues = {
 
 class Enemy {
   constructor(maxWidth, maxHeight, position) {
-    this.width = enemyValues.width * SCALE;
-    this.height = enemyValues.height * SCALE;
+    this.width = enemyValues.width;
+    this.height = enemyValues.height;
     this.x = 0;
     this.y = 0;
     this.dx = 0;
     this.dy = 0;
+    this.inVision = false;
     this.alive = true;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
-    this.image = '';
     this.setPosition(position);
     this.init();
   }
@@ -53,17 +53,37 @@ class Enemy {
     image.src = this.image;
     ctx.beginPath();
     image.onload = () => {
-      ctx.drawImage(image, this.x, this.y, this.width, this.height);
+      ctx.drawImage(
+        image,
+        this.x * SCALE,
+        this.y * SCALE,
+        this.width * SCALE,
+        this.height * SCALE
+      );
       ctx.closePath();
     };
   };
 
   checkBoundary = () => {
-    if (this.x < 0 || this.x > this.maxWidth) {
-      this.alive = false;
+    if (this.x + this.width < 0 || this.x > this.maxWidth) {
+      this.inVision = false;
     } else {
-      this.alive = true;
+      this.inVision = true;
     }
+  };
+
+  checkCollision = bullets => {
+    bullets.forEach(bullet => {
+      if (
+        bullet.x < this.x + this.width &&
+        this.x < bullet.x + bullet.r &&
+        bullet.y < this.y + this.height &&
+        this.y < bullet.y + bullet.r
+      ) {
+        this.alive = false;
+        bullet.destroyed = true;
+      }
+    });
   };
 }
 

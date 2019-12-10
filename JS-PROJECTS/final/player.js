@@ -28,6 +28,11 @@ const controller = {
         break;
       case 90: //Z
         controller.shoot = keyState;
+      case 1: //Select
+        controller.select = keyState;
+        break;
+      case 1: //Start
+        controller.start = keyState;
     }
   }
 };
@@ -265,7 +270,13 @@ class Player {
     ctx.beginPath();
     let image = new Image();
     image.src = './assets/' + display[this.state.sprite];
-    ctx.drawImage(image, this.x, this.y, this.width, this.height);
+    ctx.drawImage(
+      image,
+      this.x * SCALE,
+      this.y * SCALE,
+      this.width * SCALE,
+      this.height * SCALE
+    );
     // ctx.rect(this.playerX, this.y, this.width, this.height);
     // ctx.fillStyle = color[this.state.sprite];
     // ctx.fill();
