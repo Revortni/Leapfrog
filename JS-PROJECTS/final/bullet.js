@@ -1,13 +1,13 @@
 class Bullet {
-  constructor(context, x, y, dx, dy, jumping) {
+  constructor(x, y, dx, dy, jumping) {
     this.x = x;
     this.y = y;
     this.jumping = jumping;
     this.dx = dx;
     this.dy = dy;
-    this.speed = 50;
-    this.r = 10;
-    this.context = context;
+    this.speed = 5;
+    this.r = 2;
+    this.destroyed = false;
     this.init();
   }
 
@@ -21,14 +21,32 @@ class Bullet {
   move() {
     this.x += this.dx * this.speed;
     this.y += this.dy * this.speed;
-    this.draw();
   }
 
   draw() {
-    let c = this.context;
+    let c = ctx;
+    let img = new Image();
+    img.src = './assets/bullet1.png';
     c.beginPath();
-    c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
-    c.fillStyle = '#000';
-    c.fill();
+    c.drawImage(
+      img,
+      this.x * SCALE,
+      this.y * SCALE,
+      2 * this.r * SCALE,
+      2 * this.r * SCALE
+    );
+    c.closePath();
   }
+
+  checkBoundary = () => {
+    //move bullets and bulletBoundaryCheck function
+    if (
+      this.x > this.maxWidth ||
+      this.x < 0 ||
+      this.y < 0 ||
+      this.y > this.maxHeight
+    ) {
+      this.destroyed = true;
+    }
+  };
 }

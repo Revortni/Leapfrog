@@ -1,6 +1,13 @@
-#app {
+canvas {
   display: block;
   margin: 0 auto;
   background-color: #98fb98;
-  margin-top: 100px;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+body {
+  background: #000;
 }

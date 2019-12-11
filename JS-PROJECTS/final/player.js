@@ -6,6 +6,8 @@ const controller = {
   down: false,
   jump: false,
   shoot: false,
+  select: false,
+  start: false,
   keyListener: event => {
     let keyState = event.type == 'keydown' ? true : false;
     switch (event.keyCode) {
@@ -21,17 +23,35 @@ const controller = {
       case 87: //W
         controller.up = keyState;
         break;
-      case 88:
+      case 88: //X
         controller.jump = keyState;
         break;
-      case 90:
+      case 90: //Z
         controller.shoot = keyState;
+      case 1: //Select
+        controller.select = keyState;
+        break;
+      case 1: //Start
+        controller.start = keyState;
     }
   }
 };
 
 const display = {
-  '0': '#000',
+  '0': 'pStandingR.png',
+  '1': 'pStandingL.png',
+  '2': '#f00',
+  '3': '#fff',
+  '4': 'pStandingL.png',
+  '5': '#fff',
+  '6': 'pLayingDownR.png',
+  '7': '#fff',
+  '8': 'pStandingR.png',
+  '9': 'pStandingL.png',
+  '10': 'pLayingDownL.png'
+};
+const color = {
+  '0': '#fff',
   '1': '#fff',
   '2': '#f00',
   '3': '#fff',
@@ -40,47 +60,41 @@ const display = {
   '6': '#0f0',
   '7': '#fff',
   '8': '#FFD700',
-  '9': '#006400'
-};
-
-const values = {
-  dx: 4,
-  dy: 50,
-  gravity: 2,
-  friction: 0.9
+  '9': '#006400',
+  '10': '#f203f4'
 };
 
 class Player {
-  constructor(context, maxWidth, maxHeight, game) {
-    this.width = 48;
-    this.height = 68;
-    this.x = 100; //x coordinate of player
-    this.dx = 0; //velocity of player in x axis
-    this.y = 100; //y coordinate of player
-    this.dy = 0; //velocity of player in y axis
-    this.context = context;
+  constructor(maxWidth, maxHeight) {
+    this.width = playerValues.width;
+    this.height = playerValues.height;
+    this.playerX = maxWidth / 2;
+    this.x = 0;
+    this.dx = 0;
+    this.y = 100;
+    this.dy = 0;
     this.state = null;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
     this.jumping = true;
     this.bullets = [];
-    this.shootFlag = true;
-    this.imagePos = 1;
+    this.sprite = null;
+    this.image = null;
+    this.gun = null;
     this.init();
   }
 
   init = () => {
     /*initialize event listeners for buttons */
     this.intro = true;
-    document.addEventListener('keydown', controller.keyListener);
-    document.addEventListener('keyup', controller.keyListener);
+    this.gun = new Gun();
     this.reset();
   };
 
   reset = () => {
     this.state = {
       alive: true,
-      sprite: '#000',
+      sprite: 0,
       facingLeft: false
     };
     this.crouch = false;
@@ -88,18 +102,16 @@ class Player {
     this.shootDirection = { x: 1, y: 0 };
   };
 
-  update = () => {
-    this.shootDirection.x = this.state.facingLeft ? -1 : 1;
-    this.shootDirection.y = 0;
+  controllerHandler = () => {
     if (controller.jump && this.jumping == false) {
-      this.dy -= values.dy;
+      this.dy -= playerValues.dy;
       this.jumping = true;
-      this.width = 48;
-      this.height = 48;
+      this.width = playerValues.width;
+      this.height = playerValues.height;
     }
 
     if (this.jumping) {
-      this.dy += values.gravity;
+      this.dy += playerValues.gravity;
       this.state.sprite = this.state.facingLeft ? 9 : 8;
     } else {
       this.state.sprite = this.directionFacing;
@@ -107,7 +119,7 @@ class Player {
         this.state.sprite = 2;
       }
       if (controller.down) {
-        this.state.sprite = 6;
+        this.state.sprite = this.state.facingLeft ? 10 : 6;
       }
       if (controller.right && controller.up) {
         this.state.sprite = 1;
@@ -130,13 +142,13 @@ class Player {
       this.shootDirection.y = 1;
     }
     if (controller.left) {
-      this.dx = -values.dx;
+      this.dx = -playerValues.dx;
       this.directionFacing = 4;
       this.shootDirection.x = -1;
       this.state.facingLeft = true;
     }
     if (controller.right) {
-      this.dx = values.dx;
+      this.dx = playerValues.dx;
       this.directionFacing = 0;
       this.shootDirection.x = 1;
       this.state.facingLeft = false;
@@ -147,31 +159,36 @@ class Player {
       controller.down &&
       !(controller.right || controller.left)
     ) {
-      let shift = this.height - this.width;
-      this.y = this.crouch ? this.y : this.y + shift;
+      this.y = this.crouch
+        ? this.y
+        : this.maxHeight - playerValues.crouchHeight;
       this.crouch = true;
-      this.width = 68;
-      this.height = 48;
+      this.width = playerValues.crouchWidth;
+      this.height = playerValues.crouchHeight;
       this.shootDirection.y = 0;
     } else if (this.crouch) {
       this.crouch = false;
-      this.width = 48;
-      this.height = 68;
+      this.width = playerValues.width;
+      this.height = playerValues.height;
       this.y = this.y + this.height - this.width;
     }
+  };
 
+  move = () => {
     //add velocity for movement in x y
     this.x += this.dx;
     this.y += this.dy;
 
     //friction
-    this.dy *= values.friction;
-    this.dx *= 0.7;
+    this.dx *= playerValues.frictionX;
+    this.dy *= playerValues.frictionY;
+  };
 
+  checkBoundary = () => {
     //check bottom boundary
     if (this.y + this.height > this.maxHeight) {
-      this.width = 48;
-      this.height = 68;
+      this.width = playerValues.width;
+      this.height = playerValues.height;
       this.jumping = false;
       this.y = this.maxHeight - this.height;
       this.dy = 0;
@@ -184,76 +201,81 @@ class Player {
     }
 
     //check right boundary
-    if (this.x + this.width > this.maxWidth) {
-      this.x = this.maxWidth - this.width;
-    }
-
-    //shooting function
-    this.shoot();
-
-    //bulletBoundary function
-    if (this.bullets.length) {
-      let removeBullet = [];
-      this.bullets.forEach((bullet, index) => {
-        bullet.move();
-        if (
-          bullet.x > this.maxWidth ||
-          bullet.x < 0 ||
-          bullet.y < 0 ||
-          bullet.y > this.maxHeight
-        ) {
-          removeBullet.push(index);
-        }
-      });
-      this.bullets.filter((val, index) => removeBullet.includes(index));
+    if (this.x + this.width > SCREEN.width) {
+      this.x = SCREEN.width - this.width;
     }
   };
 
-  shoot = () => {
-    if (controller.shoot && this.shootFlag) {
-      controller.shoot = false;
-      let x = this.x + this.width / 2;
-      let y =
-        this.jumping || this.crouch
-          ? this.y + this.height / 2
-          : this.y + this.height / 3;
-      let bullet = new Bullet(
-        this.context,
-        x,
-        y,
-        this.shootDirection.x,
-        this.shootDirection.y,
-        this.jumping
-      );
+  gunHandler = () => {
+    let x = this.state.facingLeft
+      ? this.x - this.width / 2
+      : this.x + this.width / 2;
+    let y =
+      this.jumping || this.crouch
+        ? this.y + this.height / 2
+        : this.y + this.height / 4;
+    let bullet = this.gun.shoot(
+      x,
+      y,
+      this.shootDirection.x,
+      this.shootDirection.y,
+      this.jumping
+    );
+    if (bullet) {
       this.bullets.push(bullet);
-      this.shootFlag = false;
     }
+    this.gun.reload();
+  };
 
-    return;
+  moveBullets = () => {
+    this.bullets.forEach(bullet => {
+      bullet.move();
+      bullet.checkBoundary();
+    });
+
+    this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
+  };
+
+  update = () => {
+    //player updates
+    this.shootDirection.x = this.state.facingLeft ? -1 : 1;
+    this.shootDirection.y = 0;
+    this.controllerHandler();
+    this.move();
+    this.checkBoundary();
+    //bullet updates
+    this.gunHandler();
+    if (this.bullets.length) {
+      this.moveBullets();
+    }
+  };
+
+  drawBullets = () => {
+    this.bullets.forEach((bullet, index) => {
+      bullet.draw();
+    });
   };
 
   draw = () => {
-    let c = this.context;
-    c.beginPath();
-    // var bg = new Image();
-    // bg.src = './assets/p1.png';
-    // bg.onload = () => {
-    //   this.context.drawImage(
-    //     bg,
-    //     this.imagePos,
-    //     12,
-    //     24,
-    //     33,
-    //     this.x,
-    //     this.y,
-    //     this.width,
-    //     this.height
-    //   );
-    //   this.imagePos += 26;
-    // };
-    c.rect(this.x, this.y, this.width, this.height);
-    c.fillStyle = display[this.state.sprite];
-    c.fill();
+    ctx.beginPath();
+    let image = new Image();
+    image.src = './assets/' + display[this.state.sprite];
+    ctx.drawImage(
+      image,
+      this.x * SCALE,
+      this.y * SCALE,
+      this.width * SCALE,
+      this.height * SCALE
+    );
+    // ctx.rect(this.playerX, this.y, this.width, this.height);
+    // ctx.fillStyle = color[this.state.sprite];
+    // ctx.fill();
+    ctx.closePath();
+  };
+
+  render = () => {
+    this.drawBullets();
+    this.draw();
   };
 }
 
