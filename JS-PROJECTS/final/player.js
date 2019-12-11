@@ -71,12 +71,11 @@ class Player {
     this.playerX = maxWidth / 2;
     this.x = 0;
     this.dx = 0;
-    this.y = 100;
-    this.dy = 0;
+    this.y = 0;
+    this.dy = playerValues.dy;
     this.state = null;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
-    this.jumping = true;
     this.bullets = [];
     this.sprite = null;
     this.image = null;
@@ -97,6 +96,7 @@ class Player {
       sprite: 0,
       facingLeft: false
     };
+    this.jumping = false;
     this.crouch = false;
     this.directionFacing = 0;
     this.shootDirection = { x: 1, y: 0 };
@@ -104,7 +104,8 @@ class Player {
 
   controllerHandler = () => {
     if (controller.jump && this.jumping == false) {
-      this.dy -= playerValues.dy;
+      this.dy = 0;
+      this.dy -= playerValues.jumpDist;
       this.jumping = true;
       this.width = playerValues.width;
       this.height = playerValues.height;
@@ -161,7 +162,7 @@ class Player {
     ) {
       this.y = this.crouch
         ? this.y
-        : this.maxHeight - playerValues.crouchHeight;
+        : this.y + this.height - playerValues.crouchHeight;
       this.crouch = true;
       this.width = playerValues.crouchWidth;
       this.height = playerValues.crouchHeight;
@@ -181,20 +182,9 @@ class Player {
 
     //friction
     this.dx *= playerValues.frictionX;
-    this.dy *= playerValues.frictionY;
   };
 
   checkBoundary = () => {
-    //check bottom boundary
-    if (this.y + this.height > this.maxHeight) {
-      this.width = playerValues.width;
-      this.height = playerValues.height;
-      this.jumping = false;
-      this.y = this.maxHeight - this.height;
-      this.dy = 0;
-      this.state.sprite = this.directionFacing;
-    }
-
     //check left boundary
     if (this.x < 0) {
       this.x = 0;
@@ -210,10 +200,7 @@ class Player {
     let x = this.state.facingLeft
       ? this.x - this.width / 2
       : this.x + this.width / 2;
-    let y =
-      this.jumping || this.crouch
-        ? this.y + this.height / 2
-        : this.y + this.height / 4;
+    let y = this.y + (this.crouch ? this.height / 2 : this.height / 4);
     let bullet = this.gun.shoot(
       x,
       y,
@@ -237,17 +224,20 @@ class Player {
   };
 
   update = () => {
+    if (this.dy > 10) {
+      this.dy = playerValues.dy;
+    }
+    //bullet updates
+    this.gunHandler();
+    if (this.bullets.length) {
+      this.moveBullets();
+    }
     //player updates
     this.shootDirection.x = this.state.facingLeft ? -1 : 1;
     this.shootDirection.y = 0;
     this.controllerHandler();
     this.move();
     this.checkBoundary();
-    //bullet updates
-    this.gunHandler();
-    if (this.bullets.length) {
-      this.moveBullets();
-    }
   };
 
   drawBullets = () => {
@@ -262,6 +252,12 @@ class Player {
     image.src = './assets/' + display[this.state.sprite];
     ctx.drawImage(
       image,
+      this.x * SCALE,
+      this.y * SCALE,
+      this.width * SCALE,
+      this.height * SCALE
+    );
+    ctx.strokeRect(
       this.x * SCALE,
       this.y * SCALE,
       this.width * SCALE,

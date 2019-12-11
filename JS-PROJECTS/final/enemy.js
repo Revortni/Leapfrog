@@ -1,10 +1,11 @@
 const enemyValues = {
   dx: 2,
-  dy: 0,
+  dy: 40,
   gravity: 1.5,
   friction: 0.9,
   width: 19,
-  height: 33
+  height: 33,
+  boundaryOffset: 30
 };
 
 class Enemy {
@@ -19,26 +20,27 @@ class Enemy {
     this.alive = true;
     this.maxWidth = maxWidth;
     this.maxHeight = maxHeight;
+    this.frame = 0;
+    this.clock = 1;
+    this.invert = 1;
     this.setPosition(position);
     this.init();
   }
 
   init = () => {
     this.dy = enemyValues.dy;
+    this.image = gameAssets.enemy1L;
   };
 
   setPosition = position => {
     if (position == 'right') {
-      this.x = this.maxWidth;
-      this.y = this.maxHeight - this.height;
+      this.x = this.maxWidth + this.width;
       this.dx = -enemyValues.dx;
-      this.image = './assets/soilderL.gif';
     }
     if (position == 'left') {
-      this.x = 0;
-      this.y = this.maxHeight - this.height;
+      this.x = -this.width;
       this.dx = enemyValues.dx;
-      this.image = './assets/soilderR.gif';
+      this.invert = -1;
     }
   };
 
@@ -46,26 +48,44 @@ class Enemy {
     //add velocity for movement in x y
     this.x += this.dx;
     this.y += this.dy;
+
+    if (this.clock % 5 == 0) {
+      this.frame++;
+      this.frame = this.frame % this.image.frameCount;
+    }
+    this.clock++;
   };
 
   draw = () => {
-    let image = new Image();
-    image.src = this.image;
     ctx.beginPath();
-    image.onload = () => {
-      ctx.drawImage(
-        image,
-        this.x * SCALE,
-        this.y * SCALE,
-        this.width * SCALE,
-        this.height * SCALE
-      );
-      ctx.closePath();
-    };
+    ctx.save();
+    ctx.drawImage(
+      this.image.img,
+      this.frame * this.image.w,
+      0,
+      this.image.w,
+      this.image.h,
+      this.x * SCALE,
+      this.y * SCALE,
+      this.image.w * SCALE,
+      this.image.h * SCALE
+    );
+
+    ctx.strokeRect(
+      this.x * SCALE,
+      this.y * SCALE,
+      this.image.w * SCALE,
+      this.image.h * SCALE
+    );
+    ctx.restore();
+    ctx.closePath();
   };
 
   checkBoundary = () => {
-    if (this.x + this.width < 0 || this.x > this.maxWidth) {
+    if (
+      this.x + this.width < -enemyValues.boundaryOffset ||
+      this.x > this.maxWidth + enemyValues.boundaryOffset
+    ) {
       this.inVision = false;
     } else {
       this.inVision = true;
