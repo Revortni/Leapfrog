@@ -1,5 +1,5 @@
 const enemyValues = {
-  dx: 2.5,
+  dx: 1.2,
   dy: 40,
   gravity: 1.5,
   friction: 0.9,
@@ -48,7 +48,6 @@ class Enemy {
     //add velocity for movement in x y
     this.x += this.dx - worldShift;
     this.y += this.dy;
-    console.log(worldShift);
     if (this.clock % 5 == 0) {
       this.frame++;
       this.frame = this.frame % this.image.frameCount;

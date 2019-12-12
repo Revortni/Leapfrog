@@ -33,17 +33,8 @@ class GroundBoundary {
     };
   };
 
-  midGround = (world, object) => {
-    let boundary = world.height - worldValues[1].mid;
-    if (object.y + object.height > boundary) {
-      object.y = boundary - object.height;
-      object.jumping = false;
-    }
-  };
-
-  lowerGround = (world, object) => {
-    let boundary = world.height - worldValues[world.level].bot;
-
+  midGround = (world, object, level) => {
+    let boundary = world.height - level;
     if (object.y + object.height > boundary) {
       object.y = boundary - object.height;
       object.jumping = false;
@@ -53,11 +44,12 @@ class GroundBoundary {
   slope = (world, object, start, end) => {
     let slopeBottomX = start;
     let playerPosition = world.x + object.x;
+    let intercept = world.height - worldValues[world.level].mid;
+    let distanceFromStartOfSlope = playerPosition - slopeBottomX;
     let slopeBottomY =
-      world.height -
-      worldValues[world.level].mid -
-      Math.tan((Math.PI * worldValues[1].slope) / 180) *
-        (playerPosition - slopeBottomX);
+      -Math.tan((Math.PI * worldValues[1].slope) / 180) *
+        distanceFromStartOfSlope +
+      intercept;
     if (object.y + object.height > slopeBottomY) {
       object.y = slopeBottomY - object.height;
     }
@@ -66,16 +58,14 @@ class GroundBoundary {
   checkGroundBoundary = (world, object) => {
     let playerPosition = world.x + object.x + object.width;
     if (playerPosition >= 565 && playerPosition <= 535 + 90) {
-      console.log('low');
-      this.boundaryFunction()[2](world, object);
+      this.boundaryFunction()[1](world, object, 24);
     } else if (
       playerPosition >= 834 + object.width &&
       playerPosition <= 834 + 275
     ) {
-      console.log('slope');
       this.boundaryFunction()[3](world, object, 825, 834 + 275);
     } else {
-      this.boundaryFunction()[1](world, object);
+      this.boundaryFunction()[1](world, object, 56);
     }
     if (object instanceof Player) {
       object.lastY = object.y;

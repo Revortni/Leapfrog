@@ -14,17 +14,13 @@ class World {
     this.height = SCREEN.height;
     this.background = null;
     this.player = null;
-    this.boundary = this.height - worldValues[level].mid;
     this.enemies = [];
     this.clock = 0;
     this.loaded = false;
   }
 
   init = background => {
-    this.player = new Player(this.width, this.boundary, {
-      width: this.width,
-      height: this.height
-    });
+    this.player = new Player(this.width);
     this.background = background;
     this.ground = new GroundBoundary();
   };
@@ -83,7 +79,7 @@ class World {
     this.player.update();
     this.manageWorldView();
     this.updateEnemy();
-    if (this.clock % 50 == 0) {
+    if (this.clock % 100 == 0) {
       this.generateEnemy();
     }
     this.ground.checkGroundBoundary(this, this.player);

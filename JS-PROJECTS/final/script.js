@@ -4,7 +4,7 @@ let SCREEN = { width: 280, height: 224 };
 let canvas = document.getElementById('app');
 let ctx = canvas.getContext('2d');
 const playerValues = {
-  dx: 2,
+  dx: 10,
   dy: 8,
   gravity: 1,
   frictionY: 0.9,

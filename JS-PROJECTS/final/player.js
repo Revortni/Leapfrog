@@ -65,7 +65,7 @@ const color = {
 };
 
 class Player {
-  constructor(maxWidth, maxHeight) {
+  constructor(maxWidth) {
     this.width = playerValues.width;
     this.height = playerValues.height;
     this.x = 100;
@@ -75,7 +75,6 @@ class Player {
     this.dy = playerValues.dy;
     this.state = null;
     this.maxWidth = maxWidth;
-    this.maxHeight = maxHeight;
     this.bullets = [];
     this.sprite = null;
     this.image = null;
