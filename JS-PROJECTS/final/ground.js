@@ -59,13 +59,6 @@ class GroundBoundary {
       Math.tan((Math.PI * worldValues[1].slope) / 180) *
         (playerPosition - slopeBottomX);
     if (object.y + object.height > slopeBottomY) {
-      // if (object instanceof Player) {
-      //   let lastY = object.y;
-      //   let nextY = slopeBottomY - object.height;
-      //   if (object.y > worldValues[world.level].mid) {
-      //   }
-      //   world.y -= Math.floor(lastY - nextY - object.dy);
-      // }
       object.y = slopeBottomY - object.height;
     }
   };
@@ -80,9 +73,12 @@ class GroundBoundary {
       playerPosition <= 834 + 275
     ) {
       console.log('slope');
-      this.boundaryFunction()[3](world, object, 834, 834 + 275);
+      this.boundaryFunction()[3](world, object, 825, 834 + 275);
     } else {
       this.boundaryFunction()[1](world, object);
+    }
+    if (object instanceof Player) {
+      object.lastY = object.y;
     }
   };
 }

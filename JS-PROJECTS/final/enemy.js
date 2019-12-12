@@ -1,5 +1,5 @@
 const enemyValues = {
-  dx: 2,
+  dx: 2.5,
   dy: 40,
   gravity: 1.5,
   friction: 0.9,
@@ -12,7 +12,7 @@ class Enemy {
   constructor(maxWidth, maxHeight, position) {
     this.width = enemyValues.width;
     this.height = enemyValues.height;
-    this.x = 0;
+    this.x = 100;
     this.y = 0;
     this.dx = 0;
     this.dy = 0;
@@ -29,26 +29,26 @@ class Enemy {
 
   init = () => {
     this.dy = enemyValues.dy;
-    this.image = gameAssets.enemy1L;
   };
 
   setPosition = position => {
     if (position == 'right') {
       this.x = this.maxWidth + this.width;
       this.dx = -enemyValues.dx;
+      this.image = gameAssets.enemy1L;
     }
     if (position == 'left') {
-      this.x = -this.width;
+      this.x = -this.width * 2;
       this.dx = enemyValues.dx;
-      this.invert = -1;
+      this.image = gameAssets.enemy1R;
     }
   };
 
-  update = () => {
+  update = worldShift => {
     //add velocity for movement in x y
-    this.x += this.dx;
+    this.x += this.dx - worldShift;
     this.y += this.dy;
-
+    console.log(worldShift);
     if (this.clock % 5 == 0) {
       this.frame++;
       this.frame = this.frame % this.image.frameCount;

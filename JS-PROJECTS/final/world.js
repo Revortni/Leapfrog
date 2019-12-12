@@ -53,7 +53,7 @@ class World {
   updateEnemy = () => {
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
-        enemy.update();
+        enemy.update(this.dx);
         enemy.checkScreenBoundary();
         this.ground.checkGroundBoundary(this, enemy);
         this.boundary;
@@ -69,8 +69,11 @@ class World {
   manageWorldView = () => {
     if (this.x >= 0 && this.x + SCREEN.width <= IMAGESIZE.x) {
       if (this.player.x + this.player.width / 2 > SCREEN.width / 2) {
-        this.x += this.player.dx / playerValues.frictionX;
-        this.player.x -= this.player.dx / playerValues.frictionX;
+        this.dx = this.player.dx;
+        this.player.x -= this.player.dx;
+        this.x += this.dx;
+      } else {
+        this.dx = 0;
       }
     }
   };
@@ -84,6 +87,7 @@ class World {
       this.generateEnemy();
     }
     this.ground.checkGroundBoundary(this, this.player);
+
     this.clock++;
   };
 

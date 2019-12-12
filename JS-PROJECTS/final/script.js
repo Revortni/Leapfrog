@@ -22,6 +22,7 @@ let assetCount = 0;
 let loaded = 0;
 const gameAssets = {
   enemy1L: { src: './assets/enemy1L.png', w: 19, h: 33, frameCount: 6 },
+  enemy1R: { src: './assets/enemy1R.png', w: 19, h: 33, frameCount: 6 },
   player1: { src: './assets/player1.png', w: 19, h: 33, frameCount: 6 }
 };
 

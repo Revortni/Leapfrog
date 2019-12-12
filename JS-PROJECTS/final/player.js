@@ -68,9 +68,10 @@ class Player {
   constructor(maxWidth, maxHeight) {
     this.width = playerValues.width;
     this.height = playerValues.height;
-    this.x = 0;
+    this.x = 100;
     this.dx = 0;
     this.y = 0;
+    this.lastY = 0;
     this.dy = playerValues.dy;
     this.state = null;
     this.maxWidth = maxWidth;
@@ -102,6 +103,7 @@ class Player {
   };
 
   controllerHandler = () => {
+    this.dx = 0;
     if (controller.jump && this.jumping == false) {
       this.dy = 0;
       this.dy -= playerValues.jumpDist;
@@ -178,9 +180,6 @@ class Player {
     //add velocity for movement in x y
     this.x += this.dx;
     this.y += this.dy;
-
-    //friction
-    this.dx *= playerValues.frictionX;
   };
 
   checkScreenBoundary = () => {
