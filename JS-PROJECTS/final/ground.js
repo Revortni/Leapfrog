@@ -43,24 +43,46 @@ class GroundBoundary {
 
   lowerGround = (world, object) => {
     let boundary = world.height - worldValues[world.level].bot;
+
     if (object.y + object.height > boundary) {
       object.y = boundary - object.height;
       object.jumping = false;
     }
   };
 
-  slope = (world, object) => {
-    let slopeBottomX = 0;
+  slope = (world, object, start, end) => {
+    let slopeBottomX = start;
     let playerPosition = world.x + object.x;
     let slopeBottomY =
       world.height -
       worldValues[world.level].mid -
       Math.tan((Math.PI * worldValues[1].slope) / 180) *
         (playerPosition - slopeBottomX);
-
     if (object.y + object.height > slopeBottomY) {
-      let lastY = object.y;
+      // if (object instanceof Player) {
+      //   let lastY = object.y;
+      //   let nextY = slopeBottomY - object.height;
+      //   if (object.y > worldValues[world.level].mid) {
+      //   }
+      //   world.y -= Math.floor(lastY - nextY - object.dy);
+      // }
       object.y = slopeBottomY - object.height;
+    }
+  };
+
+  checkGroundBoundary = (world, object) => {
+    let playerPosition = world.x + object.x + object.width;
+    if (playerPosition >= 565 && playerPosition <= 535 + 90) {
+      console.log('low');
+      this.boundaryFunction()[2](world, object);
+    } else if (
+      playerPosition >= 834 + object.width &&
+      playerPosition <= 834 + 275
+    ) {
+      console.log('slope');
+      this.boundaryFunction()[3](world, object, 834, 834 + 275);
+    } else {
+      this.boundaryFunction()[1](world, object);
     }
   };
 }

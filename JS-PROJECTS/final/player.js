@@ -68,7 +68,6 @@ class Player {
   constructor(maxWidth, maxHeight) {
     this.width = playerValues.width;
     this.height = playerValues.height;
-    this.playerX = maxWidth / 2;
     this.x = 0;
     this.dx = 0;
     this.y = 0;
@@ -184,7 +183,7 @@ class Player {
     this.dx *= playerValues.frictionX;
   };
 
-  checkBoundary = () => {
+  checkScreenBoundary = () => {
     //check left boundary
     if (this.x < 0) {
       this.x = 0;
@@ -237,7 +236,7 @@ class Player {
     this.shootDirection.y = 0;
     this.controllerHandler();
     this.move();
-    this.checkBoundary();
+    this.checkScreenBoundary();
   };
 
   drawBullets = () => {

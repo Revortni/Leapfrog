@@ -54,8 +54,8 @@ class World {
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
         enemy.update();
-        enemy.checkBoundary();
-        this.ground.boundaryFunction()[1](this, enemy);
+        enemy.checkScreenBoundary();
+        this.ground.checkGroundBoundary(this, enemy);
         this.boundary;
         if (this.player.bullets.length > 0) {
           enemy.checkCollision(this.player.bullets);
@@ -83,13 +83,7 @@ class World {
     if (this.clock % 50 == 0) {
       this.generateEnemy();
     }
-    this.ground.boundaryFunction()[1](this, this.player);
-    // let playerPosition = this.x + this.player.x + this.player.width;
-    // if (playerPosition >= 834 && playerPosition <= 834 + 250) {
-    //   this.groundBoundary3();
-    // } else {
-    //   this.groundBoundary1();
-    // }
+    this.ground.checkGroundBoundary(this, this.player);
     this.clock++;
   };
 

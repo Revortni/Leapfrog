@@ -5,8 +5,8 @@ let canvas = document.getElementById('app');
 let ctx = canvas.getContext('2d');
 const playerValues = {
   dx: 2,
-  dy: 40,
-  gravity: 3,
+  dy: 8,
+  gravity: 1,
   frictionY: 0.9,
   frictionX: 0.5,
   width: 23,
@@ -15,7 +15,7 @@ const playerValues = {
   crouchHeight: 15,
   jumpSize: 18,
   reloadTime: 5,
-  jumpDist: 24
+  jumpDist: 14
 };
 
 let assetCount = 0;

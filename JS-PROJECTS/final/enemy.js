@@ -81,7 +81,7 @@ class Enemy {
     ctx.closePath();
   };
 
-  checkBoundary = () => {
+  checkScreenBoundary = () => {
     if (
       this.x + this.width < -enemyValues.boundaryOffset ||
       this.x > this.maxWidth + enemyValues.boundaryOffset
