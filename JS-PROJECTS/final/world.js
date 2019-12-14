@@ -7,11 +7,16 @@ const worldValues = {
 };
 class World {
   constructor(level) {
-    this.x = 0;
-    this.level = level;
+    //viewport
+    this.screenX = 0;
+    this.screenY = 0;
+    this.screenWidth = SCREEN.width;
+    this.screenHeight = SCREEN.height;
+    //entire map
+    this.x = 500;
     this.y = IMAGESIZE.y - SCREEN.height;
-    this.width = SCREEN.width;
-    this.height = SCREEN.height;
+    this.viewportY = IMAGESIZE.y - SCREEN.height;
+    this.level = level;
     this.background = null;
     this.player = null;
     this.enemies = [];
@@ -20,7 +25,7 @@ class World {
   }
 
   init = background => {
-    this.player = new Player(this.width);
+    this.player = new Player(this.x, this.y, this.screenWidth, this);
     this.background = background;
     this.ground = new GroundBoundary();
   };
@@ -28,7 +33,7 @@ class World {
   setBackground = () => {
     ctx.save();
     ctx.beginPath();
-    ctx.translate(-this.x * SCALE, -this.y * SCALE);
+    ctx.translate(-this.x * SCALE, -this.viewportY * SCALE); //translates to bottom
     ctx.drawImage(
       this.background,
       0,
@@ -40,8 +45,8 @@ class World {
   };
 
   generateEnemy = () => {
-    let enemyLeft = new Enemy(this.width, this.boundary, 'left');
-    let enemyRight = new Enemy(this.width, this.boundary, 'right');
+    let enemyLeft = new Enemy(this.screenWidth, 'left');
+    let enemyRight = new Enemy(this.screenWidth, 'right');
     this.enemies.push(enemyLeft);
     this.enemies.push(enemyRight);
   };
@@ -50,9 +55,8 @@ class World {
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
         enemy.update(this.dx);
-        enemy.checkScreenBoundary();
         this.ground.checkGroundBoundary(this, enemy);
-        this.boundary;
+        enemy.checkScreenBoundary();
         if (this.player.bullets.length > 0) {
           enemy.checkCollision(this.player.bullets);
         }
@@ -63,11 +67,13 @@ class World {
   };
 
   manageWorldView = () => {
-    if (this.x >= 0 && this.x + SCREEN.width <= IMAGESIZE.x) {
-      if (this.player.x + this.player.width / 2 > SCREEN.width / 2) {
-        this.dx = this.player.dx;
-        this.player.x -= this.player.dx;
-        this.x += this.dx;
+    if (this.x >= 0 && this.x + this.screenWidth <= IMAGESIZE.x) {
+      if (this.player.x + this.player.width / 2 > this.screenWidth / 2) {
+        if (this.player.dx > 0) {
+          this.dx = this.player.dx;
+          this.player.x -= this.player.dx;
+          this.x += this.dx;
+        }
       } else {
         this.dx = 0;
       }
@@ -77,20 +83,21 @@ class World {
   update = () => {
     //update player position and create bullets if button pressed
     this.player.update();
+    this.ground.checkGroundBoundary(this, this.player);
     this.manageWorldView();
     this.updateEnemy();
     if (this.clock % 100 == 0) {
       this.generateEnemy();
     }
-    this.ground.checkGroundBoundary(this, this.player);
 
     this.clock++;
   };
 
   render = () => {
-    ctx.clearRect(0, 0, this.width, this.height);
+    ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
     this.setBackground();
     this.player.render();
+    this.ground.draw(this);
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
         enemy.draw();

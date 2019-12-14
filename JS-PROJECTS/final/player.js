@@ -1,42 +1,3 @@
-/*a controller object to manage key press states */
-const controller = {
-  left: false,
-  right: false,
-  up: false,
-  down: false,
-  jump: false,
-  shoot: false,
-  select: false,
-  start: false,
-  keyListener: event => {
-    let keyState = event.type == 'keydown' ? true : false;
-    switch (event.keyCode) {
-      case 65: //A
-        controller.left = keyState;
-        break;
-      case 83: //S
-        controller.down = keyState;
-        break;
-      case 68: //D
-        controller.right = keyState;
-        break;
-      case 87: //W
-        controller.up = keyState;
-        break;
-      case 88: //X
-        controller.jump = keyState;
-        break;
-      case 90: //Z
-        controller.shoot = keyState;
-      case 1: //Select
-        controller.select = keyState;
-        break;
-      case 1: //Start
-        controller.start = keyState;
-    }
-  }
-};
-
 const display = {
   '0': 'pStandingR.png',
   '1': 'pStandingL.png',
@@ -63,9 +24,22 @@ const color = {
   '9': '#006400',
   '10': '#f203f4'
 };
+const playerValues = {
+  dx: 10,
+  dy: 8,
+  gravity: 1.2,
+  friction: 0.9,
+  width: 23,
+  height: 34,
+  crouchWidth: 32,
+  crouchHeight: 15,
+  jumpSize: 18,
+  reloadTime: 5,
+  jumpDist: 16
+};
 
 class Player {
-  constructor(maxWidth) {
+  constructor(maxWidth, world) {
     this.width = playerValues.width;
     this.height = playerValues.height;
     this.x = 100;
@@ -79,11 +53,11 @@ class Player {
     this.sprite = null;
     this.image = null;
     this.gun = null;
+    this.world = world;
     this.init();
   }
 
   init = () => {
-    /*initialize event listeners for buttons */
     this.intro = true;
     this.gun = new Gun();
     this.reset();
@@ -188,8 +162,8 @@ class Player {
     }
 
     //check right boundary
-    if (this.x + this.width > SCREEN.width) {
-      this.x = SCREEN.width - this.width;
+    if (this.x + this.width > this.world.screenWidth) {
+      this.x = this.world.screenWidth - this.width;
     }
   };
 
@@ -238,7 +212,7 @@ class Player {
   };
 
   drawBullets = () => {
-    this.bullets.forEach((bullet, index) => {
+    this.bullets.forEach(bullet => {
       bullet.draw();
     });
   };
@@ -260,9 +234,14 @@ class Player {
       this.width * SCALE,
       this.height * SCALE
     );
-    // ctx.rect(this.playerX, this.y, this.width, this.height);
-    // ctx.fillStyle = color[this.state.sprite];
-    // ctx.fill();
+    //   ctx.rect(
+    //     this.x * SCALE,
+    //     this.y * SCALE,
+    //     this.width * SCALE,
+    //     this.height * SCALE
+    //   );
+    //   ctx.fillStyle = color[this.state.sprite];
+    //   ctx.fill();
     ctx.closePath();
   };
 
@@ -270,8 +249,4 @@ class Player {
     this.drawBullets();
     this.draw();
   };
-}
-
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
 }

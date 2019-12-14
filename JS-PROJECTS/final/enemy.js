@@ -1,7 +1,7 @@
 const enemyValues = {
   dx: 1.2,
-  dy: 40,
-  gravity: 1.5,
+  dy: 8,
+  gravity: 1,
   friction: 0.9,
   width: 19,
   height: 33,
@@ -9,17 +9,17 @@ const enemyValues = {
 };
 
 class Enemy {
-  constructor(maxWidth, maxHeight, position) {
+  constructor(maxWidth, position) {
     this.width = enemyValues.width;
     this.height = enemyValues.height;
-    this.x = 100;
+    this.x = 0;
     this.y = 0;
     this.dx = 0;
     this.dy = 0;
     this.inVision = false;
     this.alive = true;
     this.maxWidth = maxWidth;
-    this.maxHeight = maxHeight;
+
     this.frame = 0;
     this.clock = 1;
     this.invert = 1;
@@ -33,7 +33,7 @@ class Enemy {
 
   setPosition = position => {
     if (position == 'right') {
-      this.x = this.maxWidth + this.width;
+      this.x = this.maxWidth;
       this.dx = -enemyValues.dx;
       this.image = gameAssets.enemy1L;
     }
