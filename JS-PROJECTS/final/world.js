@@ -9,19 +9,20 @@ class World {
   constructor(level) {
     //viewport
     this.screenX = 0;
-    this.screenY = 0;
+    this.viewportY = IMAGESIZE.y - SCREEN.height;
+    this.screenY = IMAGESIZE.y - SCREEN.height;
     this.screenWidth = SCREEN.width;
     this.screenHeight = SCREEN.height;
     //entire map
     this.x = 500;
-    this.y = IMAGESIZE.y - SCREEN.height;
-    this.viewportY = IMAGESIZE.y - SCREEN.height;
+    this.y = IMAGESIZE.y;
     this.level = level;
     this.background = null;
     this.player = null;
     this.enemies = [];
     this.clock = 0;
     this.loaded = false;
+    this.shiftCycle = 1.6;
   }
 
   init = background => {
@@ -33,7 +34,7 @@ class World {
   setBackground = () => {
     ctx.save();
     ctx.beginPath();
-    ctx.translate(-this.x * SCALE, -this.viewportY * SCALE); //translates to bottom
+    ctx.translate(-this.x * SCALE, -this.screenY * SCALE); //translates to bottom
     ctx.drawImage(
       this.background,
       0,
@@ -80,21 +81,34 @@ class World {
     }
   };
 
+  shiftFunction() {
+    if (
+      this.screenY >= this.y - this.shiftCycle * this.screenHeight &&
+      this.shift &&
+      this.clock % 2 == 0
+    ) {
+      this.screenY -= 2;
+    }
+    if (this.screenY < this.y - this.shiftCycle * this.screenHeight) {
+      this.shift = false;
+    }
+  }
+
   update = () => {
     //update player position and create bullets if button pressed
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
     this.manageWorldView();
-    this.updateEnemy();
-    if (this.clock % 100 == 0) {
-      this.generateEnemy();
-    }
-
+    // this.updateEnemy();
+    // if (this.clock % 100 == 0) {
+    //   this.generateEnemy();
+    // }
+    this.shiftFunction();
     this.clock++;
   };
 
   render = () => {
-    ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
+    ctx.clearRect(0, 0, this.screenWidth * 2, this.screenHeight * 2);
     this.setBackground();
     this.player.render();
     this.ground.draw(this);
