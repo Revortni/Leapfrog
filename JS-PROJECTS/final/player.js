@@ -26,7 +26,7 @@ const color = {
 };
 const playerValues = {
   dx: 10,
-  dy: 8,
+  dy: 10,
   gravity: 1.2,
   friction: 0.9,
   width: 23,

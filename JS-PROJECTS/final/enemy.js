@@ -1,7 +1,7 @@
 const enemyValues = {
   dx: 1.2,
-  dy: 8,
-  gravity: 1,
+  dy: 40,
+  gravity: 5,
   friction: 0.9,
   width: 19,
   height: 33,
@@ -13,7 +13,7 @@ class Enemy {
     this.width = enemyValues.width;
     this.height = enemyValues.height;
     this.x = 0;
-    this.y = 0;
+    this.y = 30;
     this.dx = 0;
     this.dy = 0;
     this.inVision = false;

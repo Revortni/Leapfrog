@@ -22,7 +22,7 @@ class World {
     this.enemies = [];
     this.clock = 0;
     this.loaded = false;
-    this.shiftCycle = 1.6;
+    this.shiftCycle = 1.5;
   }
 
   init = background => {
@@ -82,15 +82,12 @@ class World {
   };
 
   shiftFunction() {
-    if (
-      this.screenY >= this.y - this.shiftCycle * this.screenHeight &&
-      this.shift &&
-      this.clock % 2 == 0
-    ) {
-      this.screenY -= 2;
-    }
-    if (this.screenY < this.y - this.shiftCycle * this.screenHeight) {
-      this.shift = false;
+    if (this.shift) {
+      this.screenY -= 10;
+      if (this.screenY < this.y - this.screenHeight * this.shiftCycle) {
+        this.shift = false;
+        this.shiftCycle += 0.56;
+      }
     }
   }
 
@@ -98,12 +95,13 @@ class World {
     //update player position and create bullets if button pressed
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
+    this.updateEnemy();
     this.manageWorldView();
-    // this.updateEnemy();
-    // if (this.clock % 100 == 0) {
-    //   this.generateEnemy();
-    // }
     this.shiftFunction();
+    if (this.clock % 100 == 0) {
+      this.generateEnemy();
+    }
+
     this.clock++;
   };
 

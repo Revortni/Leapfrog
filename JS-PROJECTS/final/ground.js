@@ -5,7 +5,6 @@ class GroundBoundary {
     this.y = 0;
     this.groundSet = [];
     this.init();
-    this.shift = false;
   }
 
   init() {
@@ -13,9 +12,18 @@ class GroundBoundary {
       [-200, 56, 750, 56, 0],
       [550, 24, 75, 24, 0],
       [625, 56, 190, 56, 0],
-      [815, 56, 1080, 185, 1],
-      [1080, 185, 260, 185, 0],
-      [1330, 185, 1554, 300, 1]
+      [815, 56, 1070, 182, 1],
+      [1080, 185, 260, 182, 0],
+      [1330, 185, 1554, 296, 1],
+      [1564, 296, 280, 296, 0],
+      [1844, 296, 2094, 424, 1],
+      [2104, 424, 238, 424, 0],
+      [2342, 390, 76, 390, 0],
+      [2418, 424, 192, 424, 0],
+      [2612, 424, 2830, 536, 1],
+      [2840, 536, 300, 536, 0],
+      [3140, 504, 76, 504, 0],
+      [3216, 536, 366, 536, 0]
     ];
     floorDimensions.forEach(x => {
       let newFloor = new Ground(x[0], x[1], x[2], x[3], x[4]);
@@ -32,24 +40,25 @@ class GroundBoundary {
 
   slopeFunction = (world, object, ground) => {
     let objPosL = world.x + object.x;
+
     let objPosB = world.screenY + object.y + object.height;
     if (objPosL > ground.x && objPosL < ground.width) {
       let intercept = ground.y;
       let distanceFromStartOfSlope = objPosL - ground.x;
       let slopeBottomY =
-        ((ground.y - (world.y - ground.height)) / (ground.x - ground.width)) *
-          distanceFromStartOfSlope +
+        -Math.tan((26.5 * Math.PI) / 180) * distanceFromStartOfSlope +
         intercept;
       if (objPosB > slopeBottomY) {
-        console.log('collision');
         object.y = slopeBottomY - object.height - world.screenY;
         if (object instanceof Player) {
+          console.log(objPosL);
           object.jumping = false;
+          if (objPosL > ground.width - 100 && !ground.shifted) {
+            world.shift = true;
+            ground.shifted = true;
+          }
         }
       }
-    }
-    if (objPosL > ground.width - 100 && !world.shift) {
-      world.shift = true;
     }
   };
 
@@ -65,11 +74,6 @@ class GroundBoundary {
       objPosL < ground.x + ground.width
     ) {
       if (object instanceof Player) {
-        //bottom collision
-        if (objPosR > ground.x && objPosT < ground.y) {
-          object.y = ground.y - object.height - world.screenY;
-          object.jumping = false;
-        }
         //collision with right boundary
         if (
           objPosR > ground.x + ground.width &&
@@ -80,13 +84,21 @@ class GroundBoundary {
           object.x = ground.x + ground.width - world.x;
         }
         //collision with left boundary
-        if (
+        else if (
           objPosL < ground.x &&
-          objPosR < ground.x + ground.width &&
-          objPosB < ground.y + ground.height &&
-          objPosT > ground.y
+          objPosT + 10 > ground.y &&
+          objPosB > ground.y
         ) {
           object.x = ground.x - world.x - object.width;
+        }
+        //bottom collision
+        else if (
+          objPosR > ground.x &&
+          objPosT < ground.y &&
+          objPosL < ground.x + ground.width
+        ) {
+          object.y = ground.y - object.height - world.screenY;
+          object.jumping = false;
         }
       } else {
         object.y = ground.y - object.height - world.screenY;
@@ -111,9 +123,6 @@ class GroundBoundary {
       } else {
         this.flatFunction(world, object, ground);
       }
-      if (world.shift) {
-        object.y -= 1;
-      }
     });
   };
 
@@ -130,6 +139,7 @@ class Ground {
     this.width = width;
     this.height = height;
     this.slope = slope;
+    this.shifted = false;
   }
 
   draw = function(world) {
