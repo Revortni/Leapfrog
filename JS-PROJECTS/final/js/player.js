@@ -25,9 +25,9 @@ const color = {
   '10': '#f203f4'
 };
 const playerValues = {
-  dx: 2,
-  dy: 10,
-  gravity: 1.2,
+  dx: 10,
+  dy: 5,
+  gravity: 0.2,
   friction: 0.9,
   width: 23,
   height: 34,
@@ -35,7 +35,7 @@ const playerValues = {
   crouchHeight: 15,
   jumpSize: 18,
   reloadTime: 5,
-  jumpDist: 16
+  jumpDist: 6
 };
 
 class Player {
@@ -55,7 +55,9 @@ class Player {
     this.world = world;
     this.lives = 3;
     this.controller = controller;
+    this.frame = 0;
     this.isMain = main || false;
+    this.spawnTime = 0;
     this.init();
   }
 
@@ -71,7 +73,8 @@ class Player {
       sprite: 0,
       facingLeft: false
     };
-    this.jumping = false;
+    this.y = 20;
+    this.jumping = true;
     this.crouch = false;
     this.directionFacing = 0;
     this.shootDirection = { x: 1, y: 0 };
@@ -202,9 +205,6 @@ class Player {
     }
     //bullet updates
     this.gunHandler();
-    if (this.bullets.length) {
-      this.moveBullets();
-    }
     //player updates
     this.shootDirection.x = this.state.facingLeft ? -1 : 1;
     this.shootDirection.y = 0;
@@ -275,14 +275,19 @@ class Player {
   checkCollision = objects => {
     objects.forEach(obj => {
       if (
-        obj.x < this.x &&
-        this.x - this.width < obj.x + obj.r &&
+        obj.x < this.x + this.width &&
+        this.x < obj.x + obj.width &&
         obj.y < this.y + this.height &&
-        this.y < obj.y + obj.r &&
-        !obj.destroyed
+        this.y < obj.y + obj.height
       ) {
         this.alive = false;
-        obj.destroyed = true;
+
+        if (this.lives > 0) {
+          this.lives--;
+          this.reset();
+        } else {
+          this.alive = false;
+        }
       }
     });
   };

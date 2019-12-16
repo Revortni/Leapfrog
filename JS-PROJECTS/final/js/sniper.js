@@ -7,7 +7,6 @@ class Sniper extends Enemy {
     this.image = gameAssets.sniper.img;
     this.clock = 0;
     this.world = world;
-    this.bulletSet = world.enemyBullets;
   }
 
   update({ playerX, playerY }) {
@@ -16,9 +15,6 @@ class Sniper extends Enemy {
     if (this.clock % 50 == 0) {
       this.shoot(playerX, playerY);
     }
-    this.bulletSet.forEach(x => {
-      x.move();
-    });
     this.clock++;
   }
 
@@ -29,7 +25,7 @@ class Sniper extends Enemy {
     let dx = Math.cos(angle);
     let dy = Math.sin(angle);
     let bullet = new EnemyBullet(this.world, this.x, this.y, dx, dy);
-    this.bulletSet.push(bullet);
+    this.world.enemyBullets.push(bullet);
   }
 
   draw = () => {
@@ -44,10 +40,9 @@ class Sniper extends Enemy {
     ctx.fillStyle = 'white';
     ctx.fill();
     ctx.closePath();
-    this.bulletSet.forEach(x => {
-      x.draw();
-    });
   };
+
+  checkBoundary = () => {};
 }
 class EnemyBullet {
   constructor(world, x, y, dx, dy) {
@@ -65,6 +60,7 @@ class EnemyBullet {
   move() {
     this.x += this.dx * this.speed;
     this.y += this.dy * this.speed;
+    this.checkBoundary();
   }
 
   draw() {
@@ -79,4 +75,16 @@ class EnemyBullet {
     );
     c.closePath();
   }
+
+  checkBoundary = () => {
+    //move bullets and bulletBoundaryCheck function
+    if (
+      this.x > SCREEN.width ||
+      this.x < 0 ||
+      this.y < 0 ||
+      this.y > SCREEN.height
+    ) {
+      this.destroyed = true;
+    }
+  };
 }

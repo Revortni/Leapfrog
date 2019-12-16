@@ -22,15 +22,15 @@ class Soilder extends Enemy {
   }
 
   setEntryPoint = position => {
-    this.image = gameAssets.enemy1L;
     if (position == 'right') {
       this.x = this.maxWidth;
       this.dx = -soilderValues.dx;
+      this.image = gameAssets.enemy1L;
     }
     if (position == 'left') {
       this.x = -this.width * 2;
       this.dx = soilderValues.dx;
-      this.invert = -1;
+      this.image = gameAssets.enemy1R;
     }
   };
 
@@ -48,21 +48,20 @@ class Soilder extends Enemy {
   draw = () => {
     ctx.beginPath();
     ctx.save();
-    ctx.scale(this.invert, 1);
     ctx.drawImage(
       this.image.img,
       this.frame * this.image.w,
       0,
       this.image.w,
       this.image.h,
-      this.x * SCALE * this.invert,
+      this.x * SCALE,
       this.y * SCALE,
       this.image.w * SCALE,
       this.image.h * SCALE
     );
 
     ctx.strokeRect(
-      this.x * SCALE * this.invert,
+      this.x * SCALE,
       this.y * SCALE,
       this.image.w * SCALE,
       this.image.h * SCALE

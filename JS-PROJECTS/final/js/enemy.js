@@ -13,7 +13,7 @@ class Enemy {
     this.inVision = true;
     this.alive = true;
     this.invert = 1;
-    this.life = 1;
+    this.hp = 1;
   }
 
   checkScreenBoundary = () => {
@@ -34,8 +34,11 @@ class Enemy {
         this.y < bullet.y + bullet.r &&
         !bullet.destroyed
       ) {
-        this.alive = false;
         bullet.destroyed = true;
+        this.hp--;
+        if (this.hp <= 0) {
+          this.alive = false;
+        }
       }
     });
   };

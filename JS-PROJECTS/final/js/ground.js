@@ -85,7 +85,7 @@ class GroundBoundary {
         //collision with left boundary
         else if (
           objPosL < ground.x &&
-          objPosT + 10 > ground.y &&
+          objPosT + object.height / 2 > ground.y &&
           objPosB > ground.y
         ) {
           object.x = ground.x - world.x - object.width;
@@ -104,6 +104,7 @@ class GroundBoundary {
       }
     }
   };
+
   checkGroundBoundary = (world, object) => {
     this.groundSet.forEach(ground => {
       // console.log('collision', index);

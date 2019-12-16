@@ -69,7 +69,7 @@ class World {
           playerX: this.player.x + this.player.width / 2,
           playerY: this.player.y + this.player.height / 2
         });
-        // this.ground.checkGroundBoundary(this, enemy);
+        this.ground.checkGroundBoundary(this, enemy);
         enemy.checkScreenBoundary();
         if (this.player.bullets.length > 0) {
           enemy.checkCollision(this.player.bullets);
@@ -78,6 +78,11 @@ class World {
     }
     this.enemies = this.enemies.filter(enemy => enemy.alive);
     this.enemies = this.enemies.filter(enemy => enemy.inVision);
+
+    this.enemyBullets.forEach(x => {
+      x.move();
+    });
+    this.enemyBullets = this.enemyBullets.filter(bullet => !bullet.destroyed);
   };
 
   manageWorldView = () => {
@@ -112,13 +117,14 @@ class World {
   update = () => {
     //update player position and create bullets if button pressed
     this.player.update();
+    this.player.moveBullets();
     this.ground.checkGroundBoundary(this, this.player);
     this.updateEnemy();
     this.checkCollisions();
     if (this.clock == 0) {
-      //   this.generateEnemy();
+      this.generateEnemy();
       let enemy = new Sniper(this);
-      enemy.setPosition(200, 20);
+      enemy.setPosition(432, this.screenHeight - 165);
       this.enemies.push(enemy);
     }
     this.manageWorldView();
@@ -134,6 +140,12 @@ class World {
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
         enemy.draw();
+      });
+    }
+
+    if (this.enemyBullets.length > 0) {
+      this.enemyBullets.forEach(bullet => {
+        bullet.draw();
       });
     }
   };
