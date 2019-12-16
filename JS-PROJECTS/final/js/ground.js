@@ -51,7 +51,6 @@ class GroundBoundary {
       if (objPosB > slopeBottomY) {
         object.y = slopeBottomY - object.height - world.screenY;
         if (object instanceof Player) {
-          console.log(objPosL);
           object.jumping = false;
           if (objPosL > ground.width - 100 && !ground.shifted) {
             world.shift = true;
@@ -94,7 +93,7 @@ class GroundBoundary {
         //bottom collision
         else if (
           objPosR > ground.x &&
-          objPosT < ground.y &&
+          objPosT < ground.y + ground.height &&
           objPosL < ground.x + ground.width
         ) {
           object.y = ground.y - object.height - world.screenY;

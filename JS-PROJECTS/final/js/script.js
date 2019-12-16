@@ -6,9 +6,20 @@ let ctx = canvas.getContext('2d');
 let assetCount = 0;
 let loaded = 0;
 const gameAssets = {
-  enemy1L: { src: './assets/enemy1L.png', w: 19, h: 33, frameCount: 6 },
-  enemy1R: { src: './assets/enemy1R.png', w: 19, h: 33, frameCount: 6 },
-  player1: { src: './assets/player1.png' }
+  enemy1L: {
+    src: './assets/enemy1L.png',
+    w: 19,
+    h: 33,
+    w1: 32,
+    frameCount: 6,
+    circles: [8, 12, 14, 16]
+  },
+  player1: { src: './assets/player1.png' },
+  life1: {
+    src: './assets/ExtraLifeBlue.png',
+    w: 8,
+    h: 16
+  }
 };
 
 const playerFrames = Object.keys(gameAssets).forEach(key => {

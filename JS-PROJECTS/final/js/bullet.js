@@ -30,8 +30,8 @@ class Bullet {
     c.beginPath();
     c.drawImage(
       img,
-      this.x * SCALE,
-      this.y * SCALE,
+      (this.x + this.r) * SCALE,
+      (this.y + this.r) * SCALE,
       2 * this.r * SCALE,
       2 * this.r * SCALE
     );

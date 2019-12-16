@@ -8,6 +8,7 @@ class Game {
     this.world = new World(this.level);
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
+
     let mainBackground = new Image();
     mainBackground.src = './assets/area' + this.level + '_bg.png';
     mainBackground.onload = () => {

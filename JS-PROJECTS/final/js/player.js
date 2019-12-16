@@ -39,21 +39,23 @@ const playerValues = {
 };
 
 class Player {
-  constructor(maxWidth, world) {
+  constructor(world, controller, x, main) {
     this.width = playerValues.width;
     this.height = playerValues.height;
-    this.x = 100;
+    this.x = x || 100;
     this.dx = 0;
     this.y = 0;
     this.lastY = 0;
     this.dy = playerValues.dy;
     this.state = null;
-    this.maxWidth = maxWidth;
     this.bullets = [];
     this.sprite = null;
     this.image = null;
     this.gun = null;
     this.world = world;
+    this.lives = 3;
+    this.controller = controller;
+    this.isMain = main || false;
     this.init();
   }
 
@@ -77,7 +79,7 @@ class Player {
 
   controllerHandler = () => {
     this.dx = 0;
-    if (controller.jump && this.jumping == false) {
+    if (this.controller.jump && this.jumping == false) {
       this.dy = 0;
       this.dy -= playerValues.jumpDist;
       this.jumping = true;
@@ -90,39 +92,39 @@ class Player {
       this.state.sprite = this.state.facingLeft ? 9 : 8;
     } else {
       this.state.sprite = this.directionFacing;
-      if (controller.up) {
+      if (this.controller.up) {
         this.state.sprite = 2;
       }
-      if (controller.down) {
+      if (this.controller.down) {
         this.state.sprite = this.state.facingLeft ? 10 : 6;
       }
-      if (controller.right && controller.up) {
+      if (this.controller.right && this.controller.up) {
         this.state.sprite = 1;
       }
-      if (controller.left && controller.up) {
+      if (this.controller.left && this.controller.up) {
         this.state.sprite = 3;
       }
-      if (controller.right && controller.down) {
+      if (this.controller.right && this.controller.down) {
         this.state.sprite = 7;
       }
-      if (controller.left && controller.down) {
+      if (this.controller.left && this.controller.down) {
         this.state.sprite = 5;
       }
     }
-    if (controller.up) {
+    if (this.controller.up) {
       this.shootDirection.x = 0;
       this.shootDirection.y = -1;
     }
-    if (controller.down) {
+    if (this.controller.down) {
       this.shootDirection.y = 1;
     }
-    if (controller.left) {
+    if (this.controller.left) {
       this.dx = -playerValues.dx;
       this.directionFacing = 4;
       this.shootDirection.x = -1;
       this.state.facingLeft = true;
     }
-    if (controller.right) {
+    if (this.controller.right) {
       this.dx = playerValues.dx;
       this.directionFacing = 0;
       this.shootDirection.x = 1;
@@ -131,8 +133,8 @@ class Player {
 
     if (
       !this.jumping &&
-      controller.down &&
-      !(controller.right || controller.left)
+      this.controller.down &&
+      !(this.controller.right || this.controller.left)
     ) {
       this.y = this.crouch
         ? this.y
@@ -245,8 +247,24 @@ class Player {
     ctx.closePath();
   };
 
+  showLifeCount = () => {
+    let x = 16;
+    let y = 4;
+    let life = gameAssets.life1;
+    for (let i = 0; i < this.lives; i++) {
+      ctx.drawImage(
+        life.img,
+        10 + x * (i + 1) + life.w * i * SCALE,
+        y * SCALE,
+        life.w * SCALE,
+        life.h * SCALE
+      );
+    }
+  };
+
   render = () => {
     this.drawBullets();
     this.draw();
+    this.showLifeCount();
   };
 }

@@ -14,19 +14,26 @@ class World {
     this.screenWidth = SCREEN.width;
     this.screenHeight = SCREEN.height;
     //entire map
-    this.x = 500;
+    this.x = 0;
     this.y = IMAGESIZE.y;
     this.level = level;
     this.background = null;
     this.player = null;
+    this.player2 = null;
     this.enemies = [];
     this.clock = 0;
     this.loaded = false;
     this.shiftCycle = 1.5;
+    this.players = 2;
   }
 
   init = background => {
-    this.player = new Player(this.x, this.y, this.screenWidth, this);
+    this.player = new Player(this, controller, 100, true);
+    // if (this.players == 2) {
+    // this.player2 = new Player(this, controller2, 200);
+    // document.addEventListener('keydown', controller2.keyListener);
+    // document.addEventListener('keyup', controller2.keyListener);
+    // }
     this.background = background;
     this.ground = new GroundBoundary();
   };
@@ -46,9 +53,9 @@ class World {
   };
 
   generateEnemy = () => {
-    let enemyLeft = new Enemy(this.screenWidth, 'left');
-    let enemyRight = new Enemy(this.screenWidth, 'right');
+    let enemyLeft = new Soilder('left');
     this.enemies.push(enemyLeft);
+    let enemyRight = new Soilder('right');
     this.enemies.push(enemyRight);
   };
 
@@ -72,7 +79,8 @@ class World {
       if (this.player.x + this.player.width / 2 > this.screenWidth / 2) {
         if (this.player.dx > 0) {
           this.dx = this.player.dx;
-          this.player.x -= this.player.dx;
+          this.player.x -= this.dx;
+          // this.player2.x -= this.dx;
           this.x += this.dx;
         }
       } else {
@@ -95,13 +103,12 @@ class World {
     //update player position and create bullets if button pressed
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
-    this.updateEnemy();
+    // this.updateEnemy();
+    // if (this.clock % 100 == 0) {
+    //   this.generateEnemy();
+    // }
     this.manageWorldView();
     this.shiftFunction();
-    if (this.clock % 100 == 0) {
-      this.generateEnemy();
-    }
-
     this.clock++;
   };
 
