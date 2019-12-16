@@ -19,7 +19,9 @@ const gameAssets = {
     src: './assets/ExtraLifeBlue.png',
     w: 8,
     h: 16
-  }
+  },
+  sniper: { src: './assets/SniperDL.png' },
+  bullet: { src: './assets/bullet1.png' }
 };
 
 const playerFrames = Object.keys(gameAssets).forEach(key => {

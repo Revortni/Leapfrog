@@ -2,12 +2,13 @@ class Bullet {
   constructor(x, y, dx, dy, jumping) {
     this.x = x;
     this.y = y;
-    this.jumping = jumping;
+    this.jumping = jumping || false;
     this.dx = dx;
     this.dy = dy;
-    this.speed = 3;
+    this.speed = 5;
     this.r = 2;
     this.destroyed = false;
+    this.image = gameAssets.bullet.img;
     this.init();
   }
 
@@ -25,11 +26,9 @@ class Bullet {
 
   draw() {
     let c = ctx;
-    let img = new Image();
-    img.src = './assets/bullet1.png';
     c.beginPath();
     c.drawImage(
-      img,
+      this.image,
       (this.x + this.r) * SCALE,
       (this.y + this.r) * SCALE,
       2 * this.r * SCALE,

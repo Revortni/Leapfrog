@@ -25,7 +25,7 @@ const color = {
   '10': '#f203f4'
 };
 const playerValues = {
-  dx: 10,
+  dx: 2,
   dy: 10,
   gravity: 1.2,
   friction: 0.9,
@@ -223,6 +223,10 @@ class Player {
     ctx.beginPath();
     let image = new Image();
     image.src = './assets/' + display[this.state.sprite];
+    ctx.fillStyle = 'white';
+    let x = this.world.x + this.x;
+    let y = this.world.y + this.y;
+    ctx.fillText(x + ',' + y, this.x * SCALE, this.y * SCALE - 5);
     ctx.drawImage(
       image,
       this.x * SCALE,
@@ -266,5 +270,20 @@ class Player {
     this.drawBullets();
     this.draw();
     this.showLifeCount();
+  };
+
+  checkCollision = objects => {
+    objects.forEach(obj => {
+      if (
+        obj.x < this.x &&
+        this.x - this.width < obj.x + obj.r &&
+        obj.y < this.y + this.height &&
+        this.y < obj.y + obj.r &&
+        !obj.destroyed
+      ) {
+        this.alive = false;
+        obj.destroyed = true;
+      }
+    });
   };
 }

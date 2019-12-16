@@ -10,7 +10,9 @@ const soilderValues = {
 
 class Soilder extends Enemy {
   constructor(position) {
-    super(soilderValues.width, soilderValues.height);
+    super();
+    this.width = soilderValues.width;
+    this.height = soilderValues.height;
     this.y = 30;
     this.dx = 0;
     this.dy = soilderValues.dy;
@@ -32,7 +34,7 @@ class Soilder extends Enemy {
     }
   };
 
-  update = worldShift => {
+  update = ({ worldShift }) => {
     //add velocity for movement in x y
     this.x += this.dx - worldShift;
     this.y += this.dy;
@@ -41,5 +43,31 @@ class Soilder extends Enemy {
       this.frame = this.frame % this.image.frameCount;
     }
     this.clock++;
+  };
+
+  draw = () => {
+    ctx.beginPath();
+    ctx.save();
+    ctx.scale(this.invert, 1);
+    ctx.drawImage(
+      this.image.img,
+      this.frame * this.image.w,
+      0,
+      this.image.w,
+      this.image.h,
+      this.x * SCALE * this.invert,
+      this.y * SCALE,
+      this.image.w * SCALE,
+      this.image.h * SCALE
+    );
+
+    ctx.strokeRect(
+      this.x * SCALE * this.invert,
+      this.y * SCALE,
+      this.image.w * SCALE,
+      this.image.h * SCALE
+    );
+    ctx.restore();
+    ctx.closePath();
   };
 }

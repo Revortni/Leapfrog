@@ -21,6 +21,7 @@ class World {
     this.player = null;
     this.player2 = null;
     this.enemies = [];
+    this.enemyBullets = [];
     this.clock = 0;
     this.loaded = false;
     this.shiftCycle = 1.5;
@@ -34,6 +35,7 @@ class World {
     // document.addEventListener('keydown', controller2.keyListener);
     // document.addEventListener('keyup', controller2.keyListener);
     // }
+
     this.background = background;
     this.ground = new GroundBoundary();
   };
@@ -62,8 +64,12 @@ class World {
   updateEnemy = () => {
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
-        enemy.update(this.dx);
-        this.ground.checkGroundBoundary(this, enemy);
+        enemy.update({
+          worldShift: this.dx,
+          playerX: this.player.x + this.player.width / 2,
+          playerY: this.player.y + this.player.height / 2
+        });
+        // this.ground.checkGroundBoundary(this, enemy);
         enemy.checkScreenBoundary();
         if (this.player.bullets.length > 0) {
           enemy.checkCollision(this.player.bullets);
@@ -99,14 +105,22 @@ class World {
     }
   }
 
+  checkCollisions = () => {
+    this.player.checkCollision(this.enemies);
+  };
+
   update = () => {
     //update player position and create bullets if button pressed
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
-    // this.updateEnemy();
-    // if (this.clock % 100 == 0) {
-    //   this.generateEnemy();
-    // }
+    this.updateEnemy();
+    this.checkCollisions();
+    if (this.clock == 0) {
+      //   this.generateEnemy();
+      let enemy = new Sniper(this);
+      enemy.setPosition(200, 20);
+      this.enemies.push(enemy);
+    }
     this.manageWorldView();
     this.shiftFunction();
     this.clock++;
