@@ -1,19 +1,19 @@
 class Bullet {
-  constructor(x, y, dx, dy, jumping) {
+  constructor(x, y, dx, dy, speed) {
     this.x = x;
     this.y = y;
-    this.jumping = jumping || false;
     this.dx = dx;
     this.dy = dy;
-    this.speed = 5;
+    this.speed = speed || 5;
     this.width = 2;
     this.height = 2;
     this.destroyed = false;
     this.image = gameAssets.bullet.img;
   }
 
-  move() {
-    this.x += this.dx * this.speed;
+  move(dx) {
+    let shift = -dx || 0;
+    this.x += this.dx * this.speed + shift;
     this.y += this.dy * this.speed;
   }
 
