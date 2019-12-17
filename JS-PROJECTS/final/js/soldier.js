@@ -1,5 +1,5 @@
 const soldierValues = {
-  dx: 2,
+  dx: 1.5,
   dy: 10,
   gravity: 5,
   friction: 0.9,
@@ -18,6 +18,7 @@ class Soldier extends Enemy {
     this.dy = soldierValues.dy;
     this.facingRight = 0;
     this.boundaryOffset = soldierValues.boundaryOffset;
+    this.invert = 1;
     this.setEntryPoint(position);
   }
 
@@ -30,7 +31,7 @@ class Soldier extends Enemy {
     if (position == 'left') {
       this.x = -this.width * 2;
       this.dx = soldierValues.dx;
-      this.facingRight = 1;
+      this.invert = -1;
     }
   };
 
@@ -46,25 +47,29 @@ class Soldier extends Enemy {
   };
 
   draw = () => {
+    let posX = this.invert == 1 ? 0 : this.width * -1;
     ctx.beginPath();
+    ctx.save();
+    ctx.scale(this.invert, 1);
     ctx.drawImage(
       this.image.img,
       this.frame * this.image.w,
       this.facingRight * this.image.h,
       this.image.w,
       this.image.h,
-      this.x * SCALE,
+      (this.invert * this.x + posX) * SCALE,
       this.y * SCALE,
       this.image.w * SCALE,
       this.image.h * SCALE
     );
 
     ctx.strokeRect(
-      this.x * SCALE,
+      (this.invert * this.x + posX) * SCALE,
       this.y * SCALE,
       this.image.w * SCALE,
       this.image.h * SCALE
     );
+    ctx.restore();
     ctx.closePath();
   };
 }

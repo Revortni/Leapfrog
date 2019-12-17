@@ -1,4 +1,4 @@
-let SCALE = 5;
+let SCALE = 2;
 let IMAGESIZE = { x: 3584, y: 720 };
 let SCREEN = { width: 280, height: 224 };
 let canvas = document.getElementById('app');
@@ -26,12 +26,16 @@ const gameAssets = {
     w: 8,
     h: 16
   },
-  sniper: { src: './assets/SniperDL.png' },
-  sbsniper: { src: './assets/SandbagSniperL.png' },
+  sniper: { src: './assets/SniperDL.png', w: 16, h: 31 },
+  sbsniper: { src: './assets/SandbagSniperL.png', w: 32, h: 17 },
+  mechgun: { src: './assets/mechGun.png', w: 32, h: 48 },
+  lastsniper: { src: './assets/lastShooter.png', w: 16, h: 31 },
+  boss: { src: './assets/boss1.png' },
   bullet: { src: './assets/bullet1.png' }
 };
 
-const playerFrames = Object.keys(gameAssets).forEach(key => {
+const playerFrames = null;
+Object.keys(gameAssets).forEach(key => {
   assetCount++;
   let img = new Image();
   img.src = gameAssets[key].src;

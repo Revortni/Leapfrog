@@ -11,7 +11,7 @@ class Bullet {
     this.image = gameAssets.bullet.img;
   }
 
-  move(dx) {
+  move(dx, dy) {
     let shift = -dx || 0;
     this.x += this.dx * this.speed + shift;
     this.y += this.dy * this.speed;
@@ -33,10 +33,10 @@ class Bullet {
   checkBoundary = () => {
     //move bullets and bulletBoundaryCheck function
     if (
-      this.x > this.maxWidth ||
+      this.x > SCREEN.width ||
       this.x < 0 ||
       this.y < 0 ||
-      this.y > this.maxHeight
+      this.y > SCREEN.height
     ) {
       this.destroyed = true;
     }

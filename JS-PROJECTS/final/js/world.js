@@ -24,9 +24,10 @@ class World {
     this.enemyBullets = [];
     this.clock = 0;
     this.loaded = false;
-    this.shiftCycle = 1.5;
+    this.shiftCycle = 3.1;
     this.players = 2;
     this.gameOver = false;
+    this.reachedBoss = false;
   }
 
   init = background => {
@@ -58,8 +59,8 @@ class World {
   generateEnemy = () => {
     let enemyLeft = new Soldier('left');
     this.enemies.push(enemyLeft);
-    let enemyRight = new Soldier('right');
-    this.enemies.push(enemyRight);
+    // let enemyRight = new Soldier('right');
+    // this.enemies.push(enemyRight);
   };
 
   updateEnemy = () => {
@@ -85,7 +86,10 @@ class World {
   };
 
   manageWorldView = () => {
-    if (this.x >= 0 && this.x + this.screenWidth <= IMAGESIZE.x) {
+    if (
+      this.x >= 0 &&
+      this.x + this.screenWidth <= IMAGESIZE.x - this.screenWidth
+    ) {
       if (this.player.x + this.player.width / 2 > this.screenWidth / 2) {
         if (this.player.dx > 0) {
           this.dx = this.player.dx;
@@ -101,7 +105,7 @@ class World {
 
   shiftFunction() {
     if (this.shift) {
-      this.screenY -= 1;
+      this.screenY -= 10;
       if (this.screenY < this.y - this.screenHeight * this.shiftCycle) {
         this.shift = false;
         this.shiftCycle += 0.56;
@@ -126,7 +130,7 @@ class World {
           this.player.state.revive = true;
           setTimeout(() => {
             this.player.reset();
-          }, 1000);
+          }, 3000);
         }
       } else {
         this.gameOver = true;
@@ -142,11 +146,17 @@ class World {
     this.player.moveBullets();
     this.checkCollisions();
     this.updateEnemy();
-    if (this.clock == 0) {
-      // this.generateEnemy();
-      let enemy = new Sniper(this);
-      enemy.setPosition(432, this.screenHeight - 165);
-      this.enemies.push(enemy);
+    if (this.clock % 200 == 0) {
+      this.generateEnemy();
+      // let enemy2 = new Sniper(this);
+      // enemy2.setPosition(432, this.screenHeight - 165);
+      // this.enemies.push(enemy2);
+      // let enemy = new SBSniper(this);
+      // enemy.setPosition(1286, this.screenHeight - 200);
+      // this.enemies.push(enemy);
+      // let enemy1 = new MechGun(this);
+      // enemy1.setPosition(2432, this.screenHeight - 462);
+      // this.enemies.push(enemy1);
     }
     this.manageWorldView();
     this.shiftFunction();

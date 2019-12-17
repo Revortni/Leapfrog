@@ -14,6 +14,7 @@ class Enemy {
     this.alive = true;
     this.invert = 1;
     this.hp = 1;
+    this.killed = false;
   }
 
   checkScreenBoundary = () => {
@@ -25,8 +26,8 @@ class Enemy {
     }
   };
 
-  setPosition(x, y) {
+  setPosition = (x, y) => {
     this.wx = x;
     this.wy = y;
-  }
+  };
 }

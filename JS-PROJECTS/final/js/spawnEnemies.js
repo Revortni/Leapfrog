@@ -13,5 +13,5 @@ class SpawnEnemies {
   }
 }
 class Spawn {
-  constructor(x) {}
+  constructor() {}
 }

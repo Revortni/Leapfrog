@@ -73,7 +73,9 @@ class Player {
       sprite: 0,
       facingLeft: false
     };
+    this.setDeadFlag = false;
     this.y = 20;
+    this.dy = playerValues.dy;
     this.width = playerValues.width;
     this.height = playerValues.height;
     this.jumping = false;
@@ -93,7 +95,6 @@ class Player {
     }
 
     if (this.jumping) {
-      this.dy += playerValues.gravity;
       this.state.sprite = this.state.facingLeft ? 9 : 8;
     } else {
       this.state.sprite = this.directionFacing;
@@ -158,6 +159,9 @@ class Player {
 
   move = () => {
     //add velocity for movement in x y
+    if (this.jumping) {
+      this.dy += playerValues.gravity;
+    }
     this.x += this.dx;
     this.y += this.dy;
   };
@@ -181,8 +185,7 @@ class Player {
       x,
       y,
       this.shootDirection.x,
-      this.shootDirection.y,
-      this.jumping
+      this.shootDirection.y
     );
     if (bullet) {
       this.bullets.push(bullet);
@@ -199,6 +202,7 @@ class Player {
   };
 
   update = () => {
+    console.log(this.bullets.length);
     if (this.state.alive) {
       //bullet updates
       this.gunHandler();
@@ -294,11 +298,12 @@ class Player {
   };
 
   setDead = () => {
-    this.dy = playerValues.dy;
-    this.dx = 0;
+    this.dy = -12;
+    this.jumping = true;
     this.state.alive = false;
     this.lives--;
     this.state.sprite = 7;
+    this.setDeadFlag = true;
   };
 
   handleCollision = obj => {
@@ -306,7 +311,9 @@ class Player {
       if (obj instanceof Bullet) {
         obj.destroyed = true;
       }
-      this.setDead();
+      if (!this.setDeadFlag) {
+        this.setDead();
+      }
     }
   };
 }

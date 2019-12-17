@@ -7,18 +7,24 @@ class Sniper extends Enemy {
     this.image = gameAssets.sniper.img;
     this.clock = 0;
     this.world = world;
+    this.reloadTime = 50;
   }
 
-  update({ playerX, playerY }) {
+  update = ({ playerX, playerY }) => {
     this.x = this.wx - this.world.x;
-    this.y = this.wy;
-    if (this.clock % 50 == 0) {
+    this.y =
+      this.wy - (-this.world.y + this.world.screenY + this.world.screenHeight);
+    if (
+      this.clock % this.reloadTime == 0 &&
+      this.x > 0 &&
+      this.x < SCREEN.width
+    ) {
       this.shoot(playerX, playerY);
     }
     this.clock++;
-  }
+  };
 
-  shoot(x, y) {
+  shoot = (x, y) => {
     x = Math.floor(x);
     y = Math.floor(y);
     let angle = Math.atan2(y - this.y, x - this.x);
@@ -26,7 +32,7 @@ class Sniper extends Enemy {
     let dy = Math.sin(angle);
     let bullet = new Bullet(this.x, this.y, dx, dy, 3);
     this.world.enemyBullets.push(bullet);
-  }
+  };
 
   draw = () => {
     ctx.beginPath();
