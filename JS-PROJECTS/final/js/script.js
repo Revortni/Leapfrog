@@ -14,13 +14,11 @@ const gameAssets = {
     frameCount: 6,
     circles: [8, 12, 14, 16]
   },
-  enemy1R: {
-    src: './assets/enemy1R.png',
+  soldier: {
+    src: './assets/soldier.png',
     w: 19,
     h: 33,
-    w1: 32,
-    frameCount: 6,
-    circles: [8, 12, 14, 16]
+    frameCount: 6
   },
   player1: { src: './assets/player1.png' },
   life1: {
@@ -29,6 +27,7 @@ const gameAssets = {
     h: 16
   },
   sniper: { src: './assets/SniperDL.png' },
+  sbsniper: { src: './assets/SandbagSniperL.png' },
   bullet: { src: './assets/bullet1.png' }
 };
 
