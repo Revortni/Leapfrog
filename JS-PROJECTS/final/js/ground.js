@@ -8,23 +8,7 @@ class GroundBoundary {
   }
 
   init() {
-    let floorDimensions = [
-      [-200, 56, 750, 56, 0],
-      [550, 24, 75, 24, 0],
-      [625, 56, 190, 56, 0],
-      [815, 56, 1070, 182, 1],
-      [1080, 185, 260, 182, 0],
-      [1330, 185, 1554, 296, 1],
-      [1564, 296, 280, 296, 0],
-      [1844, 296, 2094, 424, 1],
-      [2104, 424, 238, 424, 0],
-      [2342, 390, 76, 390, 0],
-      [2418, 424, 192, 424, 0],
-      [2612, 424, 2830, 536, 1],
-      [2840, 536, 300, 536, 0],
-      [3140, 504, 76, 504, 0],
-      [3216, 536, 366, 536, 0]
-    ];
+    let floorDimensions = DATA.ground1;
     floorDimensions.forEach(x => {
       let newFloor = new Ground(x[0], x[1], x[2], x[3], x[4]);
       this.groundSet.push(newFloor);
@@ -56,6 +40,8 @@ class GroundBoundary {
             world.shift = true;
             ground.shifted = true;
           }
+        } else if (object instanceof Bullet) {
+          object.destroyed = true;
         }
       }
     }
@@ -99,6 +85,9 @@ class GroundBoundary {
           object.y = ground.y - object.height - world.screenY;
           object.jumping = false;
         }
+      } else if (object instanceof Bullet) {
+        console.log('collision');
+        object.destroyed = true;
       } else {
         object.y = ground.y - object.height - world.screenY;
       }
@@ -107,17 +96,6 @@ class GroundBoundary {
 
   checkGroundBoundary = (world, object) => {
     this.groundSet.forEach(ground => {
-      // console.log('collision', index);
-      // if (ground.x == 0) {
-      //   console.log('Player', objPosL, objPosR, objPosT, objPosB);
-      //   console.log(
-      //     'ground',
-      //     ground.x,
-      //     ground.x + ground.width,
-      //     ground.y,
-      //     ground.y + ground.height
-      //   );
-      // }
       if (ground.slope) {
         this.slopeFunction(world, object, ground);
       } else {
