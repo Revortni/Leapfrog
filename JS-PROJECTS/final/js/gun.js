@@ -3,6 +3,7 @@ class Gun {
     this.type = 0;
     this.time = 1;
     this.reloading = false;
+    this.reloadTime = playerValues.reloadTime;
   }
 
   upgrade = () => {};
@@ -12,7 +13,7 @@ class Gun {
   shoot = (x, y, dx, dy, jumping) => {
     if (controller.shoot && !this.reloading) {
       this.reloading = true;
-      return new Bullet(x, y, dx, dy, jumping);
+      return new Bullet(x, y, dx, dy);
     }
     return null;
   };
@@ -21,7 +22,7 @@ class Gun {
     //reload is true after reloadtime has passed
     if (this.reloading) {
       this.time++;
-      if (this.time % playerValues.reloadTime == 0) {
+      if (this.time % this.reloadTime == 0) {
         this.reloading = false;
         this.time = 1;
       }
