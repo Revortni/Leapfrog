@@ -78,7 +78,7 @@ class World {
     this.enemies = this.enemies.filter(enemy => enemy.inVision);
 
     this.enemyBullets.forEach(x => {
-      x.move();
+      x.move(this.dx);
       this.ground.checkGroundBoundary(this, x);
     });
     this.enemyBullets = this.enemyBullets.filter(bullet => !bullet.destroyed);
@@ -141,7 +141,6 @@ class World {
     this.ground.checkGroundBoundary(this, this.player);
     this.player.moveBullets();
     this.checkCollisions();
-
     this.updateEnemy();
     if (this.clock == 0) {
       // this.generateEnemy();
@@ -159,7 +158,7 @@ class World {
     ctx.clearRect(0, 0, this.screenWidth * 2, this.screenHeight * 2);
     this.setBackground();
     this.player.render();
-    this.ground.draw(this);
+    // this.ground.draw(this);
     if (this.enemies.length > 0) {
       this.enemies.forEach(enemy => {
         enemy.draw();
