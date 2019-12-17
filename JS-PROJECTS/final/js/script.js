@@ -1,4 +1,4 @@
-let SCALE = 2;
+let SCALE = 5;
 let IMAGESIZE = { x: 3584, y: 720 };
 let SCREEN = { width: 280, height: 224 };
 let canvas = document.getElementById('app');
