@@ -26,6 +26,7 @@ class World {
     this.loaded = false;
     this.shiftCycle = 1.5;
     this.players = 2;
+    this.gameOver = false;
   }
 
   init = background => {
@@ -55,9 +56,9 @@ class World {
   };
 
   generateEnemy = () => {
-    let enemyLeft = new Soilder('left');
+    let enemyLeft = new Soldier('left');
     this.enemies.push(enemyLeft);
-    let enemyRight = new Soilder('right');
+    let enemyRight = new Soldier('right');
     this.enemies.push(enemyRight);
   };
 
@@ -71,9 +72,6 @@ class World {
         });
         this.ground.checkGroundBoundary(this, enemy);
         enemy.checkScreenBoundary();
-        if (this.player.bullets.length > 0) {
-          enemy.checkCollision(this.player.bullets);
-        }
       });
     }
     this.enemies = this.enemies.filter(enemy => enemy.alive);
@@ -81,6 +79,7 @@ class World {
 
     this.enemyBullets.forEach(x => {
       x.move();
+      this.ground.checkGroundBoundary(this, x);
     });
     this.enemyBullets = this.enemyBullets.filter(bullet => !bullet.destroyed);
   };
@@ -102,7 +101,7 @@ class World {
 
   shiftFunction() {
     if (this.shift) {
-      this.screenY -= 10;
+      this.screenY -= 1;
       if (this.screenY < this.y - this.screenHeight * this.shiftCycle) {
         this.shift = false;
         this.shiftCycle += 0.56;
@@ -111,18 +110,41 @@ class World {
   }
 
   checkCollisions = () => {
-    this.player.checkCollision(this.enemies);
+    this.player.checkCollision([...this.enemies, ...this.enemyBullets]);
+    if (this.player.bullets.length > 0) {
+      this.player.bullets.forEach(bullet => {
+        this.ground.checkGroundBoundary(this, bullet);
+        bullet.checkCollision(this.enemies);
+      });
+    }
+  };
+
+  checkIfAlive = () => {
+    if (!this.player.state.alive) {
+      if (this.player.lives) {
+        if (!this.player.state.revive) {
+          this.player.state.revive = true;
+          setTimeout(() => {
+            this.player.reset();
+          }, 1000);
+        }
+      } else {
+        this.gameOver = true;
+      }
+    }
   };
 
   update = () => {
     //update player position and create bullets if button pressed
+
     this.player.update();
-    this.player.moveBullets();
     this.ground.checkGroundBoundary(this, this.player);
-    this.updateEnemy();
+    this.player.moveBullets();
     this.checkCollisions();
+
+    this.updateEnemy();
     if (this.clock == 0) {
-      this.generateEnemy();
+      // this.generateEnemy();
       let enemy = new Sniper(this);
       enemy.setPosition(432, this.screenHeight - 165);
       this.enemies.push(enemy);
@@ -130,6 +152,7 @@ class World {
     this.manageWorldView();
     this.shiftFunction();
     this.clock++;
+    this.checkIfAlive();
   };
 
   render = () => {
@@ -142,7 +165,6 @@ class World {
         enemy.draw();
       });
     }
-
     if (this.enemyBullets.length > 0) {
       this.enemyBullets.forEach(bullet => {
         bullet.draw();
