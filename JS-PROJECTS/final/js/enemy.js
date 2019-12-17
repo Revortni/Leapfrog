@@ -25,24 +25,6 @@ class Enemy {
     }
   };
 
-  checkCollision = bullets => {
-    bullets.forEach(bullet => {
-      if (
-        bullet.x < this.x &&
-        this.x - this.width < bullet.x + bullet.r &&
-        bullet.y < this.y + this.height &&
-        this.y < bullet.y + bullet.r &&
-        !bullet.destroyed
-      ) {
-        bullet.destroyed = true;
-        this.hp--;
-        if (this.hp <= 0) {
-          this.alive = false;
-        }
-      }
-    });
-  };
-
   setPosition(x, y) {
     this.wx = x;
     this.wy = y;
