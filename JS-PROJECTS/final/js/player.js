@@ -6,7 +6,7 @@ const display = {
   '4': 'pStandingL.png',
   '5': '#fff',
   '6': 'pLayingDownR.png',
-  '7': '#fff',
+  '7': 'dead.png',
   '8': 'pStandingR.png',
   '9': 'pStandingL.png',
   '10': 'pLayingDownL.png'
@@ -26,22 +26,21 @@ const color = {
 };
 const playerValues = {
   dx: 10,
-  dy: 5,
-  gravity: 0.2,
-  friction: 0.9,
+  dy: 10,
+  gravity: 0.9,
   width: 23,
   height: 34,
   crouchWidth: 32,
   crouchHeight: 15,
   jumpSize: 18,
-  reloadTime: 5,
-  jumpDist: 6
+  reloadTime: 16,
+  jumpDist: 14
 };
 
 class Player {
   constructor(world, controller, x, main) {
-    this.width = playerValues.width;
-    this.height = playerValues.height;
+    this.width = 0;
+    this.height = 0;
     this.x = x || 100;
     this.dx = 0;
     this.y = 0;
@@ -54,10 +53,10 @@ class Player {
     this.gun = null;
     this.world = world;
     this.lives = 3;
+    this.alive = true;
     this.controller = controller;
     this.frame = 0;
     this.isMain = main || false;
-    this.spawnTime = 0;
     this.init();
   }
 
@@ -70,11 +69,14 @@ class Player {
   reset = () => {
     this.state = {
       alive: true,
+      revive: false,
       sprite: 0,
       facingLeft: false
     };
     this.y = 20;
-    this.jumping = true;
+    this.width = playerValues.width;
+    this.height = playerValues.height;
+    this.jumping = false;
     this.crouch = false;
     this.directionFacing = 0;
     this.shootDirection = { x: 1, y: 0 };
@@ -173,10 +175,8 @@ class Player {
   };
 
   gunHandler = () => {
-    let x = this.state.facingLeft
-      ? this.x - this.width / 2
-      : this.x + this.width / 2;
-    let y = this.y + (this.crouch ? this.height / 2 : this.height / 4);
+    let x = this.x + this.width / 2;
+    let y = this.y + (this.crouch ? 5 : 8);
     let bullet = this.gun.shoot(
       x,
       y,
@@ -195,20 +195,18 @@ class Player {
       bullet.move();
       bullet.checkBoundary();
     });
-
     this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
   };
 
   update = () => {
-    if (this.dy > 10) {
-      this.dy = playerValues.dy;
+    if (this.state.alive) {
+      //bullet updates
+      this.gunHandler();
+      //player updates
+      this.shootDirection.x = this.state.facingLeft ? -1 : 1;
+      this.shootDirection.y = 0;
+      this.controllerHandler();
     }
-    //bullet updates
-    this.gunHandler();
-    //player updates
-    this.shootDirection.x = this.state.facingLeft ? -1 : 1;
-    this.shootDirection.y = 0;
-    this.controllerHandler();
     this.move();
     this.checkScreenBoundary();
   };
@@ -219,8 +217,19 @@ class Player {
     });
   };
 
+  calculateSpriteDim = () => {
+    if (!this.state.alive) {
+      let height = 12;
+      let width = 32;
+      this.y = this.y + this.height - height;
+      this.height = height;
+      this.width = width;
+    }
+  };
+
   draw = () => {
     ctx.beginPath();
+    this.calculateSpriteDim();
     let image = new Image();
     image.src = './assets/' + display[this.state.sprite];
     ctx.fillStyle = 'white';
@@ -255,14 +264,12 @@ class Player {
     let x = 16;
     let y = 4;
     let life = gameAssets.life1;
+
     for (let i = 0; i < this.lives; i++) {
-      ctx.drawImage(
-        life.img,
-        10 + x * (i + 1) + life.w * i * SCALE,
-        y * SCALE,
-        life.w * SCALE,
-        life.h * SCALE
-      );
+      let posX = this.isMain
+        ? 10 + x * (i + 1) + life.w * i * SCALE
+        : SCREEN.width - (10 + x * (i + 1) + life.w * i * SCALE);
+      ctx.drawImage(life.img, posX, y * SCALE, life.w * SCALE, life.h * SCALE);
     }
   };
 
@@ -273,6 +280,7 @@ class Player {
   };
 
   checkCollision = objects => {
+    if (!this.state.alive) return;
     objects.forEach(obj => {
       if (
         obj.x < this.x + this.width &&
@@ -280,15 +288,19 @@ class Player {
         obj.y < this.y + this.height &&
         this.y < obj.y + obj.height
       ) {
-        this.alive = false;
-
-        if (this.lives > 0) {
-          this.lives--;
-          this.reset();
-        } else {
-          this.alive = false;
-        }
+        this.handleCollision(obj);
       }
     });
+  };
+
+  handleCollision = obj => {
+    if (obj instanceof Enemy || obj instanceof Bullet) {
+      if (obj instanceof Bullet) {
+        obj.destroyed = true;
+      }
+      this.state.alive = false;
+      this.lives--;
+      this.state.sprite = 7;
+    }
   };
 }
