@@ -293,14 +293,20 @@ class Player {
     });
   };
 
+  setDead = () => {
+    this.dy = playerValues.dy;
+    this.dx = 0;
+    this.state.alive = false;
+    this.lives--;
+    this.state.sprite = 7;
+  };
+
   handleCollision = obj => {
     if (obj instanceof Enemy || obj instanceof Bullet) {
       if (obj instanceof Bullet) {
         obj.destroyed = true;
       }
-      this.state.alive = false;
-      this.lives--;
-      this.state.sprite = 7;
+      this.setDead();
     }
   };
 }
