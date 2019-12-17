@@ -2,6 +2,7 @@ class Game {
   constructor() {
     this.level = 1;
     this.world = null;
+    this.interval = null;
   }
 
   init = () => {
@@ -25,10 +26,18 @@ class Game {
     this.world.render();
   };
 
+  handleGameOver = () => {
+    console.log('gameOver');
+    clearInterval(this.interval);
+  };
+
   startGame = () => {
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.update();
       this.render();
+      if (this.world.gameOver) {
+        this.handleGameOver();
+      }
       this.clock++;
     }, 50);
   };
