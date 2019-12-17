@@ -5,10 +5,10 @@ class SpawnEnemies {
   }
 
   init() {
-    let floorDimensions = [];
-    floorDimensions.forEach(x => {
-      let newFloor = new Spawn();
-      this.groundSet.push(newFloor);
+    let enemySet = [];
+    enemySet.forEach(x => {
+      let spawn = new Spawn();
+      this.spawnSet.push(spawn);
     });
   }
 }
