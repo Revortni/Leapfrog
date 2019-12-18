@@ -3,6 +3,7 @@ class SBSniper extends Sniper {
     super(world);
     this.width = 32;
     this.height = 17;
-    this.image = gameAssets.sbsniper.img;
+    this.image = gameAssets.sbsniper;
+    this.hp = 6;
   }
 }

@@ -39,6 +39,6 @@ class Game {
         this.handleGameOver();
       }
       this.clock++;
-    }, 50);
+    }, 40);
   };
 }

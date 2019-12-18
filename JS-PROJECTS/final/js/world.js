@@ -14,7 +14,7 @@ class World {
     this.screenWidth = SCREEN.width;
     this.screenHeight = SCREEN.height;
     //entire map
-    this.x = 0;
+    this.x = 40;
     this.y = IMAGESIZE.y;
     this.level = level;
     this.background = null;
@@ -24,10 +24,11 @@ class World {
     this.enemyBullets = [];
     this.clock = 0;
     this.loaded = false;
-    this.shiftCycle = 3.1;
+    this.shiftCycle = 1.5;
     this.players = 2;
     this.gameOver = false;
     this.reachedBoss = false;
+    this.counter = 0;
   }
 
   init = background => {
@@ -40,6 +41,7 @@ class World {
 
     this.background = background;
     this.ground = new GroundBoundary();
+    this.spawnEnemies = new SpawnEnemies(this);
   };
 
   setBackground = () => {
@@ -57,10 +59,14 @@ class World {
   };
 
   generateEnemy = () => {
-    let enemyLeft = new Soldier('left');
+    let enemyLeft = new Soldier('left', this);
     this.enemies.push(enemyLeft);
-    // let enemyRight = new Soldier('right');
-    // this.enemies.push(enemyRight);
+    let enemyRight = new Soldier('right', this);
+    this.enemies.push(enemyRight);
+    if (this.counter > 3) {
+      this.counter = 0;
+      this.spawn = false;
+    }
   };
 
   updateEnemy = () => {
@@ -86,21 +92,21 @@ class World {
   };
 
   manageWorldView = () => {
-    if (
-      this.x >= 0 &&
-      this.x + this.screenWidth <= IMAGESIZE.x - this.screenWidth
-    ) {
-      if (this.player.x + this.player.width / 2 > this.screenWidth / 2) {
-        if (this.player.dx > 0) {
-          this.dx = this.player.dx;
-          this.player.x -= this.dx;
-          // this.player2.x -= this.dx;
-          this.x += this.dx;
-        }
-      } else {
-        this.dx = 0;
-      }
-    }
+    // if (
+    //   this.x >= 0 &&
+    //   this.x + this.screenWidth <= IMAGESIZE.x - this.screenWidth
+    // ) {
+    //   if (this.player.x + this.player.width / 2 > this.screenWidth / 2) {
+    //     if (this.player.dx > 0) {
+    //       this.dx = this.player.dx + 0.1;
+    //       this.player.x -= this.dx + 0.1;
+    //       // this.player2.x -= this.dx;
+    //       this.x += this.dx;
+    //     }
+    //   } else {
+    //     this.dx = 0;
+    //   }
+    // }
   };
 
   shiftFunction() {
@@ -130,7 +136,7 @@ class World {
           this.player.state.revive = true;
           setTimeout(() => {
             this.player.reset();
-          }, 3000);
+          }, 4000);
         }
       } else {
         this.gameOver = true;
@@ -140,44 +146,43 @@ class World {
 
   update = () => {
     //update player position and create bullets if button pressed
-
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
     this.player.moveBullets();
     this.checkCollisions();
     this.updateEnemy();
-    if (this.clock % 200 == 0) {
-      this.generateEnemy();
-      // let enemy2 = new Sniper(this);
-      // enemy2.setPosition(432, this.screenHeight - 165);
-      // this.enemies.push(enemy2);
-      // let enemy = new SBSniper(this);
-      // enemy.setPosition(1286, this.screenHeight - 200);
-      // this.enemies.push(enemy);
-      // let enemy1 = new MechGun(this);
-      // enemy1.setPosition(2432, this.screenHeight - 462);
-      // this.enemies.push(enemy1);
-    }
+
     this.manageWorldView();
     this.shiftFunction();
-    this.clock++;
+
     this.checkIfAlive();
+    let spawn = this.spawnEnemies.checkTriggerPosition(this.x + this.player.x);
+    this.spawnEnemies.createEnemy(this);
+    if (spawn) {
+      this.spawn = true;
+    }
+    if (this.clock % 50 == 0 && this.spawn) {
+      this.generateEnemy();
+      this.counter++;
+    }
+    this.clock++;
   };
 
   render = () => {
     ctx.clearRect(0, 0, this.screenWidth * 2, this.screenHeight * 2);
     this.setBackground();
-    this.player.render();
-    // this.ground.draw(this);
-    if (this.enemies.length > 0) {
-      this.enemies.forEach(enemy => {
-        enemy.draw();
-      });
-    }
     if (this.enemyBullets.length > 0) {
       this.enemyBullets.forEach(bullet => {
         bullet.draw();
       });
     }
+    if (this.enemies.length > 0) {
+      this.enemies.forEach(enemy => {
+        enemy.draw();
+      });
+    }
+
+    this.player.render();
+    this.ground.draw(this);
   };
 }

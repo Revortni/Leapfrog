@@ -1,5 +1,5 @@
 class Bullet {
-  constructor(x, y, dx, dy, speed) {
+  constructor(x, y, dx, dy, speed, image) {
     this.x = x;
     this.y = y;
     this.dx = dx;
@@ -8,10 +8,11 @@ class Bullet {
     this.width = 2;
     this.height = 2;
     this.destroyed = false;
-    this.image = gameAssets.bullet.img;
+    this.image = image || gameAssets.bullet.img;
+    this.hit = false;
   }
 
-  move(dx, dy) {
+  move(dx) {
     let shift = -dx || 0;
     this.x += this.dx * this.speed + shift;
     this.y += this.dy * this.speed;
@@ -50,13 +51,14 @@ class Bullet {
         target.y < this.y + this.height &&
         this.y < target.y + target.height
       ) {
+        this.hit = true;
         this.destroyed = true;
         if (target instanceof Player) {
           target.alive = false;
         } else {
           target.hp--;
           if (target.hp <= 0) {
-            target.alive = false;
+            target.setKilled();
           }
         }
       }

@@ -2,7 +2,7 @@ const display = {
   '0': 'pStandingR.png',
   '1': 'pStandingL.png',
   '2': '#f00',
-  '3': '#fff',
+  '3': 'jump.png',
   '4': 'pStandingL.png',
   '5': '#fff',
   '6': 'pLayingDownR.png',
@@ -25,16 +25,16 @@ const color = {
   '10': '#f203f4'
 };
 const playerValues = {
-  dx: 10,
-  dy: 10,
-  gravity: 0.9,
+  dx: 2,
+  dy: 4,
+  gravity: 0.4,
   width: 23,
   height: 34,
   crouchWidth: 32,
   crouchHeight: 15,
-  jumpSize: 18,
+  jumpSize: 17,
   reloadTime: 16,
-  jumpDist: 14
+  jumpDist: 8
 };
 
 class Player {
@@ -44,8 +44,7 @@ class Player {
     this.x = x || 100;
     this.dx = 0;
     this.y = 0;
-    this.lastY = 0;
-    this.dy = playerValues.dy;
+    this.dy = 0;
     this.state = null;
     this.bullets = [];
     this.sprite = null;
@@ -58,11 +57,12 @@ class Player {
     this.frame = 0;
     this.isMain = main || false;
     this.init();
+    this.killable = false;
   }
 
   init = () => {
     this.intro = true;
-    this.gun = new Gun();
+    this.gun = new Gun(8);
     this.reset();
   };
 
@@ -75,6 +75,7 @@ class Player {
     };
     this.setDeadFlag = false;
     this.y = 20;
+    this.dx = playerValues.dx;
     this.dy = playerValues.dy;
     this.width = playerValues.width;
     this.height = playerValues.height;
@@ -90,13 +91,15 @@ class Player {
       this.dy = 0;
       this.dy -= playerValues.jumpDist;
       this.jumping = true;
-      this.width = playerValues.width;
-      this.height = playerValues.height;
+      this.width = playerValues.jumpSize;
+      this.height = playerValues.jumpSize;
     }
 
     if (this.jumping) {
-      this.state.sprite = this.state.facingLeft ? 9 : 8;
+      this.state.sprite = this.state.facingLeft ? 3 : 3;
     } else {
+      this.width = playerValues.width;
+      this.height = playerValues.height;
       this.state.sprite = this.directionFacing;
       if (this.controller.up) {
         this.state.sprite = 2;
@@ -162,7 +165,13 @@ class Player {
     if (this.jumping) {
       this.dy += playerValues.gravity;
     }
-    this.x += this.dx;
+    if (this.x > SCREEN.width / 2) {
+      this.world.x += this.dx;
+      this.world.dx = this.dx;
+    } else {
+      this.x += this.dx;
+      this.world.dx = 0;
+    }
     this.y += this.dy;
   };
 
@@ -202,7 +211,6 @@ class Player {
   };
 
   update = () => {
-    console.log(this.bullets.length);
     if (this.state.alive) {
       //bullet updates
       this.gunHandler();
@@ -298,7 +306,8 @@ class Player {
   };
 
   setDead = () => {
-    this.dy = -12;
+    this.dy = -10;
+    this.dx = 0;
     this.jumping = true;
     this.state.alive = false;
     this.lives--;
@@ -311,7 +320,7 @@ class Player {
       if (obj instanceof Bullet) {
         obj.destroyed = true;
       }
-      if (!this.setDeadFlag) {
+      if (!this.setDeadFlag && this.killable) {
         this.setDead();
       }
     }

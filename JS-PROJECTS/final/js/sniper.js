@@ -4,13 +4,14 @@ class Sniper extends Enemy {
     this.width = 16;
     this.height = 31;
     this.bulletSet = [];
-    this.image = gameAssets.sniper.img;
+    this.image = gameAssets.sniper;
     this.clock = 0;
     this.world = world;
-    this.reloadTime = 50;
+    this.reloadTime = 70;
   }
 
   update = ({ playerX, playerY }) => {
+    if (this.checkIfKilled()) return;
     this.x = this.wx - this.world.x;
     this.y =
       this.wy - (-this.world.y + this.world.screenY + this.world.screenHeight);
@@ -30,23 +31,25 @@ class Sniper extends Enemy {
     let angle = Math.atan2(y - this.y, x - this.x);
     let dx = Math.cos(angle);
     let dy = Math.sin(angle);
-    let bullet = new Bullet(this.x, this.y, dx, dy, 3);
+    let bullet = new Bullet(this.x, this.y, dx, dy, 2);
     this.world.enemyBullets.push(bullet);
   };
 
   draw = () => {
-    ctx.beginPath();
-    ctx.drawImage(
-      this.image,
-      this.x * SCALE,
-      this.y * SCALE,
-      this.width * SCALE,
-      this.height * SCALE
-    );
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    ctx.closePath();
+    if (this.x > 0 && this.x < SCREEN.width) {
+      ctx.beginPath();
+      ctx.drawImage(
+        this.image.img,
+        this.frame * this.image.w,
+        0,
+        this.image.w,
+        this.image.h,
+        this.x * SCALE,
+        this.y * SCALE,
+        this.image.w * SCALE,
+        this.image.h * SCALE
+      );
+      ctx.closePath();
+    }
   };
-
-  checkScreenBoundary = () => {};
 }

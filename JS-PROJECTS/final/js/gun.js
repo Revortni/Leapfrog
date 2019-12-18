@@ -5,16 +5,22 @@ class Gun {
     this.reloading = false;
     this.reloadTime = playerValues.reloadTime;
     this.speed = speed || 2;
+    this.count = 0;
+    this.bulletCount = 1;
   }
 
   upgrade = () => {};
 
   reset = () => {};
 
-  shoot = (x, y, dx, dy, enemy = false) => {
-    if ((controller.shoot || enemy) && !this.reloading) {
-      this.reloading = true;
-      return new Bullet(x, y, dx, dy, this.speed);
+  shoot = (x, y, dx, dy) => {
+    if (controller.shoot && !this.reloading) {
+      this.count++;
+      if (this.count > this.bulletCount) {
+        this.reloading = true;
+        this.count = 0;
+      }
+      return new Bullet(x, y, dx, dy, this.speed, this.bulletImage);
     }
     return null;
   };

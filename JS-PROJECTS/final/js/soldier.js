@@ -9,7 +9,7 @@ const soldierValues = {
 };
 
 class Soldier extends Enemy {
-  constructor(position) {
+  constructor(position, world) {
     super();
     this.width = soldierValues.width;
     this.height = soldierValues.height;
@@ -19,10 +19,12 @@ class Soldier extends Enemy {
     this.facingRight = 0;
     this.boundaryOffset = soldierValues.boundaryOffset;
     this.invert = 1;
+    this.world = world;
     this.setEntryPoint(position);
   }
 
   setEntryPoint = position => {
+    position = position || 'right';
     this.image = gameAssets.soldier;
     if (position == 'right') {
       this.x = this.maxWidth;
@@ -36,6 +38,8 @@ class Soldier extends Enemy {
   };
 
   update = ({ worldShift }) => {
+    if (this.checkIfKilled()) return;
+
     //add velocity for movement in x y
     this.x += this.dx - worldShift;
     this.y += this.dy;

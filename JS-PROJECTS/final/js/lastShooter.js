@@ -3,8 +3,7 @@ class LastShooter extends Sniper {
     super(world);
     this.width = 16;
     this.height = 31;
-    this.image = gameAssets.lastsniper.img;
-    this.hp = 1;
+    this.image = gameAssets.lastsniper;
     this.reloadTime = 40;
   }
 }
