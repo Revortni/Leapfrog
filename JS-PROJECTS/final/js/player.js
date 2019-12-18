@@ -31,8 +31,8 @@ class Player {
     this.frame = 0;
     this.isMain = main || false;
     this.init();
-    this.killable = false;
-    this.image = gameAssets.player1;
+    this.killable = true;
+    this.image = this.isMain ? gameAssets.player1 : gameAssets.player2;
     this.clock = 1;
     this.invert = 1;
   }
@@ -70,9 +70,6 @@ class Player {
       this.width = playerValues.jumpSize;
       this.height = playerValues.jumpSize;
     }
-
-    this.width = playerValues.width;
-    this.height = playerValues.height;
 
     if (this.controller.up) {
       this.state.sprite = ANIMATE.up;
@@ -132,9 +129,12 @@ class Player {
 
     if (this.jumping) {
       this.state.sprite = ANIMATE.jump;
+    } else {
+      this.width = playerValues.width;
+      this.height = playerValues.height;
     }
-    if (this.controller.shoot) {
-      this.state.sprite = ANIMATE.shoot;
+    if (this.controller.up) {
+      this.width = 14;
     }
   };
 
@@ -183,7 +183,7 @@ class Player {
   };
 
   gunHandler = () => {
-    let x = this.x + this.width / 2;
+    let x = this.invert == 1 ? this.x + this.width / 2 : this.x;
     let y = this.y + (this.crouch ? 5 : 8);
     let bullet = this.gun.shoot(
       x,
@@ -229,6 +229,7 @@ class Player {
       this.state.sprite = ANIMATE.dead;
     }
   };
+
   draw = () => {
     ctx.beginPath();
     let posX = this.invert == 1 ? 0 : this.width * -1;
@@ -243,15 +244,15 @@ class Player {
       this.image.img,
       this.frame * this.image.w,
       this.state.sprite.pos * this.image.h,
-      this.image.w,
+      this.state.sprite.w || this.image.w,
       this.image.h,
       (this.invert * this.x + posX) * SCALE,
       (this.y - this.state.sprite.offset) * SCALE,
-      this.image.w * SCALE,
-      this.image.h * SCALE
+      this.state.sprite.w || this.image.w * SCALE,
+      this.state.sprite.h || this.image.h * SCALE
     );
     ctx.strokeRect(
-      this.x * SCALE,
+      (this.invert * this.x + posX) * SCALE,
       this.y * SCALE,
       this.width * SCALE,
       this.height * SCALE
@@ -263,7 +264,7 @@ class Player {
   showLifeCount = () => {
     let x = 16;
     let y = 4;
-    let life = gameAssets.life1;
+    let life = this.isMain ? gameAssets.life1 : gameAssets.life2;
 
     for (let i = 0; i < this.lives; i++) {
       let posX = this.isMain

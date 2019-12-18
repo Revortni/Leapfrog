@@ -142,7 +142,9 @@ class World {
           }, 4000);
         }
       } else {
-        this.gameOver = true;
+        setTimeout(() => {
+          this.gameOver = true;
+        }, 2000);
       }
     }
   };
