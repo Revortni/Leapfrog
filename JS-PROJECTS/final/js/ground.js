@@ -86,7 +86,6 @@ class GroundBoundary {
           object.jumping = false;
         }
       } else if (object instanceof Bullet) {
-        console.log('collision');
         object.destroyed = true;
       } else {
         object.y = ground.y - object.height - world.screenY;

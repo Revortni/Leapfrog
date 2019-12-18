@@ -1,29 +1,3 @@
-const display = {
-  '0': 'pStandingR.png',
-  '1': 'pStandingL.png',
-  '2': '#f00',
-  '3': 'jump.png',
-  '4': 'pStandingL.png',
-  '5': '#fff',
-  '6': 'pLayingDownR.png',
-  '7': 'dead.png',
-  '8': 'pStandingR.png',
-  '9': 'pStandingL.png',
-  '10': 'pLayingDownL.png'
-};
-const color = {
-  '0': '#fff',
-  '1': '#fff',
-  '2': '#f00',
-  '3': '#fff',
-  '4': '#00f',
-  '5': '#fff',
-  '6': '#0f0',
-  '7': '#fff',
-  '8': '#FFD700',
-  '9': '#006400',
-  '10': '#f203f4'
-};
 const playerValues = {
   dx: 2,
   dy: 4,
@@ -58,11 +32,14 @@ class Player {
     this.isMain = main || false;
     this.init();
     this.killable = false;
+    this.image = gameAssets.player1;
+    this.clock = 1;
+    this.invert = 1;
   }
 
   init = () => {
     this.intro = true;
-    this.gun = new Gun(8);
+    this.gun = new Gun(this.controller, 5);
     this.reset();
   };
 
@@ -70,7 +47,6 @@ class Player {
     this.state = {
       alive: true,
       revive: false,
-      sprite: 0,
       facingLeft: false
     };
     this.setDeadFlag = false;
@@ -81,7 +57,7 @@ class Player {
     this.height = playerValues.height;
     this.jumping = false;
     this.crouch = false;
-    this.directionFacing = 0;
+    this.directionFacing = ANIMATE.standing;
     this.shootDirection = { x: 1, y: 0 };
   };
 
@@ -95,49 +71,44 @@ class Player {
       this.height = playerValues.jumpSize;
     }
 
-    if (this.jumping) {
-      this.state.sprite = this.state.facingLeft ? 3 : 3;
-    } else {
-      this.width = playerValues.width;
-      this.height = playerValues.height;
-      this.state.sprite = this.directionFacing;
-      if (this.controller.up) {
-        this.state.sprite = 2;
-      }
-      if (this.controller.down) {
-        this.state.sprite = this.state.facingLeft ? 10 : 6;
-      }
-      if (this.controller.right && this.controller.up) {
-        this.state.sprite = 1;
-      }
-      if (this.controller.left && this.controller.up) {
-        this.state.sprite = 3;
-      }
-      if (this.controller.right && this.controller.down) {
-        this.state.sprite = 7;
-      }
-      if (this.controller.left && this.controller.down) {
-        this.state.sprite = 5;
-      }
-    }
+    this.width = playerValues.width;
+    this.height = playerValues.height;
+
     if (this.controller.up) {
+      this.state.sprite = ANIMATE.up;
       this.shootDirection.x = 0;
       this.shootDirection.y = -1;
     }
+
     if (this.controller.down) {
+      this.state.sprite = ANIMATE.down;
       this.shootDirection.y = 1;
     }
+
+    if (
+      !this.controller.left &&
+      !this.controller.down &&
+      !this.controller.right &&
+      !this.controller.up &&
+      !this.jumping
+    ) {
+      this.frame = 0;
+      this.state.sprite = ANIMATE.standing;
+    }
+
     if (this.controller.left) {
       this.dx = -playerValues.dx;
-      this.directionFacing = 4;
+      this.invert = -1;
       this.shootDirection.x = -1;
       this.state.facingLeft = true;
+      this.state.sprite = ANIMATE.right;
     }
     if (this.controller.right) {
       this.dx = playerValues.dx;
-      this.directionFacing = 0;
+      this.invert = 1;
       this.shootDirection.x = 1;
       this.state.facingLeft = false;
+      this.state.sprite = ANIMATE.right;
     }
 
     if (
@@ -158,6 +129,22 @@ class Player {
       this.height = playerValues.height;
       this.y = this.y + this.height - this.width;
     }
+
+    if (this.jumping) {
+      this.state.sprite = ANIMATE.jump;
+    }
+    if (this.controller.shoot) {
+      this.state.sprite = ANIMATE.shoot;
+    }
+  };
+
+  updateFrame = () => {
+    if (this.clock % 4 == 0 && this.state.sprite.frames > 1) {
+      this.frame++;
+      if (this.frame >= this.state.sprite.frames) {
+        this.frame = 0;
+      }
+    }
   };
 
   move = () => {
@@ -165,14 +152,22 @@ class Player {
     if (this.jumping) {
       this.dy += playerValues.gravity;
     }
-    if (this.x > SCREEN.width / 2) {
-      this.world.x += this.dx;
-      this.world.dx = this.dx;
-    } else {
-      this.x += this.dx;
-      this.world.dx = 0;
+    if (
+      this.x + this.width > this.dx &&
+      this.x + this.width + this.dx < SCREEN.width
+    ) {
+      if (this.x + this.width > SCREEN.width / 2 && this.dx > 0) {
+        this.world.x += this.dx;
+        this.world.dx = this.dx;
+      } else {
+        this.x += this.dx;
+        this.world.dx = 0;
+      }
     }
     this.y += this.dy;
+
+    this.updateFrame();
+    this.clock++;
   };
 
   checkScreenBoundary = () => {
@@ -231,29 +226,29 @@ class Player {
 
   calculateSpriteDim = () => {
     if (!this.state.alive) {
-      let height = 12;
-      let width = 32;
-      this.y = this.y + this.height - height;
-      this.height = height;
-      this.width = width;
+      this.state.sprite = ANIMATE.dead;
     }
   };
-
   draw = () => {
     ctx.beginPath();
-    this.calculateSpriteDim();
-    let image = new Image();
-    image.src = './assets/' + display[this.state.sprite];
-    ctx.fillStyle = 'white';
+    let posX = this.invert == 1 ? 0 : this.width * -1;
     let x = this.world.x + this.x;
     let y = this.world.y + this.y;
     ctx.fillText(x + ',' + y, this.x * SCALE, this.y * SCALE - 5);
+    ctx.fillStyle = 'white';
+
+    ctx.save();
+    ctx.scale(this.invert, 1);
     ctx.drawImage(
-      image,
-      this.x * SCALE,
-      this.y * SCALE,
-      this.width * SCALE,
-      this.height * SCALE
+      this.image.img,
+      this.frame * this.image.w,
+      this.state.sprite.pos * this.image.h,
+      this.image.w,
+      this.image.h,
+      (this.invert * this.x + posX) * SCALE,
+      (this.y - this.state.sprite.offset) * SCALE,
+      this.image.w * SCALE,
+      this.image.h * SCALE
     );
     ctx.strokeRect(
       this.x * SCALE,
@@ -261,14 +256,7 @@ class Player {
       this.width * SCALE,
       this.height * SCALE
     );
-    //   ctx.rect(
-    //     this.x * SCALE,
-    //     this.y * SCALE,
-    //     this.width * SCALE,
-    //     this.height * SCALE
-    //   );
-    //   ctx.fillStyle = color[this.state.sprite];
-    //   ctx.fill();
+    ctx.restore();
     ctx.closePath();
   };
 
@@ -313,6 +301,8 @@ class Player {
     this.lives--;
     this.state.sprite = 7;
     this.setDeadFlag = true;
+    this.height = 12;
+    this.calculateSpriteDim();
   };
 
   handleCollision = obj => {

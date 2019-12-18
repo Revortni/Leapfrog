@@ -13,8 +13,6 @@ class SpawnEnemies {
       if (loc.pos <= playerPosition) {
         this.spawn = loc;
         this.spawnList.splice(i, 1);
-        console.log('spawn', this.spawn);
-        console.log('spawnlist', this.spawnList);
         this.trigger = true;
         return loc.soldierPos;
       }

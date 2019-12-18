@@ -1,4 +1,5 @@
 const DATA = {
+  //[x,y,width,height,function]
   ground1: [
     [-200, 56, 748, 56, 0],
     [548, 24, 77, 24, 0],
@@ -26,7 +27,13 @@ const ENEMYCLASS = {
   5: x => new LastShooter(x)
 };
 
+//spawn Positions
 const SPAWNPOS = [
+  {
+    pos: 200,
+    enemy: [],
+    soldierPos: 1
+  },
   {
     pos: 300,
     enemy: [
@@ -184,3 +191,49 @@ const SPAWNPOS = [
     soldierPos: 1
   }
 ];
+
+const ANIMATE = {
+  right: {
+    offset: 2,
+    frames: 4,
+    pos: 2
+  },
+  up: {
+    offset: 12,
+    frames: 2,
+    pos: 1,
+    height: 17
+  },
+  down: {
+    offset: 0,
+    frames: 1,
+    pos: 3,
+    width: 32
+  },
+  jump: {
+    offset: 0,
+    frames: 4,
+    pos: 5
+  },
+  upRight: {
+    offset: 2,
+    frames: 5,
+    pos: 4
+  },
+  standing: {
+    offset: 0,
+    frames: 1,
+    pos: 0
+  },
+  dead: {
+    frames: 1,
+    pos: 6,
+    offset: 0,
+    width: 32
+  },
+  shoot: {
+    offset: 0,
+    frames: 2,
+    pos: 0
+  }
+};

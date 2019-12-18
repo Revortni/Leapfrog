@@ -19,16 +19,15 @@ class Bullet {
   }
 
   draw() {
-    let c = ctx;
-    c.beginPath();
-    c.drawImage(
+    ctx.beginPath();
+    ctx.drawImage(
       this.image,
       (this.x + this.width) * SCALE,
       (this.y + this.height) * SCALE,
       2 * this.width * SCALE,
       2 * this.height * SCALE
     );
-    c.closePath();
+    ctx.closePath();
   }
 
   checkBoundary = () => {

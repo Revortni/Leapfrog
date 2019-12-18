@@ -1,12 +1,11 @@
 class Gun {
-  constructor(speed) {
+  constructor(controller, speed) {
     this.type = 0;
     this.time = 1;
     this.reloading = false;
     this.reloadTime = playerValues.reloadTime;
     this.speed = speed || 2;
-    this.count = 0;
-    this.bulletCount = 1;
+    this.controller = controller;
   }
 
   upgrade = () => {};
@@ -14,12 +13,8 @@ class Gun {
   reset = () => {};
 
   shoot = (x, y, dx, dy) => {
-    if (controller.shoot && !this.reloading) {
-      this.count++;
-      if (this.count > this.bulletCount) {
-        this.reloading = true;
-        this.count = 0;
-      }
+    if (this.controller.shoot && !this.reloading) {
+      this.reloading = true;
       return new Bullet(x, y, dx, dy, this.speed, this.bulletImage);
     }
     return null;

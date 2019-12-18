@@ -59,11 +59,14 @@ class World {
   };
 
   generateEnemy = () => {
-    let enemyLeft = new Soldier('left', this);
-    this.enemies.push(enemyLeft);
-    let enemyRight = new Soldier('right', this);
+    if (Math.random() > 0.5) {
+      let enemyLeft = new Soldier(this, 'left');
+      this.enemies.push(enemyLeft);
+    }
+    let enemyRight = new Soldier(this, 'right');
     this.enemies.push(enemyRight);
-    if (this.counter > 3) {
+    this.counter++;
+    if (this.counter > 5) {
       this.counter = 0;
       this.spawn = false;
     }
@@ -144,27 +147,42 @@ class World {
     }
   };
 
+  spawnUpdate = () => {
+    let spawn = this.spawnEnemies.checkTriggerPosition(this.x + this.player.x);
+    this.spawnEnemies.createEnemy(this);
+    if (spawn && Math.random() > 0.5) {
+      this.spawn = true;
+      this.capsule = new Capsule();
+    }
+    if (this.clock % 50 == 0 && this.spawn) {
+      this.generateEnemy();
+    }
+  };
+
   update = () => {
     //update player position and create bullets if button pressed
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
     this.player.moveBullets();
     this.checkCollisions();
+
     this.updateEnemy();
 
+    //world shift
     this.manageWorldView();
     this.shiftFunction();
 
+    //check if player is alive
     this.checkIfAlive();
-    let spawn = this.spawnEnemies.checkTriggerPosition(this.x + this.player.x);
-    this.spawnEnemies.createEnemy(this);
-    if (spawn) {
-      this.spawn = true;
+
+    if (this.capsule) {
+      this.capsule.update();
+      if (this.player.bullets.length) {
+        this.capsule.checkCollision(this.player.bullets);
+      }
     }
-    if (this.clock % 50 == 0 && this.spawn) {
-      this.generateEnemy();
-      this.counter++;
-    }
+
+    this.spawnUpdate();
     this.clock++;
   };
 
@@ -181,7 +199,10 @@ class World {
         enemy.draw();
       });
     }
-
+    //powerup capsule
+    if (this.capsule) {
+      this.capsule.draw();
+    }
     this.player.render();
     this.ground.draw(this);
   };

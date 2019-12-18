@@ -12,12 +12,10 @@ class Enemy {
     this.destroyed = false;
     this.inVision = true;
     this.alive = true;
-    this.invert = 1;
-    this.hp = 2;
+    this.hp = 1;
     this.killed = false;
     this.destroyedImage = gameAssets.enemyExplode;
     this.point = 10;
-    
   }
 
   checkScreenBoundary = () => {
