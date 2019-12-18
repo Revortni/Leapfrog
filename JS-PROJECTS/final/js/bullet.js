@@ -1,12 +1,12 @@
 class Bullet {
-  constructor(x, y, dx, dy, speed, image) {
+  constructor(x, y, dx, dy, speed, image, size) {
     this.x = x;
     this.y = y;
     this.dx = dx;
     this.dy = dy;
     this.speed = speed || 5;
-    this.width = 2;
-    this.height = 2;
+    this.width = size || 2;
+    this.height = size || 2;
     this.destroyed = false;
     this.image = image || gameAssets.bullet.img;
     this.hit = false;

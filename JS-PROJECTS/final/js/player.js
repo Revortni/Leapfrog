@@ -57,6 +57,10 @@ class Player {
     this.height = playerValues.height;
     this.jumping = false;
     this.crouch = false;
+    this.killable = false;
+    setTimeout(() => {
+      this.killable = true;
+    }, 3000);
     this.directionFacing = ANIMATE.standing;
     this.shootDirection = { x: 1, y: 0 };
   };
@@ -107,7 +111,18 @@ class Player {
       this.state.facingLeft = false;
       this.state.sprite = ANIMATE.right;
     }
-
+    if (this.jumping) {
+      this.state.sprite = ANIMATE.jump;
+    } else {
+      this.width = playerValues.width;
+      this.height = playerValues.height;
+    }
+    if (this.controller.up) {
+      this.width = 14;
+    }
+    if ((this.controller.up && this.controller.right) || this.controller.left) {
+      this.state.sprite = ANIMATE.upRight;
+    }
     if (
       !this.jumping &&
       this.controller.down &&
@@ -125,16 +140,6 @@ class Player {
       this.width = playerValues.width;
       this.height = playerValues.height;
       this.y = this.y + this.height - this.width;
-    }
-
-    if (this.jumping) {
-      this.state.sprite = ANIMATE.jump;
-    } else {
-      this.width = playerValues.width;
-      this.height = playerValues.height;
-    }
-    if (this.controller.up) {
-      this.width = 14;
     }
   };
 
@@ -224,12 +229,6 @@ class Player {
     });
   };
 
-  calculateSpriteDim = () => {
-    if (!this.state.alive) {
-      this.state.sprite = ANIMATE.dead;
-    }
-  };
-
   draw = () => {
     ctx.beginPath();
     let posX = this.invert == 1 ? 0 : this.width * -1;
@@ -248,8 +247,8 @@ class Player {
       this.image.h,
       (this.invert * this.x + posX) * SCALE,
       (this.y - this.state.sprite.offset) * SCALE,
-      this.state.sprite.w || this.image.w * SCALE,
-      this.state.sprite.h || this.image.h * SCALE
+      (this.state.sprite.w || this.image.w) * SCALE,
+      (this.state.sprite.h || this.image.h) * SCALE
     );
     ctx.strokeRect(
       (this.invert * this.x + posX) * SCALE,
@@ -289,13 +288,25 @@ class Player {
         obj.y < this.y + this.height &&
         this.y < obj.y + obj.height
       ) {
+        if (obj instanceof Capsule) {
+          if (obj.destroyed) {
+            this.gun.upgrade(obj.upgrade);
+            obj.picked = true;
+          }
+        }
         this.handleCollision(obj);
       }
     });
   };
 
+  calculateSpriteDim = () => {
+    if (!this.state.alive) {
+      this.state.sprite = ANIMATE.dead;
+    }
+  };
+
   setDead = () => {
-    this.dy = -10;
+    this.dy = -5;
     this.dx = 0;
     this.jumping = true;
     this.state.alive = false;
@@ -303,6 +314,7 @@ class Player {
     this.state.sprite = 7;
     this.setDeadFlag = true;
     this.height = 12;
+    this.width = 32;
     this.calculateSpriteDim();
   };
 

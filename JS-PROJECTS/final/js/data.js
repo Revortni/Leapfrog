@@ -201,14 +201,13 @@ const ANIMATE = {
   up: {
     offset: 12,
     frames: 2,
-    pos: 1,
-    height: 17
+    pos: 1
   },
   down: {
     offset: 0,
     frames: 1,
     pos: 3,
-    width: 32
+    w: 32
   },
   jump: {
     offset: 0,
@@ -229,7 +228,7 @@ const ANIMATE = {
     frames: 1,
     pos: 6,
     offset: 0,
-    width: 32
+    w: 32
   },
   shoot: {
     offset: 0,

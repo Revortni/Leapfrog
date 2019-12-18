@@ -42,6 +42,7 @@ class World {
     this.background = background;
     this.ground = new GroundBoundary();
     this.spawnEnemies = new SpawnEnemies(this);
+    this.capsule = new Capsule();
   };
 
   setBackground = () => {
@@ -114,7 +115,7 @@ class World {
 
   shiftFunction() {
     if (this.shift) {
-      this.screenY -= 10;
+      this.screenY -= 1;
       if (this.screenY < this.y - this.screenHeight * this.shiftCycle) {
         this.shift = false;
         this.shiftCycle += 0.56;
@@ -129,6 +130,13 @@ class World {
         this.ground.checkGroundBoundary(this, bullet);
         bullet.checkCollision(this.enemies);
       });
+    }
+    if (this.capsule && this.capsule.destroyed) {
+      this.ground.checkGroundBoundary(this, this.capsule);
+      this.player.checkCollision([this.capsule]);
+      if (this.capsule.picked) {
+        this.capsule = null;
+      }
     }
   };
 
@@ -178,7 +186,7 @@ class World {
     this.checkIfAlive();
 
     if (this.capsule) {
-      this.capsule.update();
+      this.capsule.update(this.dx);
       if (this.player.bullets.length) {
         this.capsule.checkCollision(this.player.bullets);
       }

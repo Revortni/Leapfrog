@@ -20,6 +20,7 @@ Object.keys(gameAssets).forEach(key => {
     gameAssets[key].img = img;
     loaded++;
     if (loaded == assetCount) {
+      gameAssets.upgrade0.upgrade.image = gameAssets.mgbullet.img;
       new Game().init();
     }
   };

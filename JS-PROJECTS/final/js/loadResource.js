@@ -31,6 +31,20 @@ const gameAssets = {
   lastsniper: { src: './assets/lastShooter.png', w: 16, h: 31 },
   boss: { src: './assets/boss1.png', w: 262, h: 90 },
   bullet: { src: './assets/bullet1.png' },
+  bulletE: { src: './assets/bulletE.png' },
+  mgbullet: { src: './assets/mgbullet.png' },
+  upgrade0: {
+    src: './assets/powerups/MachineGun.png',
+    w: 24,
+    h: 16,
+    upgrade: { reload: 8, size: 3 }
+  },
+  upgrade1: { src: './assets/powerups/MegaShell.png', w: 24, h: 15 },
+  upgrade2: {
+    src: './assets/powerups/SpreadGun.png',
+    w: 24,
+    h: 15
+  },
   enemyExplode: {
     src: './assets/explode.png',
     w: 32,
