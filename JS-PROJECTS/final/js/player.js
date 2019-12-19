@@ -60,7 +60,7 @@ class Player {
     this.killable = false;
     setTimeout(() => {
       this.killable = true;
-    }, 2500);
+    }, 3000);
     this.directionFacing = ANIMATE.standing;
     this.shootDirection = { x: 1, y: 0 };
   };
@@ -167,14 +167,18 @@ class Player {
       if (
         this.x + this.width > SCREEN.width / 2 &&
         this.dx > 0 &&
-        !this.world.reachedBoss
+        !this.world.reachedBoss &&
+        this.isMain
       ) {
         this.world.manageWorldView(this.dx);
       } else {
         this.x += this.dx;
-        this.world.manageWorldView(0);
+        if (this.isMain) {
+          this.world.manageWorldView(0);
+        }
       }
     }
+
     this.y += this.dy;
 
     this.updateFrame();
@@ -216,7 +220,7 @@ class Player {
     this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
   };
 
-  update = () => {
+  update = (dx = 0) => {
     if (this.state.alive) {
       //bullet updates
       this.gunHandler();
@@ -226,6 +230,9 @@ class Player {
       this.controllerHandler();
     }
     this.move();
+    if (!this.isMain) {
+      this.x -= dx;
+    }
     this.checkScreenBoundary();
   };
 
@@ -263,7 +270,7 @@ class Player {
     for (let i = 0; i < this.lives; i++) {
       let posX = this.isMain
         ? 10 + x * (i + 1) + life.w * i * SCALE
-        : SCREEN.width - (10 + x * (i + 1) + life.w * i * SCALE);
+        : SCREEN.width * SCALE - (10 + x * (i + 1) + life.w * i * SCALE);
       ctx.drawImage(life.img, posX, y * SCALE, life.w * SCALE, life.h * SCALE);
     }
   };

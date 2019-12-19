@@ -37,10 +37,10 @@ class World {
 
   init = (background, count) => {
     this.player = new Player(this, controller, 100, true);
-    this.pcount++;
+
     if (count) {
-      this.pcount++;
-      this.player2 = new Player(this, controller2, 200);
+      this.pcount = 1;
+      this.player2 = new Player(this, controller2, 200, false);
       document.addEventListener('keydown', controller2.keyListener);
       document.addEventListener('keyup', controller2.keyListener);
     }
@@ -110,6 +110,9 @@ class World {
     if (this.x >= 0 && this.x + this.screenWidth <= IMAGESIZE.x - offset) {
       this.x += dx;
       this.dx = dx;
+      if (this.pcount) {
+        this.player2.x -= dx;
+      }
     }
     if (this.x + this.screenWidth >= IMAGESIZE.x - offset) {
       this.reachedBoss = true;
@@ -151,14 +154,14 @@ class World {
     }
   };
 
-  checkCollisions = () => {
-    this.player.checkCollision([...this.enemies, ...this.enemyBullets]);
-    if (this.player.bullets.length > 0) {
-      this.player.bullets.forEach(bullet => {
+  checkCollisions = player => {
+    player.checkCollision([...this.enemies, ...this.enemyBullets]);
+    if (player.bullets.length > 0) {
+      player.bullets.forEach(bullet => {
         this.ground.checkGroundBoundary(this, bullet);
         // get score points
         let points = bullet.checkCollision(this.enemies);
-        this.player.score += points;
+        player.score += points;
       });
     }
   };
@@ -177,6 +180,21 @@ class World {
           this.gameOver = true;
         }, 4000);
       }
+    } else if (this.pcount) {
+      if (!this.player2.state.alive) {
+        if (this.player2.lives) {
+          if (!this.player2.state.revive) {
+            this.player2.state.revive = true;
+            setTimeout(() => {
+              this.player2.reset();
+            }, 4000);
+          }
+        }
+      }
+    } else {
+      setTimeout(() => {
+        this.gameOver = true;
+      }, 4000);
     }
   };
 
@@ -186,10 +204,18 @@ class World {
       if (this.player.bullets.length) {
         this.capsule.checkCollision(this.player.bullets);
       }
+      if (this.pcount) {
+        if (this.player2.bullets.length) {
+          this.capsule.checkCollision(this.player2.bullets);
+        }
+      }
     }
     if (this.capsule && this.capsule.destroyed) {
       this.ground.checkGroundBoundary(this, this.capsule);
       this.player.checkCollision([this.capsule]);
+      if (this.pcount) {
+        this.player2.checkCollision([this.capsule]);
+      }
       this.capsuleHandler();
     }
   };
@@ -235,7 +261,15 @@ class World {
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
     this.player.moveBullets();
-    this.checkCollisions();
+    this.checkCollisions(this.player);
+
+    if (this.pcount) {
+      this.player2.update();
+      this.ground.checkGroundBoundary(this, this.player2);
+      this.player2.moveBullets();
+      this.checkCollisions(this.player2);
+    }
+
     this.capsuleUpdate();
     this.updateEnemy();
     //world shift
@@ -270,5 +304,8 @@ class World {
     }
 
     this.player.render();
+    if (this.pcount) {
+      this.player2.render();
+    }
   };
 }

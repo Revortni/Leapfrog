@@ -12,7 +12,7 @@ const gameAssets = {
     frameCount: 6
   },
   player1: { src: './assets/p1.png', w: 24, h: 45 },
-  player2: { src: './assets/p1.png', w: 24, h: 45 },
+  player2: { src: './assets/p21.png', w: 24, h: 45 },
   life1: {
     src: './assets/ExtraLifeBlue.png',
     w: 8,
