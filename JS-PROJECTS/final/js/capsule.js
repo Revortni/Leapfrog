@@ -1,5 +1,5 @@
 class Capsule {
-  constructor() {
+  constructor(world) {
     this.x = 0;
     this.y = 40;
     this.dx = 1.5;
@@ -13,6 +13,9 @@ class Capsule {
     this.hp = 1;
     this.image = gameAssets.capsule.img;
     this.picked = false;
+    this.type = '';
+    this.clock = 1;
+    this.world = world;
   }
 
   checkScreenBoundary = () => {
@@ -23,22 +26,28 @@ class Capsule {
 
   getUpgrade = () => {
     this.y = -20;
-    let val = 0;
-    Math.floor(getRandomArbitrary(0, 3));
+    let val = Math.floor(getRandomArbitrary(0, 2));
     let asset = gameAssets['upgrade' + val];
     this.image = asset.img;
     this.width = asset.w;
     this.height = asset.h;
     this.upgrade = asset.upgrade;
+    this.type = asset.type;
   };
 
   update = shift => {
     if (!this.destroyed) {
-      this.x += this.dx - shift;
+      this.x += this.dx - (shift || 0);
       this.y = 40 + Math.sin((30 * (this.x * Math.PI)) / 180);
       this.checkScreenBoundary();
+      this.wx = this.x + this.world.x;
     } else {
+      this.x = this.wx - this.world.x;
       this.y += this.dy;
+      this.clock++;
+      if (this.clock % 500 == 0) {
+        this.picked = true;
+      }
     }
   };
 

@@ -31,7 +31,7 @@ class Player {
     this.frame = 0;
     this.isMain = main || false;
     this.init();
-    this.killable = true;
+    this.killable = false;
     this.image = this.isMain ? gameAssets.player1 : gameAssets.player2;
     this.clock = 1;
     this.invert = 1;
@@ -83,6 +83,7 @@ class Player {
 
     if (this.controller.down) {
       this.state.sprite = ANIMATE.down;
+      this.shootDirection.x *= this.jumping ? 0 : 1;
       this.shootDirection.y = 1;
     }
 
@@ -111,23 +112,24 @@ class Player {
       this.state.facingLeft = false;
       this.state.sprite = ANIMATE.right;
     }
+
+    if ((this.controller.up && this.controller.right) || this.controller.left) {
+      this.state.sprite = ANIMATE.upRight;
+    }
     if (this.jumping) {
       this.state.sprite = ANIMATE.jump;
+    } else if (this.controller.up) {
+      this.width = 14;
     } else {
       this.width = playerValues.width;
       this.height = playerValues.height;
-    }
-    if (this.controller.up) {
-      this.width = 14;
-    }
-    if ((this.controller.up && this.controller.right) || this.controller.left) {
-      this.state.sprite = ANIMATE.upRight;
     }
     if (
       !this.jumping &&
       this.controller.down &&
       !(this.controller.right || this.controller.left)
     ) {
+      this.frame = 0;
       this.y = this.crouch
         ? this.y
         : this.y + this.height - playerValues.crouchHeight;
@@ -290,7 +292,9 @@ class Player {
       ) {
         if (obj instanceof Capsule) {
           if (obj.destroyed) {
-            this.gun.upgrade(obj.upgrade);
+            if (obj.type == 'upgrade') {
+              this.gun.upgrade(obj.upgrade);
+            }
             obj.picked = true;
           }
         }
@@ -308,6 +312,7 @@ class Player {
   setDead = () => {
     this.dy = -5;
     this.dx = 0;
+    this.frame = 0;
     this.jumping = true;
     this.state.alive = false;
     this.lives--;

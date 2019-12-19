@@ -42,7 +42,7 @@ class World {
     this.background = background;
     this.ground = new GroundBoundary();
     this.spawnEnemies = new SpawnEnemies(this);
-    this.capsule = new Capsule();
+    this.capsule = new Capsule(this);
   };
 
   setBackground = () => {
@@ -123,6 +123,21 @@ class World {
     }
   }
 
+  destroyAllInVision = () => {
+    this.enemies.forEach(enemy => {
+      enemy.setKilled();
+    });
+  };
+
+  capsuleHandler = () => {
+    if (this.capsule.picked) {
+      if (this.capsule.type == 'destroy') {
+        this.destroyAllInVision();
+      }
+      this.capsule = null;
+    }
+  };
+
   checkCollisions = () => {
     this.player.checkCollision([...this.enemies, ...this.enemyBullets]);
     if (this.player.bullets.length > 0) {
@@ -131,16 +146,9 @@ class World {
         bullet.checkCollision(this.enemies);
       });
     }
-    if (this.capsule && this.capsule.destroyed) {
-      this.ground.checkGroundBoundary(this, this.capsule);
-      this.player.checkCollision([this.capsule]);
-      if (this.capsule.picked) {
-        this.capsule = null;
-      }
-    }
   };
 
-  checkIfAlive = () => {
+  respawnHandler = () => {
     if (!this.player.state.alive) {
       if (this.player.lives) {
         if (!this.player.state.revive) {
@@ -152,8 +160,22 @@ class World {
       } else {
         setTimeout(() => {
           this.gameOver = true;
-        }, 2000);
+        }, 4000);
       }
+    }
+  };
+
+  capsuleUpdate = () => {
+    if (this.capsule) {
+      this.capsule.update(this.dx);
+      if (this.player.bullets.length) {
+        this.capsule.checkCollision(this.player.bullets);
+      }
+    }
+    if (this.capsule && this.capsule.destroyed) {
+      this.ground.checkGroundBoundary(this, this.capsule);
+      this.player.checkCollision([this.capsule]);
+      this.capsuleHandler();
     }
   };
 
@@ -162,7 +184,9 @@ class World {
     this.spawnEnemies.createEnemy(this);
     if (spawn && Math.random() > 0.5) {
       this.spawn = true;
-      this.capsule = new Capsule();
+      if (!this.capsule) {
+        this.capsule = new Capsule(this);
+      }
     }
     if (this.clock % 50 == 0 && this.spawn) {
       this.generateEnemy();
@@ -175,7 +199,7 @@ class World {
     this.ground.checkGroundBoundary(this, this.player);
     this.player.moveBullets();
     this.checkCollisions();
-
+    this.capsuleUpdate();
     this.updateEnemy();
 
     //world shift
@@ -183,14 +207,7 @@ class World {
     this.shiftFunction();
 
     //check if player is alive
-    this.checkIfAlive();
-
-    if (this.capsule) {
-      this.capsule.update(this.dx);
-      if (this.player.bullets.length) {
-        this.capsule.checkCollision(this.player.bullets);
-      }
-    }
+    this.respawnHandler();
 
     this.spawnUpdate();
     this.clock++;

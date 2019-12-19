@@ -37,9 +37,15 @@ const gameAssets = {
     src: './assets/powerups/MachineGun.png',
     w: 24,
     h: 16,
-    upgrade: { reload: 8, size: 3 }
+    upgrade: { reload: 8, size: 3 },
+    type: 'upgrade'
   },
-  upgrade1: { src: './assets/powerups/MegaShell.png', w: 24, h: 15 },
+  upgrade1: {
+    src: './assets/powerups/MegaShell.png',
+    w: 24,
+    h: 15,
+    type: 'destroy'
+  },
   upgrade2: {
     src: './assets/powerups/SpreadGun.png',
     w: 24,
