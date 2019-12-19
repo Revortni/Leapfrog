@@ -25,7 +25,6 @@ class Soldier extends Enemy {
 
   setEntryPoint = (position, loc) => {
     this.image = gameAssets.soldier;
-
     if (position == 'right') {
       this.x = this.maxWidth;
       this.dx = -soldierValues.dx;
@@ -41,13 +40,19 @@ class Soldier extends Enemy {
       this.y = this.world.y - loc.y - this.world.screenY;
       this.dx = -soldierValues.dx;
     }
+    if (position == 'boss') {
+      this.x = loc.x;
+      this.y = loc.y;
+      this.dx = soldierValues.dx * loc.dir;
+      this.invert = -1 * loc.dir;
+    }
   };
 
   update = ({ worldShift }) => {
     if (this.checkIfKilled()) return;
 
     //add velocity for movement in x y
-    this.x += this.dx - worldShift;
+    this.x += this.dx - (worldShift || 0);
     this.y += this.dy;
     if (this.clock % 5 == 0) {
       this.frame++;

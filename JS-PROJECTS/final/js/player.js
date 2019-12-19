@@ -1,6 +1,6 @@
 const playerValues = {
-  dx: 10,
-  dy: 14, //4
+  dx: 2,
+  dy: 4, //4
   gravity: 0.4, //.4
   width: 23,
   height: 34,
@@ -30,7 +30,6 @@ class Player {
     this.controller = controller;
     this.frame = 0;
     this.isMain = main || false;
-    this.killable = false;
     this.image = this.isMain ? gameAssets.player1 : gameAssets.player2;
     this.clock = 1;
     this.invert = 1;
@@ -59,9 +58,9 @@ class Player {
     this.jumping = false;
     this.crouch = false;
     this.killable = false;
-    // setTimeout(() => {
-    //   this.killable = true;
-    // }, 3000);
+    setTimeout(() => {
+      this.killable = true;
+    }, 3000);
     this.directionFacing = ANIMATE.standing;
     this.shootDirection = { x: 1, y: 0 };
   };
@@ -121,6 +120,7 @@ class Player {
       this.state.sprite = ANIMATE.jump;
     } else if (this.controller.up) {
       this.width = 14;
+      this.height = playerValues.height;
     } else {
       this.width = playerValues.width;
       this.height = playerValues.height;
@@ -331,6 +331,9 @@ class Player {
     if (obj instanceof Enemy || obj instanceof Bullet) {
       if (obj instanceof Bullet) {
         obj.destroyed = true;
+      }
+      if (obj instanceof Enemy && obj.killed) {
+        return;
       }
       if (!this.setDeadFlag && this.killable) {
         this.setDead();

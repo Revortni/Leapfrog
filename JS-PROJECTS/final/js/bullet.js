@@ -52,6 +52,7 @@ class Bullet {
         target.y < this.y + this.height &&
         this.y < target.y + target.height
       ) {
+        if (target instanceof Enemy && target.killed) return;
         this.hit = true;
         this.destroyed = true;
         if (target instanceof Player) {

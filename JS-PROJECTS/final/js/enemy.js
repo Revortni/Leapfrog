@@ -33,7 +33,7 @@ class Enemy {
   };
 
   destroy = () => {
-    this.x -= this.world.dx;
+    this.x -= this.world.dx || 0;
     if (this.clock % 2 == 0) {
       this.frame++;
     }

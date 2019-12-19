@@ -13,11 +13,10 @@ class Game {
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     this.fetchHighScore();
-    this.start();
-    // this.startInterval = setInterval(() => {
-    //   this.showMainMenu();
-    //   this.checkKeyPress();
-    // }, 50);
+    this.startInterval = setInterval(() => {
+      this.showMainMenu();
+      this.checkKeyPress();
+    }, 50);
   };
 
   checkKeyPress = () => {
@@ -29,10 +28,7 @@ class Game {
     }
     if (controller.select) {
       clearInterval(this.startInterval);
-      // this.showLevelLoad();
-      // setTimeout(() => {
       this.start();
-      // }, 2000);
     }
   };
 
@@ -54,7 +50,7 @@ class Game {
     let mainBackground = new Image();
     mainBackground.src = './assets/area' + this.level + '_bg.png';
     mainBackground.onload = () => {
-      this.world.init(mainBackground);
+      this.world.init(mainBackground, this.pointer);
       this.startGame();
     };
   };
@@ -83,10 +79,43 @@ class Game {
     }
   };
 
+  get7Digit = score => {
+    let x = 7 - score.toString().length;
+    let res = '';
+    while (x > 0) {
+      res += '0';
+      x--;
+    }
+    return res + score;
+  };
+
+  showScore = () => {
+    ctx.fillStyle = '#333';
+    ctx.fillRect(0, 0, SCREEN.width * SCALE, SCREEN.height * SCALE);
+    ctx.fillStyle = '#fff';
+    ctx.font = '16px "Press Start 2P", cursive';
+    ctx.textAlign = 'center';
+    ctx.fillText('HI SCORE', ctx.canvas.width / 2, 50);
+    ctx.fillText(this.get7Digit(this.highScore), ctx.canvas.width / 2, 100);
+    ctx.fillText('1P SCORE', ctx.canvas.width * 0.25, 200);
+    ctx.fillText(
+      this.get7Digit(this.world.player.score),
+      ctx.canvas.width * 0.25,
+      250
+    );
+    ctx.fillText('2P SCORE', ctx.canvas.width * 0.75, 200);
+    let player2Score = this.world.player2 ? this.world.player2.score : 0;
+    ctx.fillText(this.get7Digit(player2Score), ctx.canvas.width * 0.75, 250);
+
+    let endText = this.world.defeatedBoss ? 'well done' : 'Game over';
+    ctx.fillText(endText.toUpperCase(), ctx.canvas.width * 0.5, 300);
+  };
+
   handleGameOver = () => {
     console.log('gameOver');
     clearInterval(this.interval);
     this.handleScore();
+    this.showScore();
   };
 
   startGame = () => {
@@ -94,7 +123,9 @@ class Game {
       this.update();
       this.render();
       if (this.world.gameOver) {
+        // setTimeout(() => {
         this.handleGameOver();
+        // }, 1000);
       }
       this.clock++;
     }, 50);

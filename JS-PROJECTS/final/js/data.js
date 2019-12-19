@@ -19,6 +19,10 @@ const DATA = {
   ]
 };
 
+const getRandom = (min, max) => {
+  return Math.random() * (max - min) + min;
+};
+
 const ENEMYCLASS = {
   1: x => new Soldier(x),
   2: x => new Sniper(x),

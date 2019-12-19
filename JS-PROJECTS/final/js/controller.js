@@ -32,6 +32,7 @@ const controller = {
         break;
       case 90: //Z
         controller.shoot = keyState;
+        break;
       case 13: //Select
         controller.select = keyState;
         break;

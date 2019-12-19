@@ -22,7 +22,6 @@ class Gun {
     this.bulletImage = image;
     this.size = size;
     this.reloadTime = reload;
-    console.log(this);
   };
 
   shoot = (x, y, dx, dy) => {

@@ -10,12 +10,11 @@ class World {
   constructor(level) {
     //viewport
     this.screenX = 0;
-    this.viewportY = IMAGESIZE.y - SCREEN.height;
     this.screenY = IMAGESIZE.y - SCREEN.height;
     this.screenWidth = SCREEN.width;
     this.screenHeight = SCREEN.height;
     //entire map
-    this.x = 2700;
+    this.x = 40;
     this.y = IMAGESIZE.y;
     this.dy = 0;
     this.level = level;
@@ -33,15 +32,18 @@ class World {
     this.defeatedBoss = false;
     this.counter = 0;
     this.spawnPoint = 1;
+    this.pcount = 0;
   }
 
-  init = background => {
+  init = (background, count) => {
     this.player = new Player(this, controller, 100, true);
-    // if (this.players == 2) {
-    // this.player2 = new Player(this, controller2, 200);
-    // document.addEventListener('keydown', controller2.keyListener);
-    // document.addEventListener('keyup', controller2.keyListener);
-    // }
+    this.pcount++;
+    if (count) {
+      this.pcount++;
+      this.player2 = new Player(this, controller2, 200);
+      document.addEventListener('keydown', controller2.keyListener);
+      document.addEventListener('keyup', controller2.keyListener);
+    }
 
     this.background = background;
     this.ground = new GroundBoundary();
@@ -112,6 +114,14 @@ class World {
     if (this.x + this.screenWidth >= IMAGESIZE.x - offset) {
       this.reachedBoss = true;
     }
+    if (this.defeatedBoss) {
+      if (this.x + this.screenWidth <= IMAGESIZE.x) {
+        this.x += 2;
+      }
+      if (this.player.x + this.x >= 3500) {
+        this.end = true;
+      }
+    }
   };
 
   shiftFunction() {
@@ -172,7 +182,7 @@ class World {
 
   capsuleUpdate = () => {
     if (this.capsule) {
-      this.capsule.update(this.dx);
+      this.capsule.update();
       if (this.player.bullets.length) {
         this.capsule.checkCollision(this.player.bullets);
       }
@@ -202,25 +212,31 @@ class World {
   };
 
   bossBattleInit = () => {
-    this.boss = new Boss();
+    this.boss = new Boss(this);
+    this.enemies.push(this.boss);
   };
 
   bossBattleCheck = () => {
-    if (this.reachedBoss && this.enemies.length == 0) {
-      console.log('boss appears');
+    if (this.reachedBoss && this.enemies.length == 0 && !this.defeatedBoss) {
       this.bossBattleInit();
+    }
+    if (this.reachedBoss && this.boss && this.boss.defeated) {
+      setTimeout(() => {
+        this.boss.cleanup();
+        this.defeatedBoss = true;
+      }, 2000);
     }
   };
 
   update = () => {
     //update player position and create bullets if button pressed
+
     this.player.update();
     this.ground.checkGroundBoundary(this, this.player);
     this.player.moveBullets();
     this.checkCollisions();
     this.capsuleUpdate();
     this.updateEnemy();
-
     //world shift
     this.shiftFunction();
 
@@ -230,6 +246,7 @@ class World {
     this.spawnUpdate();
 
     this.bossBattleCheck();
+
     this.clock++;
   };
 
@@ -252,6 +269,5 @@ class World {
     }
 
     this.player.render();
-    this.ground.draw(this);
   };
 }

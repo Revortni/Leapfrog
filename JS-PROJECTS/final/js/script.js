@@ -5,7 +5,6 @@ const SCREEN = { width: 280, height: 224 };
 const showControls = () => {
   let controlInfo = document.getElementById('container');
   controlInfo.style.width = SCREEN.width * SCALE + 'px';
-  controlInfo.style.height = SCREEN.height + 'px';
   let hide = document.createElement('div');
   hide.innerHTML = 'hide';
   hide.classList.add('hide');

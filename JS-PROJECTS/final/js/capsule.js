@@ -26,7 +26,7 @@ class Capsule {
 
   getUpgrade = () => {
     this.y = -20;
-    let val = Math.floor(getRandomArbitrary(0, 2));
+    let val = Math.floor(getRandom(0, 2));
     let asset = gameAssets['upgrade' + val];
     this.image = asset.img;
     this.width = asset.w;
@@ -35,9 +35,9 @@ class Capsule {
     this.type = asset.type;
   };
 
-  update = shift => {
+  update = () => {
     if (!this.destroyed) {
-      this.x += this.dx - (shift || 0);
+      this.x += this.dx;
       this.y = 40 + Math.sin((30 * (this.x * Math.PI)) / 180);
       this.checkScreenBoundary();
       this.wx = this.x + this.world.x;
@@ -79,7 +79,3 @@ class Capsule {
     });
   };
 }
-
-const getRandomArbitrary = (min, max) => {
-  return Math.random() * (max - min) + min;
-};
