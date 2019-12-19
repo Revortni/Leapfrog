@@ -25,8 +25,6 @@ class Gun {
     console.log(this);
   };
 
-  reset = () => {};
-
   shoot = (x, y, dx, dy) => {
     if (this.controller.shoot && !this.reloading) {
       this.reloading = true;

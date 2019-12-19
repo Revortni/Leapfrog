@@ -12,10 +12,11 @@ class Bullet {
     this.hit = false;
   }
 
-  move(dx) {
-    let shift = -dx || 0;
-    this.x += this.dx * this.speed + shift;
-    this.y += this.dy * this.speed;
+  move(dx, dy) {
+    let shiftx = -dx || 0;
+    let shifty = dy || 0;
+    this.x += this.dx * this.speed + shiftx;
+    this.y += this.dy * this.speed + shifty;
   }
 
   draw() {
@@ -43,6 +44,7 @@ class Bullet {
   };
 
   checkCollision = targets => {
+    let points = 0;
     targets.forEach(target => {
       if (
         target.x < this.x + this.width &&
@@ -57,10 +59,12 @@ class Bullet {
         } else {
           target.hp--;
           if (target.hp <= 0) {
+            points += target.point;
             target.setKilled();
           }
         }
       }
     });
+    return points;
   };
 }

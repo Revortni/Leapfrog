@@ -57,7 +57,6 @@ class Enemy {
   checkIfKilled = () => {
     if (this.killed) {
       this.destroy();
-
       return true;
     }
     return false;

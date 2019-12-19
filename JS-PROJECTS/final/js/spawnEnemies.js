@@ -11,6 +11,7 @@ class SpawnEnemies {
     for (let i = 0; i < data.length; i++) {
       let loc = data[i];
       if (loc.pos <= playerPosition) {
+        console.log(this.spawnList);
         this.spawn = loc;
         this.spawnList.splice(i, 1);
         this.trigger = true;

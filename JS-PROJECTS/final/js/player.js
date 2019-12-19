@@ -1,5 +1,5 @@
 const playerValues = {
-  dx: 2,
+  dx: 10,
   dy: 4,
   gravity: 0.4,
   width: 23,
@@ -30,11 +30,12 @@ class Player {
     this.controller = controller;
     this.frame = 0;
     this.isMain = main || false;
-    this.init();
     this.killable = false;
     this.image = this.isMain ? gameAssets.player1 : gameAssets.player2;
     this.clock = 1;
     this.invert = 1;
+    this.score = 0;
+    this.init();
   }
 
   init = () => {
@@ -58,9 +59,9 @@ class Player {
     this.jumping = false;
     this.crouch = false;
     this.killable = false;
-    setTimeout(() => {
-      this.killable = true;
-    }, 3000);
+    // setTimeout(() => {
+    //   this.killable = true;
+    // }, 3000);
     this.directionFacing = ANIMATE.standing;
     this.shootDirection = { x: 1, y: 0 };
   };
@@ -163,12 +164,15 @@ class Player {
       this.x + this.width > this.dx &&
       this.x + this.width + this.dx < SCREEN.width
     ) {
-      if (this.x + this.width > SCREEN.width / 2 && this.dx > 0) {
-        this.world.x += this.dx;
-        this.world.dx = this.dx;
+      if (
+        this.x + this.width > SCREEN.width / 2 &&
+        this.dx > 0 &&
+        !this.world.reachedBoss
+      ) {
+        this.world.manageWorldView(this.dx);
       } else {
         this.x += this.dx;
-        this.world.dx = 0;
+        this.world.manageWorldView(0);
       }
     }
     this.y += this.dy;

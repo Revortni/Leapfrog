@@ -2,7 +2,7 @@ class Capsule {
   constructor(world) {
     this.x = 0;
     this.y = 40;
-    this.dx = 1.5;
+    this.dx = 2;
     this.dy = 2;
     this.width = 24;
     this.height = 14;

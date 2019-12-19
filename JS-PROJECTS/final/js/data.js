@@ -46,7 +46,7 @@ const SPAWNPOS = [
     soldierPos: 1
   },
   {
-    pos: 500,
+    pos: 525,
     enemy: [
       {
         id: 2,
@@ -67,7 +67,7 @@ const SPAWNPOS = [
     soldierPos: 1
   },
   {
-    pos: 1000,
+    pos: 1150,
     enemy: [
       {
         id: 3,
@@ -81,7 +81,7 @@ const SPAWNPOS = [
     }
   },
   {
-    pos: 1552,
+    pos: 1600,
     enemy: [
       {
         id: 2,
@@ -91,7 +91,7 @@ const SPAWNPOS = [
     ],
     soldierPos: {
       x: 1678,
-      y: 296
+      y: 422
     }
   },
   {
@@ -162,7 +162,7 @@ const SPAWNPOS = [
     ],
     soldierPos: {
       x: 2478,
-      y: 170
+      y: 554
     }
   },
   {
@@ -171,12 +171,12 @@ const SPAWNPOS = [
       {
         id: 4,
         x: 3040,
-        y: 144
+        y: 576
       }
     ],
     soldierPos: {
       x: 2956,
-      y: 56
+      y: 664
     }
   },
   {
@@ -185,7 +185,7 @@ const SPAWNPOS = [
       {
         id: 5,
         x: 3154,
-        y: 185
+        y: 535
       }
     ],
     soldierPos: 1
@@ -236,3 +236,5 @@ const ANIMATE = {
     pos: 0
   }
 };
+
+const HIGHSCOREKEY = '@highscoreContra';

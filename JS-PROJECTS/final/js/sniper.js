@@ -8,6 +8,7 @@ class Sniper extends Enemy {
     this.clock = 0;
     this.world = world;
     this.reloadTime = 70;
+    this.point = 25;
   }
 
   update = ({ playerX, playerY }) => {

@@ -14,8 +14,9 @@ class World {
     this.screenWidth = SCREEN.width;
     this.screenHeight = SCREEN.height;
     //entire map
-    this.x = 40;
+    this.x = 0;
     this.y = IMAGESIZE.y;
+    this.dy = 0;
     this.level = level;
     this.background = null;
     this.player = null;
@@ -29,6 +30,7 @@ class World {
     this.gameOver = false;
     this.reachedBoss = false;
     this.counter = 0;
+    this.spawnPoint = 1;
   }
 
   init = background => {
@@ -42,7 +44,6 @@ class World {
     this.background = background;
     this.ground = new GroundBoundary();
     this.spawnEnemies = new SpawnEnemies(this);
-    this.capsule = new Capsule(this);
   };
 
   setBackground = () => {
@@ -59,13 +60,19 @@ class World {
     ctx.restore();
   };
 
-  generateEnemy = () => {
-    if (Math.random() > 0.5) {
-      let enemyLeft = new Soldier(this, 'left');
-      this.enemies.push(enemyLeft);
+  generateSoilders = () => {
+    if (this.spawnPoint == 1) {
+      if (Math.random() > 0.5) {
+        let enemyLeft = new Soldier(this, 'left');
+        this.enemies.push(enemyLeft);
+      }
+      let enemyRight = new Soldier(this, 'right');
+      this.enemies.push(enemyRight);
+    } else {
+      let enemy = new Soldier(this, 'fixed', this.spawnPoint);
+      console.log(this.spawnPoint);
+      this.enemies.push(enemy);
     }
-    let enemyRight = new Soldier(this, 'right');
-    this.enemies.push(enemyRight);
     this.counter++;
     if (this.counter > 5) {
       this.counter = 0;
@@ -89,33 +96,30 @@ class World {
     this.enemies = this.enemies.filter(enemy => enemy.inVision);
 
     this.enemyBullets.forEach(x => {
-      x.move(this.dx);
+      x.move(this.dx, this.dy);
       this.ground.checkGroundBoundary(this, x);
     });
     this.enemyBullets = this.enemyBullets.filter(bullet => !bullet.destroyed);
   };
 
-  manageWorldView = () => {
+  manageWorldView = dx => {
     // if (
     //   this.x >= 0 &&
     //   this.x + this.screenWidth <= IMAGESIZE.x - this.screenWidth
     // ) {
-    //   if (this.player.x + this.player.width / 2 > this.screenWidth / 2) {
-    //     if (this.player.dx > 0) {
-    //       this.dx = this.player.dx + 0.1;
-    //       this.player.x -= this.dx + 0.1;
-    //       // this.player2.x -= this.dx;
-    //       this.x += this.dx;
-    //     }
-    //   } else {
-    //     this.dx = 0;
-    //   }
+    //
     // }
+    if (this.x >= 0 && this.x + this.screenWidth <= IMAGESIZE.x - 256) {
+      this.x += dx;
+      this.dx = dx;
+    }
   };
 
   shiftFunction() {
+    this.dy = 0;
     if (this.shift) {
       this.screenY -= 1;
+      this.dy = 1;
       if (this.screenY < this.y - this.screenHeight * this.shiftCycle) {
         this.shift = false;
         this.shiftCycle += 0.56;
@@ -143,7 +147,9 @@ class World {
     if (this.player.bullets.length > 0) {
       this.player.bullets.forEach(bullet => {
         this.ground.checkGroundBoundary(this, bullet);
-        bullet.checkCollision(this.enemies);
+        // get score points
+        let points = bullet.checkCollision(this.enemies);
+        this.player.score += points;
       });
     }
   };
@@ -181,15 +187,18 @@ class World {
 
   spawnUpdate = () => {
     let spawn = this.spawnEnemies.checkTriggerPosition(this.x + this.player.x);
+
     this.spawnEnemies.createEnemy(this);
-    if (spawn && Math.random() > 0.5) {
+    if (spawn) {
       this.spawn = true;
+      this.spawnPoint = spawn;
+      this.counter = 0;
       if (!this.capsule) {
         this.capsule = new Capsule(this);
       }
     }
-    if (this.clock % 50 == 0 && this.spawn) {
-      this.generateEnemy();
+    if (this.clock % 40 == 0 && this.spawn) {
+      this.generateSoilders();
     }
   };
 
@@ -203,7 +212,6 @@ class World {
     this.updateEnemy();
 
     //world shift
-    this.manageWorldView();
     this.shiftFunction();
 
     //check if player is alive
@@ -216,6 +224,10 @@ class World {
   render = () => {
     ctx.clearRect(0, 0, this.screenWidth * 2, this.screenHeight * 2);
     this.setBackground();
+    //powerup capsule
+    if (this.capsule) {
+      this.capsule.draw();
+    }
     if (this.enemyBullets.length > 0) {
       this.enemyBullets.forEach(bullet => {
         bullet.draw();
@@ -226,10 +238,7 @@ class World {
         enemy.draw();
       });
     }
-    //powerup capsule
-    if (this.capsule) {
-      this.capsule.draw();
-    }
+
     this.player.render();
     this.ground.draw(this);
   };

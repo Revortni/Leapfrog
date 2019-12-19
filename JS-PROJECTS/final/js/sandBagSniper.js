@@ -4,7 +4,7 @@ class SBSniper extends Sniper {
     this.width = 32;
     this.height = 17;
     this.image = gameAssets.sbsniper;
-    this.hp = 6;
+    this.hp = 2;
   }
   shoot = (x, y) => {
     x = Math.floor(x);
