@@ -1,7 +1,7 @@
 const playerValues = {
   dx: 10,
-  dy: 4,
-  gravity: 0.4,
+  dy: 14, //4
+  gravity: 0.4, //.4
   width: 23,
   height: 34,
   crouchWidth: 32,

@@ -55,6 +55,7 @@ const showControls = () => {
   };
 };
 
+//show game controls below canvas
 showControls();
 
 const canvas = document.getElementById('app');

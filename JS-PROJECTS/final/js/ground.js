@@ -15,13 +15,6 @@ class GroundBoundary {
     });
   }
 
-  boundaryFunction = () => {
-    return {
-      1: this.midGround,
-      2: this.slope
-    };
-  };
-
   slopeFunction = (world, object, ground) => {
     let objPosL = world.x + object.x;
 
@@ -133,7 +126,6 @@ class Ground {
       ctx.save();
       ctx.fillStyle = 'red';
       ctx.globalAlpha = 0.5;
-      // console.log(this.x - world.x, this.y - world.y, this.width, this.height);
       ctx.fillRect(
         (this.x - world.x) * s,
         (this.y - world.screenY) * s,

@@ -13,11 +13,11 @@ class Game {
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     this.fetchHighScore();
-    this.showMainMenu();
-    this.startInterval = setInterval(() => {
-      this.showMainMenu();
-      this.checkKeyPress();
-    }, 50);
+    this.start();
+    // this.startInterval = setInterval(() => {
+    //   this.showMainMenu();
+    //   this.checkKeyPress();
+    // }, 50);
   };
 
   checkKeyPress = () => {
@@ -29,7 +29,10 @@ class Game {
     }
     if (controller.select) {
       clearInterval(this.startInterval);
+      // this.showLevelLoad();
+      // setTimeout(() => {
       this.start();
+      // }, 2000);
     }
   };
 

@@ -3,7 +3,7 @@ const worldValues = {
     mid: 56,
     bot: 24,
     slope: 27,
-    shiftRate: 10
+    shiftRate: 100
   }
 };
 class World {

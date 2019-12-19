@@ -184,7 +184,7 @@ const SPAWNPOS = [
     enemy: [
       {
         id: 5,
-        x: 3154,
+        x: 3158,
         y: 535
       }
     ],
