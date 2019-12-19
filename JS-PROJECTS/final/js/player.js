@@ -238,11 +238,6 @@ class Player {
   draw = () => {
     ctx.beginPath();
     let posX = this.invert == 1 ? 0 : this.width * -1;
-    let x = this.world.x + this.x;
-    let y = this.world.y + this.y;
-    ctx.fillText(x + ',' + y, this.x * SCALE, this.y * SCALE - 5);
-    ctx.fillStyle = 'white';
-
     ctx.save();
     ctx.scale(this.invert, 1);
     ctx.drawImage(
@@ -255,12 +250,6 @@ class Player {
       (this.y - this.state.sprite.offset) * SCALE,
       (this.state.sprite.w || this.image.w) * SCALE,
       (this.state.sprite.h || this.image.h) * SCALE
-    );
-    ctx.strokeRect(
-      (this.invert * this.x + posX) * SCALE,
-      this.y * SCALE,
-      this.width * SCALE,
-      this.height * SCALE
     );
     ctx.restore();
     ctx.closePath();
