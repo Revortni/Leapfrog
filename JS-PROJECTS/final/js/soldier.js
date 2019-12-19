@@ -1,11 +1,9 @@
 const soldierValues = {
   dx: 1.5,
   dy: 6,
-  gravity: 5,
-  friction: 0.9,
   width: 19,
   height: 33,
-  boundaryOffset: 30
+  boundaryOffset: 35
 };
 
 class Soldier extends Enemy {
@@ -26,7 +24,7 @@ class Soldier extends Enemy {
   setEntryPoint = (position, loc) => {
     this.image = gameAssets.soldier;
     if (position == 'right') {
-      this.x = this.maxWidth;
+      this.x = this.maxWidth + 35;
       this.dx = -soldierValues.dx;
     }
     if (position == 'left') {

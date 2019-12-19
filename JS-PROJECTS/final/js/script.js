@@ -2,6 +2,29 @@ const SCALE = 2;
 const IMAGESIZE = { x: 3584, y: 720 };
 const SCREEN = { width: 280, height: 224 };
 
+const canvas = document.getElementById('app');
+const ctx = canvas.getContext('2d');
+
+canvas.width = SCREEN.width * SCALE;
+canvas.height = SCREEN.height * SCALE;
+
+let _assetCount = 0;
+let _loaded = 0;
+
+Object.keys(gameAssets).forEach(key => {
+  _assetCount++;
+  let img = new Image();
+  img.src = gameAssets[key].src;
+  img.onload = () => {
+    gameAssets[key].img = img;
+    _loaded++;
+    if (_loaded == _assetCount) {
+      gameAssets.upgrade0.upgrade.image = gameAssets.mgbullet.img;
+      new Game().init(); //initialize game object
+    }
+  };
+});
+
 const showControls = () => {
   let controlInfo = document.getElementById('container');
   controlInfo.style.width = SCREEN.width * SCALE + 'px';
@@ -53,26 +76,5 @@ const showControls = () => {
     hide.innerHTML = controls.style.display == 'block' ? 'hide' : 'show';
   };
 };
-
 //show game controls below canvas
 showControls();
-
-const canvas = document.getElementById('app');
-const ctx = canvas.getContext('2d');
-
-canvas.width = SCREEN.width * SCALE;
-canvas.height = SCREEN.height * SCALE;
-
-Object.keys(gameAssets).forEach(key => {
-  assetCount++;
-  let img = new Image();
-  img.src = gameAssets[key].src;
-  img.onload = () => {
-    gameAssets[key].img = img;
-    loaded++;
-    if (loaded == assetCount) {
-      gameAssets.upgrade0.upgrade.image = gameAssets.mgbullet.img;
-      new Game().init();
-    }
-  };
-});

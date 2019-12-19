@@ -1,7 +1,7 @@
 const playerValues = {
   dx: 2,
-  dy: 4, //4
-  gravity: 0.4, //.4
+  dy: 4,
+  gravity: 0.4,
   width: 23,
   height: 34,
   crouchWidth: 32,
@@ -60,7 +60,7 @@ class Player {
     this.killable = false;
     setTimeout(() => {
       this.killable = true;
-    }, 3000);
+    }, 2500);
     this.directionFacing = ANIMATE.standing;
     this.shootDirection = { x: 1, y: 0 };
   };

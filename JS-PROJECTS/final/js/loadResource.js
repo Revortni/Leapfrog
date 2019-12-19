@@ -1,5 +1,3 @@
-let assetCount = 0;
-let loaded = 0;
 const gameAssets = {
   enemy1L: {
     src: './assets/enemy1L.png',

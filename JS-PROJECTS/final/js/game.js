@@ -67,7 +67,7 @@ class Game {
     if (localStorage.getItem(HIGHSCOREKEY) == null) {
       this.highScore = 0;
     } else {
-      this.highScore = localStorage.getItem(HIGHSCOREKEY);
+      this.highScore = localStorage.getItem(HIGHSCOREKEY) || 0;
     }
   };
 
@@ -112,7 +112,6 @@ class Game {
   };
 
   handleGameOver = () => {
-    console.log('gameOver');
     clearInterval(this.interval);
     this.handleScore();
     this.showScore();
@@ -122,10 +121,10 @@ class Game {
     this.interval = setInterval(() => {
       this.update();
       this.render();
-      if (this.world.gameOver) {
-        // setTimeout(() => {
-        this.handleGameOver();
-        // }, 1000);
+      if (this.world.gameOver || this.world.end) {
+        setTimeout(() => {
+          this.handleGameOver();
+        }, 1000);
       }
       this.clock++;
     }, 50);

@@ -3,7 +3,7 @@ const worldValues = {
     mid: 56,
     bot: 24,
     slope: 27,
-    shiftRate: 100
+    shiftRate: 1
   }
 };
 class World {
@@ -25,7 +25,7 @@ class World {
     this.enemyBullets = [];
     this.clock = 0;
     this.loaded = false;
-    this.shiftCycle = 3.1;
+    this.shiftCycle = 1.5;
     this.players = 2;
     this.gameOver = false;
     this.reachedBoss = false;
@@ -77,7 +77,7 @@ class World {
       this.enemies.push(enemy);
     }
     this.counter++;
-    if (this.counter > 5) {
+    if (this.counter > 4 || this.enemies.length > 8) {
       this.counter = 0;
       this.spawn = false;
     }
@@ -206,7 +206,7 @@ class World {
         this.capsule = new Capsule(this);
       }
     }
-    if (this.clock % 40 == 0 && this.spawn) {
+    if (this.clock % 30 == 0 && this.spawn) {
       this.generateSoilders();
     }
   };
@@ -223,6 +223,7 @@ class World {
     if (this.reachedBoss && this.boss && this.boss.defeated) {
       setTimeout(() => {
         this.boss.cleanup();
+        this.destroyAllInVision();
         this.defeatedBoss = true;
       }, 2000);
     }
