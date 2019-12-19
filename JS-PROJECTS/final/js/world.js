@@ -2,7 +2,8 @@ const worldValues = {
   '1': {
     mid: 56,
     bot: 24,
-    slope: 27
+    slope: 27,
+    shiftRate: 10
   }
 };
 class World {
@@ -14,7 +15,7 @@ class World {
     this.screenWidth = SCREEN.width;
     this.screenHeight = SCREEN.height;
     //entire map
-    this.x = 0;
+    this.x = 2700;
     this.y = IMAGESIZE.y;
     this.dy = 0;
     this.level = level;
@@ -25,10 +26,11 @@ class World {
     this.enemyBullets = [];
     this.clock = 0;
     this.loaded = false;
-    this.shiftCycle = 1.5;
+    this.shiftCycle = 3.1;
     this.players = 2;
     this.gameOver = false;
     this.reachedBoss = false;
+    this.defeatedBoss = false;
     this.counter = 0;
     this.spawnPoint = 1;
   }
@@ -70,7 +72,6 @@ class World {
       this.enemies.push(enemyRight);
     } else {
       let enemy = new Soldier(this, 'fixed', this.spawnPoint);
-      console.log(this.spawnPoint);
       this.enemies.push(enemy);
     }
     this.counter++;
@@ -103,22 +104,20 @@ class World {
   };
 
   manageWorldView = dx => {
-    // if (
-    //   this.x >= 0 &&
-    //   this.x + this.screenWidth <= IMAGESIZE.x - this.screenWidth
-    // ) {
-    //
-    // }
-    if (this.x >= 0 && this.x + this.screenWidth <= IMAGESIZE.x - 256) {
+    let offset = this.defeatedBoss ? 0 : 256;
+    if (this.x >= 0 && this.x + this.screenWidth <= IMAGESIZE.x - offset) {
       this.x += dx;
       this.dx = dx;
+    }
+    if (this.x + this.screenWidth >= IMAGESIZE.x - offset) {
+      this.reachedBoss = true;
     }
   };
 
   shiftFunction() {
     this.dy = 0;
     if (this.shift) {
-      this.screenY -= 1;
+      this.screenY -= worldValues[this.level].shiftRate;
       this.dy = 1;
       if (this.screenY < this.y - this.screenHeight * this.shiftCycle) {
         this.shift = false;
@@ -202,6 +201,17 @@ class World {
     }
   };
 
+  bossBattleInit = () => {
+    this.boss = new Boss();
+  };
+
+  bossBattleCheck = () => {
+    if (this.reachedBoss && this.enemies.length == 0) {
+      console.log('boss appears');
+      this.bossBattleInit();
+    }
+  };
+
   update = () => {
     //update player position and create bullets if button pressed
     this.player.update();
@@ -218,6 +228,8 @@ class World {
     this.respawnHandler();
 
     this.spawnUpdate();
+
+    this.bossBattleCheck();
     this.clock++;
   };
 

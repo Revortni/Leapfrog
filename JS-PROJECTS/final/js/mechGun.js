@@ -20,4 +20,10 @@ class MechGun extends Sniper {
     let bullet = new Bullet(this.x, this.y + 8, dx, dy, 2);
     this.world.enemyBullets.push(bullet);
   };
+
+  checkScreenBoundary = () => {
+    if (this.x < 0 || this.x > this.maxWidth + this.boundaryOffset) {
+      this.inVision = false;
+    }
+  };
 }

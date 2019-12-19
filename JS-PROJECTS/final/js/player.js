@@ -7,7 +7,7 @@ const playerValues = {
   crouchWidth: 32,
   crouchHeight: 15,
   jumpSize: 17,
-  reloadTime: 16,
+  reloadTime: 14,
   jumpDist: 8
 };
 
@@ -40,7 +40,7 @@ class Player {
 
   init = () => {
     this.intro = true;
-    this.gun = new Gun(this.controller, 5);
+    this.gun = new Gun(this.controller, 8);
     this.reset();
   };
 
@@ -195,7 +195,7 @@ class Player {
 
   gunHandler = () => {
     let x = this.invert == 1 ? this.x + this.width / 2 : this.x;
-    let y = this.y + (this.crouch ? 5 : 8);
+    let y = this.y + (this.crouch ? 4 : 7);
     let bullet = this.gun.shoot(
       x,
       y,

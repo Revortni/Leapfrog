@@ -40,7 +40,6 @@ class Soldier extends Enemy {
       this.x = loc.x - this.world.x;
       this.y = this.world.y - loc.y - this.world.screenY;
       this.dx = -soldierValues.dx;
-      console.log(this.x, this.y);
     }
   };
 

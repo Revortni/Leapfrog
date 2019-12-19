@@ -1,5 +1,6 @@
-class Helicopter extends Enemy {
+class Boss extends Enemy {
   constructor(world) {
+    super();
     this.width = 19;
     this.height = 33;
     this.life = 15;

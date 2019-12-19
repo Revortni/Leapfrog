@@ -5,4 +5,54 @@ canvas {
 
 body {
   background: #000;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+#container {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 25px;
+}
+
+.hide {
+  font-size: 10px;
+  display: block;
+  text-align: right;
+  cursor: pointer;
+  padding-right: 10px;
+  text-transform: capitalize;
+}
+
+.hide:hover {
+  text-decoration: underline;
+}
+
+.controls {
+  width: 50%;
+  margin: 0 auto;
+  height: 100%;
+}
+.controls ul {
+  list-style-type: none;
+  font-size: 12px;
+  text-align: left;
+  word-spacing: 2px;
+  font-family: 'Roboto';
+}
+
+.controls ul li {
+  padding: 2px;
+}
+.controls::after {
+  clear: both;
+}
+
+.p1Controls {
+  float: left;
+}
+.p2Controls {
+  float: right;
 }

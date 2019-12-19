@@ -188,7 +188,7 @@ const SPAWNPOS = [
         y: 535
       }
     ],
-    soldierPos: 1
+    soldierPos: 0
   }
 ];
 

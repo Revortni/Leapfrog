@@ -57,5 +57,7 @@ const gameAssets = {
     h: 32,
     r: 16
   },
-  capsule: { src: './assets/powerups/FlyingCapsule.png' }
+  capsule: { src: './assets/powerups/FlyingCapsule.png' },
+  loadScreen: { src: './assets/loadscreen1.png' },
+  button: { src: './assets/button.png', r: 8 }
 };
