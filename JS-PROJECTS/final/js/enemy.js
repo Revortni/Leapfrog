@@ -52,6 +52,7 @@ class Enemy {
     let y = this.y + this.height / 2 - this.image.r;
     this.x = x;
     this.y = y;
+    enemyDeadSound.play();
   };
 
   checkIfKilled = () => {

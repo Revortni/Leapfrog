@@ -37,7 +37,7 @@ const showControls = () => {
   controls.style.display = 'block';
   let controlTitles = ['up', 'down', 'left', 'right', 'shoot', 'jump'];
   let control1 = ['w ', 's', 'a', 'd', 'z', 'x'];
-  let control2 = ['8 ', '2', '4', '6', '1', '0'];
+  let control2 = ['8 ', '2', '4', '6', '0', '1'];
 
   let list = document.createElement('ul');
   let title = document.createElement('li');

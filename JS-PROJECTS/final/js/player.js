@@ -26,14 +26,15 @@ class Player {
     this.gun = null;
     this.world = world;
     this.lives = 3;
-    this.alive = true;
     this.controller = controller;
     this.frame = 0;
     this.isMain = main || false;
+    this.isFirst = main;
     this.image = this.isMain ? gameAssets.player1 : gameAssets.player2;
     this.clock = 1;
     this.invert = 1;
     this.score = 0;
+    this.gameover = false;
     this.init();
   }
 
@@ -58,7 +59,9 @@ class Player {
     this.jumping = false;
     this.crouch = false;
     this.killable = false;
+    this.opacity = 0.7;
     setTimeout(() => {
+      this.opacity = 1;
       this.killable = true;
     }, 3000);
     this.directionFacing = ANIMATE.standing;
@@ -147,11 +150,14 @@ class Player {
   };
 
   updateFrame = () => {
-    if (this.clock % 4 == 0 && this.state.sprite.frames > 1) {
+    if (this.clock % 3 == 0 && this.state.sprite.frames > 1) {
       this.frame++;
       if (this.frame >= this.state.sprite.frames) {
         this.frame = 0;
       }
+    }
+    if (this.opacity < 1) {
+      this.opacity += 0.005;
     }
   };
 
@@ -207,6 +213,7 @@ class Player {
       this.shootDirection.y
     );
     if (bullet) {
+      shootSound.play();
       this.bullets.push(bullet);
     }
     this.gun.reload();
@@ -243,32 +250,35 @@ class Player {
   };
 
   draw = () => {
-    ctx.beginPath();
-    let posX = this.invert == 1 ? 0 : this.width * -1;
-    ctx.save();
-    ctx.scale(this.invert, 1);
-    ctx.drawImage(
-      this.image.img,
-      this.frame * this.image.w,
-      this.state.sprite.pos * this.image.h,
-      this.state.sprite.w || this.image.w,
-      this.image.h,
-      (this.invert * this.x + posX) * SCALE,
-      (this.y - this.state.sprite.offset) * SCALE,
-      (this.state.sprite.w || this.image.w) * SCALE,
-      (this.state.sprite.h || this.image.h) * SCALE
-    );
-    ctx.restore();
-    ctx.closePath();
+    if (!this.gameover) {
+      ctx.beginPath();
+      let posX = this.invert == 1 ? 0 : this.width * -1;
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.scale(this.invert, 1);
+      ctx.drawImage(
+        this.image.img,
+        this.frame * this.image.w,
+        this.state.sprite.pos * this.image.h,
+        this.state.sprite.w || this.image.w,
+        this.image.h,
+        (this.invert * this.x + posX) * SCALE,
+        (this.y - this.state.sprite.offset) * SCALE,
+        (this.state.sprite.w || this.image.w) * SCALE,
+        (this.state.sprite.h || this.image.h) * SCALE
+      );
+      ctx.restore();
+      ctx.closePath();
+    }
   };
 
   showLifeCount = () => {
     let x = 16;
     let y = 4;
-    let life = this.isMain ? gameAssets.life1 : gameAssets.life2;
+    let life = this.isFirst ? gameAssets.life1 : gameAssets.life2;
 
     for (let i = 0; i < this.lives; i++) {
-      let posX = this.isMain
+      let posX = this.isFirst
         ? 10 + x * (i + 1) + life.w * i * SCALE
         : SCREEN.width * SCALE - (10 + x * (i + 1) + life.w * i * SCALE);
       ctx.drawImage(life.img, posX, y * SCALE, life.w * SCALE, life.h * SCALE);
@@ -321,6 +331,7 @@ class Player {
     this.height = 12;
     this.width = 32;
     this.calculateSpriteDim();
+    playerDeadSound.play();
   };
 
   handleCollision = obj => {

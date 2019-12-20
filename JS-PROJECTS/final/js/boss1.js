@@ -35,7 +35,7 @@ class Boss extends Enemy {
 
   checkIntro = () => {
     if (!this.entry) {
-      this.x += 20;
+      this.x += 2;
       if (this.x > 0) {
         this.entry = true;
       }
@@ -87,6 +87,7 @@ class Boss extends Enemy {
 
     if (this.core && this.core.killed) {
       this.defeated = true;
+      bossDeadSound.play();
     }
   };
 
@@ -110,8 +111,9 @@ class Boss extends Enemy {
 
   update = () => {
     this.checkIntro();
-    if (!this.entry) return;
     this.updateFrame();
+    if (!this.entry) return;
+
     if (this.clock % 20 == 0 && this.hatchOpen) {
       this.generateSoilders();
     }
@@ -179,7 +181,7 @@ class BossGun extends Enemy {
     this.x = this.parent.x + this.px;
     this.y = this.parent.y + this.py;
     if (this.killed) return;
-    if (this.clock % this.reloadTime == 0 && this.x > 0 && this.active) {
+    if (this.clock % this.reloadTime == 0 && this.x > 0 && !this.killed) {
       this.shoot(playerX, playerY);
     }
     this.clock++;

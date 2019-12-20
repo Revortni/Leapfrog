@@ -33,6 +33,7 @@ class Sniper extends Enemy {
     let dx = Math.cos(angle);
     let dy = Math.sin(angle);
     let bullet = new Bullet(this.x, this.y, dx, dy, 2, gameAssets.bulletE.img);
+    enemyShootSound.play();
     this.world.enemyBullets.push(bullet);
   };
 

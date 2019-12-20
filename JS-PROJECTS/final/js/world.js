@@ -77,7 +77,7 @@ class World {
       this.enemies.push(enemy);
     }
     this.counter++;
-    if (this.counter > 4 || this.enemies.length > 8) {
+    if (this.counter > 4 || this.enemies.length > 6) {
       this.counter = 0;
       this.spawn = false;
     }
@@ -111,8 +111,12 @@ class World {
       this.x += dx;
       this.dx = dx;
       if (this.pcount) {
-        this.player2.x -= dx;
+        if (!this.player2.isMain) {
+          this.player2.x -= dx;
+        }
       }
+    } else {
+      this.dx = 0;
     }
     if (this.x + this.screenWidth >= IMAGESIZE.x - offset) {
       this.reachedBoss = true;
@@ -167,8 +171,10 @@ class World {
   };
 
   respawnHandler = () => {
+    let flag = 1;
     if (!this.player.state.alive) {
       if (this.player.lives) {
+        flag = 0;
         if (!this.player.state.revive) {
           this.player.state.revive = true;
           setTimeout(() => {
@@ -176,22 +182,37 @@ class World {
           }, 4000);
         }
       } else {
-        setTimeout(() => {
-          this.gameOver = true;
-        }, 4000);
+        this.player.gameover = true;
+        if (this.pcount) {
+          this.player2.isMain = true;
+        }
       }
-    } else if (this.pcount) {
+    }
+    if (this.pcount) {
       if (!this.player2.state.alive) {
         if (this.player2.lives) {
+          flag = 0;
           if (!this.player2.state.revive) {
             this.player2.state.revive = true;
             setTimeout(() => {
               this.player2.reset();
             }, 4000);
           }
+        } else {
+          this.gameOver = true;
         }
       }
-    } else {
+    }
+    if (this.player.state.alive) {
+      flag = 0;
+    }
+    if (this.pcount) {
+      if (this.player2.state.alive) {
+        flag = 0;
+      }
+    }
+
+    if (flag) {
       setTimeout(() => {
         this.gameOver = true;
       }, 4000);

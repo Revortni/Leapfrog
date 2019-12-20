@@ -51,6 +51,7 @@ class Game {
     mainBackground.src = './assets/area' + this.level + '_bg.png';
     mainBackground.onload = () => {
       this.world.init(mainBackground, this.pointer);
+      themeSound.play();
       this.startGame();
     };
   };
@@ -112,6 +113,7 @@ class Game {
   };
 
   handleGameOver = () => {
+    themeSound.stop();
     clearInterval(this.interval);
     this.handleScore();
     this.showScore();

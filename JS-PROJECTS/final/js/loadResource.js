@@ -62,3 +62,26 @@ const gameAssets = {
   loadScreen: { src: './assets/loadscreen1.png' },
   button: { src: './assets/button.png', r: 8 }
 };
+
+function SOUND(src, loop) {
+  this.sound = document.createElement('audio');
+  this.sound.src = src;
+  this.sound.loop = loop || false;
+  this.sound.setAttribute('preload', 'auto');
+  this.sound.setAttribute('controls', 'none');
+  this.sound.style.display = 'none';
+  document.body.appendChild(this.sound);
+  this.play = () => {
+    this.sound.currentTime = 0;
+    this.sound.play();
+  };
+  this.stop = () => {
+    this.sound.pause();
+  };
+}
+const themeSound = new SOUND('./assets/audio/theme.mp3', true);
+const shootSound = new SOUND('./assets/audio/normalShoot.wav');
+const enemyShootSound = new SOUND('./assets/audio/enemyShoot.wav');
+const enemyDeadSound = new SOUND('./assets/audio/enemyX.wav');
+const playerDeadSound = new SOUND('./assets/audio/dead.wav');
+const bossDeadSound = new SOUND('./assets/audio/bossDead.wav');
