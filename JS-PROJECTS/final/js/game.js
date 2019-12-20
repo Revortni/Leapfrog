@@ -74,6 +74,9 @@ class Game {
 
   handleScore = () => {
     let score = this.world.player.score;
+    if (this.world.pcount) {
+      score = Math.max(score, this.world.player2.score);
+    }
     if (score > this.highScore) {
       this.highScore = this.score;
       localStorage.setItem(HIGHSCOREKEY, score);
@@ -126,7 +129,7 @@ class Game {
       if (this.world.gameOver || this.world.end) {
         setTimeout(() => {
           this.handleGameOver();
-        }, 1000);
+        }, 3000);
       }
       this.clock++;
     }, 50);
